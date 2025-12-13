@@ -474,89 +474,70 @@ namespace KCM.LoadSaveOverrides
             {
                 Main.helper.Log("Starting villager state resync after load");
                 
-                // Wait a frame for all systems to initialize
-                System.Threading.Tasks.Task.Delay(100).ContinueWith(_ => 
+                // Simple resync without async complications
+                Main.helper.Log("Performing villager resync");
+                
+                // Force villager system refresh
+                if (VillagerSystem.inst != null)
                 {
                     try
                     {
-                        Main.helper.Log("Performing delayed villager resync");
+                        var villagerSystemType = typeof(VillagerSystem);
+                        var refreshMethods = villagerSystemType.GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
+                            .Where(m => m.Name.Contains("Refresh") || m.Name.Contains("Update") || m.Name.Contains("Restart"));
                         
-                        // Resync all villager positions and states
-                        for (int i = 0; i < Villager.villagers.Count; i++)
+                        foreach (var method in refreshMethods)
                         {
-                            Villager v = Villager.villagers.data[i];
-                            if (v != null)
+                            if (method.GetParameters().Length == 0)
                             {
                                 try
                                 {
-                                    // Force position update
-                                    Vector3 currentPos = v.Pos;
-                                    v.TeleportTo(currentPos);
-                                    
-                                    // Use reflection to check and fix villager state
-                                    var villagerType = typeof(Villager);
-                                    var workerJobField = villagerType.GetField("workerJob", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
-                                    var workerJob = workerJobField?.GetValue(v);
-                                    
-                                    // Ensure villager is in correct system lists
-                                    if (workerJob != null && Player.inst != null)
-                                    {
-                                        if (!Player.inst.Workers.Contains(v))
-                                        {
-                                            Player.inst.Workers.Add(v);
-                                        }
-                                    }
-                                    else if (workerJob == null && Player.inst != null)
-                                    {
-                                        if (!Player.inst.Homeless.Contains(v))
-                                        {
-                                            Player.inst.Homeless.Add(v);
-                                        }
-                                    }
+                                    method.Invoke(VillagerSystem.inst, null);
+                                    Main.helper.Log($"Called VillagerSystem.{method.Name}()");
                                 }
-                                catch (Exception e)
-                                {
-                                    Main.helper.Log($"Error resyncing villager {i}: {e.Message}");
-                                }
+                                catch { }
                             }
                         }
-                        
-                        // Force job system to re-evaluate all jobs
-                        if (JobSystem.inst != null)
-                        {
-                            try
-                            {
-                                var jobSystemUpdateType = typeof(JobSystem);
-                                var updateMethods = jobSystemUpdateType.GetMethods(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
-                                    .Where(m => m.Name.Contains("Update") || m.Name.Contains("Refresh"));
-                                    
-                                foreach (var method in updateMethods)
-                                {
-                                    try
-                                    {
-                                        method.Invoke(JobSystem.inst, null);
-                                        Main.helper.Log($"Called JobSystem.{method.Name} for resync");
-                                    }
-                                    catch { }
-                                }
-                            }
-                            catch (Exception e)
-                            {
-                                Main.helper.Log($"Error updating job system: {e.Message}");
-                            }
-                        }
-                        
-                        Main.helper.Log("Villager state resync completed");
                     }
                     catch (Exception e)
                     {
-                        Main.helper.Log($"Error in delayed villager resync: {e.Message}");
+                        Main.helper.Log($"Error refreshing villager system: {e.Message}");
                     }
-                });
+                }
+                
+                // Force job system refresh
+                if (JobSystem.inst != null)
+                {
+                    try
+                    {
+                        var jobSystemRefreshType = typeof(JobSystem);
+                        var refreshMethods = jobSystemRefreshType.GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
+                            .Where(m => m.Name.Contains("Refresh") || m.Name.Contains("Update") || m.Name.Contains("Restart"));
+                        
+                        foreach (var method in refreshMethods)
+                        {
+                            if (method.GetParameters().Length == 0)
+                            {
+                                try
+                                {
+                                    method.Invoke(JobSystem.inst, null);
+                                    Main.helper.Log($"Called JobSystem.{method.Name}()");
+                                }
+                                catch { }
+                            }
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        Main.helper.Log($"Error refreshing job system: {e.Message}");
+                    }
+                }
+                
+                Main.helper.Log("Villager state resync completed");
             }
             catch (Exception e)
             {
-                Main.helper.Log($"Error starting villager resync: {e.Message}");
+                Main.helper.Log($"Error during villager resync: {e.Message}");
             }
                                     
                                     // Ensure villager is in correct system lists
