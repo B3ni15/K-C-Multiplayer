@@ -38,7 +38,8 @@ namespace KCM.Packets.Network
 
             Main.helper.Log("Sending client connected. Client ID is: " + clientId);
 
-            Main.kCPlayers.Add(Main.PlayerSteamID, new KCPlayer(KCClient.inst.Name, clientId, Main.PlayerSteamID));
+            Main.kCPlayers[Main.PlayerSteamID] = new KCPlayer(KCClient.inst.Name, clientId, Main.PlayerSteamID);
+            Main.clientSteamIds[clientId] = Main.PlayerSteamID;
 
             Player.inst.PlayerLandmassOwner.teamId = clientId * 10 + 2;
 
