@@ -1156,8 +1156,26 @@ namespace KCM
                      Main.helper.Log($"set speed Called by 2: {new StackFrame(2).GetMethod()} {new StackFrame(2).GetMethod().Name.Contains("HandlePacket")}");
                      Main.helper.Log($"set speed Called by 3: {new StackFrame(3).GetMethod()} {new StackFrame(3).GetMethod().Name.Contains("HandlePacket")}");*/
 
-                    if (new StackFrame(3).GetMethod().Name.Contains("HandlePacket"))
-                        return;
+                    try
+                    {
+                        if (new StackFrame(3).GetMethod().Name.Contains("HandlePacket"))
+                            return;
+                    }
+                    catch
+                    {
+                    }
+
+                    try
+                    {
+                        if (idx > 0 && Time.timeScale == 0f)
+                        {
+                            Time.timeScale = 1f;
+                            Main.helper.Log("TimeScaleFix: restored Time.timeScale=1 on local SetSpeed idx=" + idx);
+                        }
+                    }
+                    catch
+                    {
+                    }
 
                     Main.helper.Log("SpeedControlUI.SetSpeed (local): " + idx);
                     bool isPaused = (idx == 0);
