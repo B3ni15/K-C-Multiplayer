@@ -16,20 +16,13 @@ namespace KCM.Packets
         {
             get
             {
-                KCPlayer p = null;
-
-                if (!Main.clientSteamIds.ContainsKey(clientId))
+                if (!Main.clientSteamIds.TryGetValue(clientId, out var steamId) || string.IsNullOrEmpty(steamId))
                     return null;
 
-                //Main.helper.Log($"SteamID: {Main.GetPlayerByClientID(clientId).steamId} for {clientId} ({Main.GetPlayerByClientID(clientId).id})");
+                if (Main.kCPlayers.TryGetValue(steamId, out var player))
+                    return player;
 
-                if (Main.kCPlayers.TryGetValue(Main.GetPlayerByClientID(clientId).steamId, out p))
-                    return p;
-                else
-                {
-                    Main.helper.Log($"Error getting player from packet {packetId} {this.GetType().Name} from {clientId}");
-                }
-
+                Main.helper.Log($"Error getting player from packet {packetId} {GetType().Name} from {clientId}");
                 return null;
             }
         }
