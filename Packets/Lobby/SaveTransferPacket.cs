@@ -29,38 +29,54 @@ namespace KCM.Packets.Lobby
 
         public override void HandlePacketClient()
         {
-            float savePercent = (float)received / (float)saveSize;
+            bool initialisingTransfer = !loadingSave ||
+                                       saveData == null ||
+                                       saveData.Length != saveSize ||
+                                       chunksReceived == null ||
+                                       chunksReceived.Length != totalChunks;
 
-            // Initialize saveData and chunksReceived on the first packet received
-            if (saveData.Length == 1)
+            if (initialisingTransfer)
             {
-
                 Main.helper.Log("Save Transfer started!");
                 loadingSave = true;
-
-                ServerLobbyScript.LoadingSave.SetActive(true);
-
-                // save percentage
-
+                received = 0;
 
                 saveData = new byte[saveSize];
                 chunksReceived = new bool[totalChunks];
+
+                if (ServerLobbyScript.LoadingSave != null)
+                    ServerLobbyScript.LoadingSave.SetActive(true);
             }
 
+            if (chunkId < 0 || chunkId >= totalChunks)
+            {
+                Main.helper.Log($"Invalid save chunk id: {chunkId} / {totalChunks}");
+                return;
+            }
 
-            // Copy the chunk data into the correct position in saveData
+            if (saveDataChunk == null)
+            {
+                Main.helper.Log($"Null save chunk data for chunk: {chunkId}");
+                return;
+            }
+
+            if (saveDataIndex < 0 || saveDataIndex + saveDataChunk.Length > saveData.Length)
+            {
+                Main.helper.Log($"Invalid save chunk write range: index={saveDataIndex} len={saveDataChunk.Length} size={saveData.Length}");
+                return;
+            }
+
             Array.Copy(saveDataChunk, 0, saveData, saveDataIndex, saveDataChunk.Length);
-
-            // Mark this chunk as received
             chunksReceived[chunkId] = true;
-
-            // Seek to the next position to write to
             received += chunkSize;
 
-
-            ServerLobbyScript.ProgressBar.fillAmount = savePercent;
-            ServerLobbyScript.ProgressBarText.text = (savePercent * 100).ToString("0.00") + "%";
-            ServerLobbyScript.ProgressText.text = $"{((float)(received / 1000)).ToString("0.00")} KB / {((float)(saveSize / 1000)).ToString("0.00")} KB";
+            float savePercent = saveSize > 0 ? (float)received / (float)saveSize : 0f;
+            if (ServerLobbyScript.ProgressBar != null)
+                ServerLobbyScript.ProgressBar.fillAmount = savePercent;
+            if (ServerLobbyScript.ProgressBarText != null)
+                ServerLobbyScript.ProgressBarText.text = (savePercent * 100).ToString("0.00") + "%";
+            if (ServerLobbyScript.ProgressText != null)
+                ServerLobbyScript.ProgressText.text = $"{((float)(received / 1000)).ToString("0.00")} KB / {((float)(saveSize / 1000)).ToString("0.00")} KB";
 
 
             if (chunkId + 1 == totalChunks)
@@ -85,7 +101,13 @@ namespace KCM.Packets.Lobby
                 LoadSaveLoadHook.saveContainer.Unpack(null);
                 Broadcast.OnLoadedEvent.Broadcast(new OnLoadedEvent());
 
-                ServerLobbyScript.LoadingSave.SetActive(false);
+                if (ServerLobbyScript.LoadingSave != null)
+                    ServerLobbyScript.LoadingSave.SetActive(false);
+
+                loadingSave = false;
+                received = 0;
+                saveData = new byte[1];
+                chunksReceived = new bool[1];
             }
         }
 

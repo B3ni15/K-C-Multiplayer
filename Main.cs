@@ -1430,12 +1430,36 @@ namespace KCM
                         Main.helper.Log($"loading building: {building.FriendlyName}");
                         Main.helper.Log($" (teamid: {building.TeamID()})");
                         Main.helper.Log(p.ToString());
+
+                        try
+                        {
+                            p.PlayerLandmassOwner.TakeOwnership(building.LandMass());
+                        }
+                        catch (Exception e)
+                        {
+                            Main.helper.Log("Failed setting landmass ownership during load");
+                            Main.helper.Log(e.Message);
+                        }
+
                         bool flag2 = building.GetComponent<Keep>() != null && building.TeamID() == p.PlayerLandmassOwner.teamId;
                         Main.helper.Log("Set keep? " + flag2);
                         if (flag2)
                         {
                             p.keep = building.GetComponent<Keep>();
                             Main.helper.Log(p.keep.ToString());
+                        }
+
+                        try
+                        {
+                            World.inst.PlaceFromLoad(building);
+                            structureData.UnpackStage2(building);
+                            building.SetVisibleForFog(false);
+                        }
+                        catch (Exception e)
+                        {
+                            Main.helper.Log("Error placing building into world during load");
+                            Main.helper.Log(e.Message);
+                            Main.helper.Log(e.StackTrace);
                         }
                         __result = building;
                     }
@@ -1466,16 +1490,6 @@ namespace KCM
                     __instance.newBannerSystem = true;
                     Main.helper.Log("Saving player creativeMode");
                     __instance.creativeMode = p.creativeMode;
-
-                    //cmo options not used for saving or loading in multiplayer
-                    /**for (int i = 0; i < p.cmoOptionsOn.Length; i++)
-                    {
-                        bool flag = p.cmoOptionsOn[i];
-                        if (flag)
-                        {
-                            __instance.cmoOptions.Add((Player.CreativeOptions)i);
-                        }
-                    }**/
 
                     Main.helper.Log("Saving player upgrades");
                     __instance.GetType().GetField("upgrades", bindingFlags).SetValue(__instance, new List<Player.UpgradeType>());
@@ -2130,7 +2144,10 @@ namespace KCM
             {
                 Assembly assembly = typeof(Building).Assembly;
 
-                Type[] types = new Type[] { typeof(Building) };
+                var types = assembly
+                    .GetTypes()
+                    .Where(t => t != null && typeof(Building).IsAssignableFrom(t) && !t.IsAbstract)
+                    .ToArray();
 
                 var methodsInNamespace = types
                     .SelectMany(t => t.GetMethods(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly).Where(m => !m.IsAbstract))
@@ -2170,6 +2187,56 @@ namespace KCM
 
                 if (PlayerInstCount > 0)
                     Main.helper.Log($"Found {PlayerInstCount} static building Player.inst references in {method.Name}");
+
+                return codes.AsEnumerable();
+            }
+        }
+
+        [HarmonyPatch]
+        public class FieldSystemPlayerReferencePatch
+        {
+            static FieldInfo playerField;
+
+            static IEnumerable<MethodBase> TargetMethods()
+            {
+                var methodsInNamespace = typeof(FieldSystem)
+                    .GetMethods(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly)
+                    .Where(m => !m.IsAbstract)
+                    .ToList();
+
+                helper.Log("Methods in namespace: " + methodsInNamespace.Count);
+
+                return methodsInNamespace.ToArray().Cast<MethodBase>();
+            }
+
+            static IEnumerable<CodeInstruction> Transpiler(MethodBase method, IEnumerable<CodeInstruction> instructions)
+            {
+                if (playerField == null)
+                {
+                    var bindingFlags = BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance;
+                    playerField = typeof(FieldSystem).GetFields(bindingFlags).FirstOrDefault(f => f.FieldType == typeof(Player));
+                }
+
+                if (playerField == null)
+                    return instructions;
+
+                int playerInstCount = 0;
+
+                var codes = new List<CodeInstruction>(instructions);
+                for (var i = 0; i < codes.Count; i++)
+                {
+                    if (codes[i].opcode == OpCodes.Ldsfld && codes[i].operand.ToString() == "Player inst")
+                    {
+                        playerInstCount++;
+
+                        codes[i].opcode = OpCodes.Ldarg_0;
+                        codes[i].operand = null;
+                        codes.Insert(++i, new CodeInstruction(OpCodes.Ldfld, playerField));
+                    }
+                }
+
+                if (playerInstCount > 0)
+                    Main.helper.Log($"Found {playerInstCount} static FieldSystem Player.inst references in {method.Name}");
 
                 return codes.AsEnumerable();
             }

@@ -18,6 +18,10 @@ A mellékelt log (`output.txt`) alapján több tipikus hiba okozta a szerver ind
 - `PlayerReady` packet: ha nincs player, ne crasheljen
 - Szerver oldalon a csatlakozáskor a játékos regisztráció/map frissítése
 - Kilépés/clear esetén `clientSteamIds` takarítása, hogy ne maradjanak “árva” bejegyzések
+- Épületek `Player.inst` referenciáinak patch-elése már nem csak a base `Building` osztályban fut, hanem az összes `Building`-ből származó típusban (pl. farmok speciális logikája)
+- `FieldSystem` `Player.inst` referenciáinak patch-elése (farm/termés állapotkezelés több helyen erre támaszkodik)
+- Mentés betöltéskor a `ProcessBuilding` útvonal kiegészítése `World.inst.PlaceFromLoad(...)` + `UnpackStage2(...)` hívásokkal (különösen fontos a “világba helyezés” mellékhatásai miatt, pl. farm/field regisztráció)
+- Save transfer kliens oldalon robusztusabb inicializálás/reset (ne ragadjon be a statikus állapot több betöltés után, plusz bounds/null ellenőrzések)
 
 Érintett fájlok (főbb pontok):
 
@@ -27,6 +31,7 @@ A mellékelt log (`output.txt`) alapján több tipikus hiba okozta a szerver ind
 - `Packets/Packet.cs`
 - `Packets/Lobby/PlayerReady.cs`
 - `Packets/Lobby/PlayerList.cs`
+- `Packets/Lobby/SaveTransferPacket.cs`
 - `KCServer.cs`
 - `Packets/Handlers/LobbyHandler.cs`
 - `RiptideSteamTransport/LobbyManager.cs`
