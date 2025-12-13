@@ -19,6 +19,7 @@ Ha a `output.txt` logban `Compilation failed` szerepel, akkor a mod **nem tölt�
 - Épület lerakás események (alap meta: `uniqueName`, `guid`, pozíció/rotáció).
 - Épület állapot frissítések “snapshot” jelleggel (`BuildingStatePacket`): built/placed, constructionProgress, life, stb.
 - Néhány globális esemény: idősebesség változtatás, időjárás váltás, fa kivágás (repo verziótól függően).
+- Host oldalon periodikus *resource snapshot* korrigálás (ha drift/desync van, visszahúzza a klienst).
 
 **Mentés betöltés (host → kliens)**
 - Host oldalon a mentés byte-ok chunkolva kerülnek kiküldésre (`SaveTransferPacket`).
@@ -68,3 +69,7 @@ Bug reporthoz küldd el:
 ## Fejlesztés
 
 Repo-szabályok és szerkezet: `AGENTS.md`.
+
+### Gyors resync
+
+A lobby chatben írd be: `/resync` – a kliens kér egy resync-et a hosttól (resource + building + villager “teleport” snapshot).

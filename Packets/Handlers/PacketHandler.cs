@@ -139,7 +139,9 @@ namespace KCM.Packets.Handlers
                 {
                     packet.HandlePacketServer();
 
-                    ((Packet)packet).SendToAll();
+                    bool shouldRelay = packet.GetType().GetCustomAttributes(typeof(NoServerRelayAttribute), inherit: true).Length == 0;
+                    if (shouldRelay)
+                        ((Packet)packet).SendToAll();
                 }
                 catch (Exception ex)
                 {

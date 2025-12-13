@@ -112,6 +112,14 @@ namespace KCM.Packets.Lobby
                 LoadSaveLoadHook.saveContainer.Unpack(null);
                 Broadcast.OnLoadedEvent.Broadcast(new OnLoadedEvent());
 
+                try
+                {
+                    new KCM.Packets.Network.ResyncRequestPacket { reason = "post-load" }.Send();
+                }
+                catch
+                {
+                }
+
                 if (ServerLobbyScript.LoadingSave != null)
                     ServerLobbyScript.LoadingSave.SetActive(false);
 

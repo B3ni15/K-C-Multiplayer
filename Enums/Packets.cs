@@ -44,6 +44,9 @@ namespace KCM.Enums
         AddVillager = 88,
         SetupInitialWorkers = 89,
         VillagerTeleportTo = 90,
-        PlaceKeepRandomly = 91
+        PlaceKeepRandomly = 91,
+        ResyncRequest = 92,
+        ResourceSnapshot = 93,
+        BuildingSnapshot = 94
     }
 }

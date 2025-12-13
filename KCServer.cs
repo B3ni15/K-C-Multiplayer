@@ -132,6 +132,7 @@ namespace KCM
         {
             server.Update();
             ProcessSaveTransfers();
+            KCM.StateManagement.Sync.SyncManager.ServerUpdate();
         }
 
         private static void ProcessSaveTransfers()

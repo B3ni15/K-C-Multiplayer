@@ -219,6 +219,21 @@ namespace KCM
                 {
                     if (ChatInput.text.Length > 0)
                     {
+                        if (ChatInput.text.Trim().Equals("/resync", StringComparison.OrdinalIgnoreCase))
+                        {
+                            try
+                            {
+                                new KCM.Packets.Network.ResyncRequestPacket { reason = "manual:/resync" }.Send();
+                                LobbyHandler.AddSystemMessage("Resync requested.");
+                            }
+                            catch
+                            {
+                            }
+
+                            ChatInput.text = "";
+                            return;
+                        }
+
                         new ChatMessage()
                         {
                             PlayerName = KCClient.inst.Name,
