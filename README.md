@@ -22,6 +22,7 @@ A mellékelt log (`output.txt`) alapján több tipikus hiba okozta a szerver ind
 - `FieldSystem` `Player.inst` referenciáinak patch-elése (farm/termés állapotkezelés több helyen erre támaszkodik)
 - Mentés betöltéskor a `ProcessBuilding` útvonal kiegészítése `World.inst.PlaceFromLoad(...)` + `UnpackStage2(...)` hívásokkal (különösen fontos a “világba helyezés” mellékhatásai miatt, pl. farm/field regisztráció)
 - Save transfer kliens oldalon robusztusabb inicializálás/reset (ne ragadjon be a statikus állapot több betöltés után, plusz bounds/null ellenőrzések)
+- Kompatibilitási fix: `World.inst.liverySets` lista esetén `.Count` használata `.Length` helyett (különben `Compilation failed` lehet egyes verziókon)
 
 Érintett fájlok (főbb pontok):
 
@@ -54,6 +55,8 @@ Ha továbbra is hibát látsz:
 
 - Küldd el a `output.txt` releváns részét (a hiba előtti/utáni stack trace-t), vagy írd le a pontos üzenetet.
 - Írd meg, hogy: hostoltál-e, hány kliens csatlakozott, és mindenkin ugyanaz a mod-verzió van-e.
+- Teszthez kapcsold ki a többi modot (különösen azokat, amik Harmony patch-elnek). A logban egy `Profiler` mod (`Profiler.ProfilerMod`) is hibázott, ez meg tudja zavarni a betöltést.
+- Farm/termés desync esetén írd meg: host vagy kliens oldalon nem látszik-e a termés, új világban történik-e vagy save betöltés után, és hány perc játék után jön elő.
 
 ## Repo higiénia
 

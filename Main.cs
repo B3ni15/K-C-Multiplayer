@@ -2144,8 +2144,17 @@ namespace KCM
             {
                 Assembly assembly = typeof(Building).Assembly;
 
-                var types = assembly
-                    .GetTypes()
+                Type[] allTypes;
+                try
+                {
+                    allTypes = assembly.GetTypes();
+                }
+                catch (ReflectionTypeLoadException e)
+                {
+                    allTypes = e.Types.Where(t => t != null).ToArray();
+                }
+
+                var types = allTypes
                     .Where(t => t != null && typeof(Building).IsAssignableFrom(t) && !t.IsAbstract)
                     .ToArray();
 
