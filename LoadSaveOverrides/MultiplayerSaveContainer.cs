@@ -265,6 +265,20 @@ namespace KCM.LoadSaveOverrides
             }
             Main.helper.Log("Unpacking done");
 
+            try
+            {
+                Main.helper.Log("Post-load: rebuilding path costs + villager grid");
+                try { World.inst.SetupInitialPathCosts(); } catch (Exception e) { Main.helper.Log(e.ToString()); }
+                try { World.inst.RebuildVillagerGrid(); } catch (Exception e) { Main.helper.Log(e.ToString()); }
+                try { Player.inst.irrigation.UpdateIrrigation(); } catch (Exception e) { Main.helper.Log(e.ToString()); }
+                try { Player.inst.CalcMaxResources(null, -1); } catch (Exception e) { Main.helper.Log(e.ToString()); }
+            }
+            catch (Exception e)
+            {
+                Main.helper.Log("Post-load rebuild failed");
+                Main.helper.Log(e.ToString());
+            }
+
 
             World.inst.UpscaleFeatures();
             Player.inst.RefreshVisibility(true);
