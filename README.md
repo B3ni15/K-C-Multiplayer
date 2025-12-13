@@ -35,9 +35,13 @@ A mellékelt log (`output.txt`) alapján több tipikus hiba okozta a szerver ind
 
 Fontos: a hostnak és **minden kliensnek ugyanaz a verzió** kell, különben továbbra is lehetnek sync problémák.
 
+Megjegyzés: a mod menüben a piros `Restart to load` üzenet azt jelenti, hogy a mod engedélyezése/letöltése közben változott valami, és **teljes játék-újraindítás** kell, hogy betöltődjön.
+
 1. Tedd a mod mappáját a játék `mods` könyvtárába (vagy használd Workshopból, de ott egy frissítés felülírhatja a javításokat).
 2. Indítsd újra teljesen a játékot.
 3. Hostolj/ csatlakozz, majd ellenőrizd, hogy a lobby és a szerver indítás stabil marad.
+
+Workshop módosításokhoz ajánlott: másold ki a Workshop mappából egy **külön névvel** a `...\\KingdomsAndCastles_Data\\mods\\` alá, és a mod menüben kapcsold ki a Workshop verziót, hogy Steam frissítés ne írja felül.
 
 ## Hibaelhárítás
 
@@ -49,4 +53,3 @@ Ha továbbra is hibát látsz:
 ## Repo higiénia
 
 - A `.gitignore` kizárja a logokat (`output*.txt`) és tipikus IDE/build artifactokat, hogy ne kerüljenek fel GitHubra.
-

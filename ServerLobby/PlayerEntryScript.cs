@@ -66,7 +66,7 @@ namespace KCM.ServerLobby
                 if (World.inst == null || World.inst.liverySets == null)
                     return;
 
-                if (player.banner < 0 || player.banner >= World.inst.liverySets.Length)
+                if (player.banner < 0 || player.banner >= World.inst.liverySets.Count)
                     return;
 
                 banner.texture = World.inst.liverySets[player.banner].banners;
