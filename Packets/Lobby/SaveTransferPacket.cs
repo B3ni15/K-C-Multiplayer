@@ -117,6 +117,14 @@ namespace KCM.Packets.Lobby
                 {
                     Main.SetMultiplayerSaveLoadInProgress(false);
                 }
+
+                try
+                {
+                    RunPostLoadRebuild("Save transfer complete");
+                }
+                catch
+                {
+                }
                 Broadcast.OnLoadedEvent.Broadcast(new OnLoadedEvent());
 
                 try

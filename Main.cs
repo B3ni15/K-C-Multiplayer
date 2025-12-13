@@ -1269,20 +1269,38 @@ namespace KCM
         public class SpeedControlUISetSpeedHook
         {
             private static long lastTime = 0;
+            private static long lastClientBlockLogTime = 0;
 
-            public static bool Prefix(ref bool __state)
+            public static bool Prefix(int idx, ref bool __state)
             {
                 __state = false;
-                if (KCClient.client.IsConnected)
-                {
-                    bool calledFromPacket = false;
-                    try { calledFromPacket = PacketHandler.IsHandlingPacket; } catch { }
+                if (!KCClient.client.IsConnected)
+                    return true;
 
-                    if (!calledFromPacket)
+                bool calledFromPacket = false;
+                try { calledFromPacket = PacketHandler.IsHandlingPacket; } catch { }
+
+                // In multiplayer, keep time control authoritative to the host to avoid clients pausing/stalling the simulation.
+                if (!KCServer.IsRunning)
+                {
+                    if (calledFromPacket)
+                        return true;
+
+                    long now = DateTimeOffset.Now.ToUnixTimeMilliseconds();
+                    if ((now - lastClientBlockLogTime) >= 2000)
                     {
-                        if ((DateTimeOffset.Now.ToUnixTimeMilliseconds() - lastTime) >= 250) // Set speed spam fix / hack
-                            __state = true;
+                        lastClientBlockLogTime = now;
+                        Main.helper.Log("Blocked SpeedControlUI.SetSpeed on non-host client: " + idx);
                     }
+
+                    return false;
+                }
+
+                if (!calledFromPacket)
+                {
+                    long now = DateTimeOffset.Now.ToUnixTimeMilliseconds();
+                    if ((now - lastTime) >= 250) // Set speed spam fix / hack
+                        __state = true;
                 }
 
                 return true;
@@ -1463,18 +1481,13 @@ namespace KCM
             public static bool Prefix(ref string __result)
             {
                 Main.helper.Log("Get save dir");
-                if (KCClient.client.IsConnected)
+                if (KCServer.IsRunning)
                 {
-                    if (KCServer.IsRunning)
-                    {
-
-                    }
                     __result = Application.persistentDataPath + "/Saves/Multiplayer";
-
                     return false;
                 }
 
-                __result = Application.persistentDataPath + "/Saves"; ;
+                __result = Application.persistentDataPath + "/Saves";
                 return true;
             }
         }
@@ -1552,6 +1565,14 @@ namespace KCM
                         finally
                         {
                             Main.SetMultiplayerSaveLoadInProgress(false);
+                        }
+
+                        try
+                        {
+                            RunPostLoadRebuild("LoadAtPath (multiplayer)");
+                        }
+                        catch
+                        {
                         }
 
                         Broadcast.OnLoadedEvent.Broadcast(new OnLoadedEvent());
