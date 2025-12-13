@@ -3,9 +3,9 @@ using KCM.Packets.Game.GameVillager;
 using KCM.Packets.State;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 using UnityEngine;
 
 namespace KCM.StateManagement.Sync
@@ -151,78 +151,83 @@ namespace KCM.StateManagement.Sync
 
         private static byte[] BuildBuildingSnapshotPayload(List<Building> buildings, ref int startIndex)
         {
-            using (var ms = new MemoryStream())
-            using (var bw = new BinaryWriter(ms))
+            byte[] buffer = new byte[MaxBuildingSnapshotBytes];
+            int offset = 0;
+            int countOffset = offset;
+            if (!TryWriteInt32(buffer, ref offset, 0))
+                return new byte[0];
+
+            int written = 0;
+            for (; startIndex < buildings.Count; startIndex++)
             {
-                long countPos = ms.Position;
-                bw.Write(0); // placeholder for record count
-                int written = 0;
+                Building b = buildings[startIndex];
+                if (b == null)
+                    continue;
 
-                for (; startIndex < buildings.Count; startIndex++)
+                int before = offset;
+                if (!TryWriteBuildingRecord(buffer, ref offset, b))
                 {
-                    Building b = buildings[startIndex];
-                    if (b == null)
-                        continue;
-
-                    long before = ms.Position;
-                    try
-                    {
-                        WriteBuildingRecord(bw, b);
-                        written++;
-                    }
-                    catch
-                    {
-                        ms.Position = before;
-                        ms.SetLength(before);
-                    }
-
-                    if (ms.Length >= MaxBuildingSnapshotBytes)
-                    {
-                        startIndex++;
-                        break;
-                    }
+                    offset = before;
+                    startIndex++;
+                    break;
                 }
 
-                long endPos = ms.Position;
-                ms.Position = countPos;
-                bw.Write(written);
-                ms.Position = endPos;
+                written++;
 
-                return ms.ToArray();
+                if (offset >= MaxBuildingSnapshotBytes - 256)
+                {
+                    startIndex++;
+                    break;
+                }
             }
+
+            WriteInt32At(buffer, countOffset, written);
+            byte[] result = new byte[offset];
+            Buffer.BlockCopy(buffer, 0, result, 0, offset);
+            return result;
         }
 
-        private static void WriteBuildingRecord(BinaryWriter bw, Building b)
+        private static bool TryWriteBuildingRecord(byte[] buffer, ref int offset, Building b)
         {
-            bw.Write(b.TeamID());
-            bw.Write(b.guid.ToByteArray());
+            if (!TryWriteInt32(buffer, ref offset, b.TeamID()))
+                return false;
+            if (!TryWriteGuidBytes(buffer, ref offset, b.guid))
+                return false;
 
-            bw.Write(b.UniqueName ?? "");
-            bw.Write(b.customName ?? "");
+            if (!TryWriteString(buffer, ref offset, b.UniqueName ?? ""))
+                return false;
+            if (!TryWriteString(buffer, ref offset, b.customName ?? ""))
+                return false;
 
             Vector3 globalPosition = b.transform.position;
             Quaternion rotation = b.transform.childCount > 0 ? b.transform.GetChild(0).rotation : b.transform.rotation;
             Vector3 localPosition = b.transform.childCount > 0 ? b.transform.GetChild(0).localPosition : Vector3.zero;
 
-            bw.Write(globalPosition.x);
-            bw.Write(globalPosition.y);
-            bw.Write(globalPosition.z);
+            if (!TryWriteSingle(buffer, ref offset, globalPosition.x) ||
+                !TryWriteSingle(buffer, ref offset, globalPosition.y) ||
+                !TryWriteSingle(buffer, ref offset, globalPosition.z))
+                return false;
 
-            bw.Write(rotation.x);
-            bw.Write(rotation.y);
-            bw.Write(rotation.z);
-            bw.Write(rotation.w);
+            if (!TryWriteSingle(buffer, ref offset, rotation.x) ||
+                !TryWriteSingle(buffer, ref offset, rotation.y) ||
+                !TryWriteSingle(buffer, ref offset, rotation.z) ||
+                !TryWriteSingle(buffer, ref offset, rotation.w))
+                return false;
 
-            bw.Write(localPosition.x);
-            bw.Write(localPosition.y);
-            bw.Write(localPosition.z);
+            if (!TryWriteSingle(buffer, ref offset, localPosition.x) ||
+                !TryWriteSingle(buffer, ref offset, localPosition.y) ||
+                !TryWriteSingle(buffer, ref offset, localPosition.z))
+                return false;
 
-            bw.Write(b.IsBuilt());
-            bw.Write(b.IsPlaced());
-            bw.Write(b.Open);
-            bw.Write(b.doBuildAnimation);
-            bw.Write(b.constructionPaused);
-            bw.Write(b.constructionProgress);
+            if (!TryWriteBool(buffer, ref offset, b.IsBuilt()) ||
+                !TryWriteBool(buffer, ref offset, b.IsPlaced()) ||
+                !TryWriteBool(buffer, ref offset, b.Open) ||
+                !TryWriteBool(buffer, ref offset, b.doBuildAnimation) ||
+                !TryWriteBool(buffer, ref offset, b.constructionPaused))
+                return false;
+
+            if (!TryWriteSingle(buffer, ref offset, b.constructionProgress))
+                return false;
 
             float resourceProgress = 0f;
             try
@@ -232,10 +237,12 @@ namespace KCM.StateManagement.Sync
                     resourceProgress = (float)field.GetValue(b);
             }
             catch { }
-            bw.Write(resourceProgress);
+            if (!TryWriteSingle(buffer, ref offset, resourceProgress))
+                return false;
 
-            bw.Write(b.Life);
-            bw.Write(b.ModifiedMaxLife);
+            if (!TryWriteSingle(buffer, ref offset, b.Life) ||
+                !TryWriteSingle(buffer, ref offset, b.ModifiedMaxLife))
+                return false;
 
             int yearBuilt = 0;
             try
@@ -245,46 +252,216 @@ namespace KCM.StateManagement.Sync
                     yearBuilt = (int)field.GetValue(b);
             }
             catch { }
-            bw.Write(yearBuilt);
+            if (!TryWriteInt32(buffer, ref offset, yearBuilt))
+                return false;
 
-            bw.Write(b.decayProtection);
+            if (!TryWriteSingle(buffer, ref offset, b.decayProtection))
+                return false;
+
+            return true;
         }
 
         public static void ApplyBuildingSnapshot(byte[] payload)
         {
-            using (var ms = new MemoryStream(payload))
-            using (var br = new BinaryReader(ms))
+            if (payload == null || payload.Length < 4)
+                return;
+
+            int offset = 0;
+            int count;
+            if (!TryReadInt32(payload, ref offset, out count))
+                return;
+
+            for (int i = 0; i < count; i++)
             {
-                int count = br.ReadInt32();
-                for (int i = 0; i < count; i++)
-                {
-                    int teamId = br.ReadInt32();
-                    Guid guid = new Guid(br.ReadBytes(16));
+                int teamId;
+                Guid guid;
+                string uniqueName;
+                string customName;
+                Vector3 globalPosition;
+                Quaternion rotation;
+                Vector3 localPosition;
+                bool built;
+                bool placed;
+                bool open;
+                bool doBuildAnimation;
+                bool constructionPaused;
+                float constructionProgress;
+                float resourceProgress;
+                float life;
+                float modifiedMaxLife;
+                int yearBuilt;
+                float decayProtection;
 
-                    string uniqueName = br.ReadString();
-                    string customName = br.ReadString();
+                if (!TryReadInt32(payload, ref offset, out teamId))
+                    break;
+                if (!TryReadGuid(payload, ref offset, out guid))
+                    break;
+                if (!TryReadString(payload, ref offset, out uniqueName))
+                    break;
+                if (!TryReadString(payload, ref offset, out customName))
+                    break;
 
-                    Vector3 globalPosition = new Vector3(br.ReadSingle(), br.ReadSingle(), br.ReadSingle());
-                    Quaternion rotation = new Quaternion(br.ReadSingle(), br.ReadSingle(), br.ReadSingle(), br.ReadSingle());
-                    Vector3 localPosition = new Vector3(br.ReadSingle(), br.ReadSingle(), br.ReadSingle());
+                float gx, gy, gz;
+                float rx, ry, rz, rw;
+                float lx, ly, lz;
+                if (!TryReadSingle(payload, ref offset, out gx) ||
+                    !TryReadSingle(payload, ref offset, out gy) ||
+                    !TryReadSingle(payload, ref offset, out gz))
+                    break;
+                globalPosition = new Vector3(gx, gy, gz);
 
-                    bool built = br.ReadBoolean();
-                    bool placed = br.ReadBoolean();
-                    bool open = br.ReadBoolean();
-                    bool doBuildAnimation = br.ReadBoolean();
-                    bool constructionPaused = br.ReadBoolean();
-                    float constructionProgress = br.ReadSingle();
-                    float resourceProgress = br.ReadSingle();
-                    float life = br.ReadSingle();
-                    float modifiedMaxLife = br.ReadSingle();
-                    int yearBuilt = br.ReadInt32();
-                    float decayProtection = br.ReadSingle();
+                if (!TryReadSingle(payload, ref offset, out rx) ||
+                    !TryReadSingle(payload, ref offset, out ry) ||
+                    !TryReadSingle(payload, ref offset, out rz) ||
+                    !TryReadSingle(payload, ref offset, out rw))
+                    break;
+                rotation = new Quaternion(rx, ry, rz, rw);
 
-                    ApplyBuildingRecord(teamId, guid, uniqueName, customName, globalPosition, rotation, localPosition, built, placed, open, doBuildAnimation, constructionPaused, constructionProgress, resourceProgress, life, modifiedMaxLife, yearBuilt, decayProtection);
-                }
+                if (!TryReadSingle(payload, ref offset, out lx) ||
+                    !TryReadSingle(payload, ref offset, out ly) ||
+                    !TryReadSingle(payload, ref offset, out lz))
+                    break;
+                localPosition = new Vector3(lx, ly, lz);
+
+                if (!TryReadBool(payload, ref offset, out built) ||
+                    !TryReadBool(payload, ref offset, out placed) ||
+                    !TryReadBool(payload, ref offset, out open) ||
+                    !TryReadBool(payload, ref offset, out doBuildAnimation) ||
+                    !TryReadBool(payload, ref offset, out constructionPaused))
+                    break;
+
+                if (!TryReadSingle(payload, ref offset, out constructionProgress) ||
+                    !TryReadSingle(payload, ref offset, out resourceProgress) ||
+                    !TryReadSingle(payload, ref offset, out life) ||
+                    !TryReadSingle(payload, ref offset, out modifiedMaxLife) ||
+                    !TryReadInt32(payload, ref offset, out yearBuilt) ||
+                    !TryReadSingle(payload, ref offset, out decayProtection))
+                    break;
+
+                ApplyBuildingRecord(teamId, guid, uniqueName, customName, globalPosition, rotation, localPosition, built, placed, open, doBuildAnimation, constructionPaused, constructionProgress, resourceProgress, life, modifiedMaxLife, yearBuilt, decayProtection);
             }
 
             TryRefreshFieldSystem();
+        }
+
+        private static bool EnsureCapacity(byte[] buffer, int offset, int bytesToWrite)
+        {
+            return buffer != null && offset >= 0 && (offset + bytesToWrite) <= buffer.Length;
+        }
+
+        private static bool TryWriteInt32(byte[] buffer, ref int offset, int value)
+        {
+            if (!EnsureCapacity(buffer, offset, 4))
+                return false;
+            byte[] bytes = BitConverter.GetBytes(value);
+            Buffer.BlockCopy(bytes, 0, buffer, offset, 4);
+            offset += 4;
+            return true;
+        }
+
+        private static void WriteInt32At(byte[] buffer, int offset, int value)
+        {
+            if (!EnsureCapacity(buffer, offset, 4))
+                return;
+            byte[] bytes = BitConverter.GetBytes(value);
+            Buffer.BlockCopy(bytes, 0, buffer, offset, 4);
+        }
+
+        private static bool TryWriteSingle(byte[] buffer, ref int offset, float value)
+        {
+            if (!EnsureCapacity(buffer, offset, 4))
+                return false;
+            byte[] bytes = BitConverter.GetBytes(value);
+            Buffer.BlockCopy(bytes, 0, buffer, offset, 4);
+            offset += 4;
+            return true;
+        }
+
+        private static bool TryWriteBool(byte[] buffer, ref int offset, bool value)
+        {
+            if (!EnsureCapacity(buffer, offset, 1))
+                return false;
+            buffer[offset++] = (byte)(value ? 1 : 0);
+            return true;
+        }
+
+        private static bool TryWriteGuidBytes(byte[] buffer, ref int offset, Guid guid)
+        {
+            if (!EnsureCapacity(buffer, offset, 16))
+                return false;
+            byte[] bytes = guid.ToByteArray();
+            Buffer.BlockCopy(bytes, 0, buffer, offset, 16);
+            offset += 16;
+            return true;
+        }
+
+        private static bool TryWriteString(byte[] buffer, ref int offset, string value)
+        {
+            if (value == null)
+                value = "";
+
+            byte[] bytes = Encoding.UTF8.GetBytes(value);
+            if (!TryWriteInt32(buffer, ref offset, bytes.Length))
+                return false;
+            if (!EnsureCapacity(buffer, offset, bytes.Length))
+                return false;
+            Buffer.BlockCopy(bytes, 0, buffer, offset, bytes.Length);
+            offset += bytes.Length;
+            return true;
+        }
+
+        private static bool TryReadInt32(byte[] buffer, ref int offset, out int value)
+        {
+            value = 0;
+            if (!EnsureCapacity(buffer, offset, 4))
+                return false;
+            value = BitConverter.ToInt32(buffer, offset);
+            offset += 4;
+            return true;
+        }
+
+        private static bool TryReadSingle(byte[] buffer, ref int offset, out float value)
+        {
+            value = 0f;
+            if (!EnsureCapacity(buffer, offset, 4))
+                return false;
+            value = BitConverter.ToSingle(buffer, offset);
+            offset += 4;
+            return true;
+        }
+
+        private static bool TryReadBool(byte[] buffer, ref int offset, out bool value)
+        {
+            value = false;
+            if (!EnsureCapacity(buffer, offset, 1))
+                return false;
+            value = buffer[offset++] != 0;
+            return true;
+        }
+
+        private static bool TryReadGuid(byte[] buffer, ref int offset, out Guid value)
+        {
+            value = Guid.Empty;
+            if (!EnsureCapacity(buffer, offset, 16))
+                return false;
+            byte[] bytes = new byte[16];
+            Buffer.BlockCopy(buffer, offset, bytes, 0, 16);
+            offset += 16;
+            value = new Guid(bytes);
+            return true;
+        }
+
+        private static bool TryReadString(byte[] buffer, ref int offset, out string value)
+        {
+            value = "";
+            int len;
+            if (!TryReadInt32(buffer, ref offset, out len))
+                return false;
+            if (len < 0 || !EnsureCapacity(buffer, offset, len))
+                return false;
+            value = len == 0 ? "" : Encoding.UTF8.GetString(buffer, offset, len);
+            offset += len;
+            return true;
         }
 
         private static void ApplyBuildingRecord(int teamId, Guid guid, string uniqueName, string customName, Vector3 globalPosition, Quaternion rotation, Vector3 localPosition, bool built, bool placed, bool open, bool doBuildAnimation, bool constructionPaused, float constructionProgress, float resourceProgress, float life, float modifiedMaxLife, int yearBuilt, float decayProtection)
