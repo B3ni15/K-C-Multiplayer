@@ -1,77 +1,70 @@
-# KCM (Kingdoms and Castles Multiplayer) – javított verzió
+# KCM (Kingdoms and Castles Multiplayer)
 
-Ez a repo egy *Kingdoms and Castles* multiplayer mod forrását tartalmazza, pár stabilitási/szinkron hibára célzott javításokkal.
+Ez a repó egy *Kingdoms and Castles* multiplayer mod forrása. A mod Steam lobby + Riptide alapú hálózattal próbálja a világot és a játékosok akcióit több kliens között szinkronban tartani.
 
-## Mi volt a gond?
+Ha a `output.txt` logban `Compilation failed` szerepel, akkor a mod **nem töltődött be**, és semmi nem fog szinkronizálódni (ilyenkor tipikusan C# szintaxis / runtime-kompatibilitási hiba van a forrásban).
 
-A mellékelt log (`output.txt`) alapján több tipikus hiba okozta a szerver indításkori/ lobby-beli szétesést:
+## Mit szinkronizál a mod? (jelenlegi állapot)
 
-- `NullReferenceException` a lobby player UI frissítésében (`PlayerEntryScript.SetValues`)
-- duplikált SteamID miatti `ArgumentException: same key already added` a handshake során
-- csomagkezelés közben `KeyNotFoundException` / `NullReferenceException` (hiányzó `clientId -> steamId` map, race/állapot problémák)
-- Save/load utani desync: a kliens oldali "Client Player" Reset nem futott mentés betöltése közben (loading flag miatt), így remote player állapot (registry/field/worker) beragadhatott; ez okozhatott "nem látni az aratást/elszállítást", hiányzó épület/resource state, és UI anomáliákat.
-- Save/load utani "kezdo keep" kerese: betöltéskor a keep beallitasa túl szigorúan teamId-hez volt kötve, ezért előfordult hogy a kliensnél nem lett beállítva a már létező keep, és újra kérte a játék a kezdő lerakást.
-- Többszöri load után romló sync: a statikus StateObserver/observer GameObject-ok nem lettek kitakarítva új load előtt, így régi világ/objektum referenciák maradhattak bent és rossz state frissítéseket küldhettek.
+**Lobby / kapcsolat**
+- Játékos csatlakozás/leválás, player lista, ready állapot.
+- Szerver beállítások (név, max players, seed, world opciók).
+- Chat és rendszerüzenetek.
 
-## Mit javít ez a verzió?
+**Világ indítás**
+- World seed szétküldése és world generálás a klienseken.
+- (Beállítástól függően) keep elhelyezés csomagból.
 
-- Lobby UI frissítés stabilizálása (null/állapot ellenőrzések, helyes inicializálási sorrend)
-- Handshake alatt a player-regisztráció ütközésmentessé tétele + `clientSteamIds` beállítása
-- Packet oldali player lookup biztonságossá tétele (ne dobjon kivételt hiányzó map esetén)
-- `PlayerReady` packet: ha nincs player, ne crasheljen
-- Szerver oldalon a csatlakozáskor a játékos regisztráció/map frissítése
-- Kilépés/clear esetén `clientSteamIds` takarítása, hogy ne maradjanak “árva” bejegyzések
-- Épületek `Player.inst` referenciáinak patch-elése már nem csak a base `Building` osztályban fut, hanem az összes `Building`-ből származó típusban (pl. farmok speciális logikája)
-- `FieldSystem` `Player.inst` referenciáinak patch-elése (farm/termés állapotkezelés több helyen erre támaszkodik)
-- Mentés betöltéskor a `ProcessBuilding` útvonal kiegészítése `World.inst.PlaceFromLoad(...)` + `UnpackStage2(...)` hívásokkal (különösen fontos a “világba helyezés” mellékhatásai miatt, pl. farm/field regisztráció)
-- Save transfer kliens oldalon robusztusabb inicializálás/reset (ne ragadjon be a statikus állapot több betöltés után, plusz bounds/null ellenőrzések)
-- Fix: save/load közben is lefut a remote "Client Player" Reset (nem csak új világ generálásnál), hogy a player alrendszerek mindig tiszta alapból induljanak.
-- Fix: keep detektálás betöltéskor (ne teamId egyezésen múljon), így nem kéri a játék a kezdő keep lerakását, ha már létezik.
-- Fix: új load előtt StateObserver takarítás (save transfer kezdetén, host oldali `LoadAtPath` elején, lobby elhagyásakor), hogy ne maradjanak beragadt observer objektumok.
-- Kompatibilitási fix: `World.inst.liverySets` lista esetén `.Count` használata `.Length` helyett (különben `Compilation failed` lehet egyes verziókon)
-- Hálózati stabilitás: `BuildingStatePacket` most `Unreliable` módban megy (state jellegű csomagoknál jobb, ha a legfrissebb állapot érkezik meg és nem torlódik fel a megbízható sor)
-- Mentés-szinkron stabilitás: szerver oldalon a save chunkok már nem egy nagy for-ciklusban mennek ki, hanem ütemezve (csökkenti a “The gap between received sequence IDs…” / “Poor connection” diszkonnekteket)
-- Kapcsolat tuning: kliens és szerver oldalon emelt `MaxSendAttempts`, és tiltott minőség-alapú auto-disconnect (különösen save transfer közben volt agresszív)
-- Fix: a `sendMode` csak a Riptide üzenetküldési mód kiválasztására szolgál, nem kerül szériázásra; az enum csomagmezők szériázása/deszériázása robusztusabb lett (különben csatlakozáskor packet-parszolás szétesett)
+**Gameplay alap**
+- Épület lerakás események (alap meta: `uniqueName`, `guid`, pozíció/rotáció).
+- Épület állapot frissítések “snapshot” jelleggel (`BuildingStatePacket`): built/placed, constructionProgress, life, stb.
+- Néhány globális esemény: idősebesség változtatás, időjárás váltás, fa kivágás (repo verziótól függően).
 
-Érintett fájlok (főbb pontok):
+**Mentés betöltés (host → kliens)**
+- Host oldalon a mentés byte-ok chunkolva kerülnek kiküldésre (`SaveTransferPacket`).
+- Kliens oldalon érkezés után `LoadSave.Load()` + `MultiplayerSaveContainer.Unpack()` fut.
+- Ha a kiválasztott mentés nem multiplayer container (vanilla mentés), a host fallback-ként átadja a normál betöltést.
 
-- `ServerLobby/PlayerEntryScript.cs`
-- `Packets/Network/ServerHandshake.cs`
-- `Packets/Network/ClientConnected.cs`
-- `Packets/Packet.cs`
-- `Packets/Lobby/PlayerReady.cs`
-- `Packets/Lobby/PlayerList.cs`
-- `Packets/Lobby/SaveTransferPacket.cs`
-- `KCServer.cs`
-- `Packets/Handlers/LobbyHandler.cs`
-- `RiptideSteamTransport/LobbyManager.cs`
-- `Packets/Handlers/PacketHandler.cs`
-- `Packets/State/BuildingStatePacket.cs`
-- `StateManagement/Observers/StateObserver.cs`
-- `Main.cs`
+## Mi nincs (még) rendesen szinkronizálva? (gyakori desync okok)
 
-## Telepítés / használat
+Ezek okozzák a tipikus “farm termel, de nem látszik” / “resource nem frissül” / “animáció hiányzik” jelenségeket:
+- **Erőforrás-logika és szállítás**: raktárkészletek, haul/cart routing, villager “viszem/lerakom” animációk nincsenek teljes állapotban szinkronizálva.
+- **Villager/job részletek**: current task, target, carried resource, pathing cache, részfeladat-állapot.
+- **Field/Farm belső állapot**: growth stage, harvest queue, field regisztráció edge case-ek.
+- **UI / kliens oldali state**: beragadt menük, promptok (pl. “rakd le a kezdő épületet”), lokális UI state nem hálózati adat.
+- **AI brains / nem-player rendszerek**: részben vagy egyáltalán nincs “szerver az igazság” modell.
 
-Fontos: a hostnak és **minden kliensnek ugyanaz a verzió** kell, különben továbbra is lehetnek sync problémák.
+## Mit érdemes még hozzáadni? (roadmap)
 
-Megjegyzés: a mod menüben a piros `Restart to load` üzenet azt jelenti, hogy a mod engedélyezése/letöltése közben változott valami, és **teljes játék-újraindítás** kell, hogy betöltődjön.
+Ha cél a stabil “load utáni sync” és kevesebb vizuális desync:
+- **Resource szinkron**: raktárak készlete, termelés/fogyasztás tick eredménye, szállítási queue események (event-based vagy periodikus snapshot).
+- **Villager szinkron**: villager state machine + carried resource + célpont; vagy determinisztikus szerver oldali szimuláció és kliens “replay”.
+- **Farm/Field szinkron**: field állapot (growth/ready/harvest), aratás események explicit hálózati üzenetként.
+- **Robusztus reconnect**: kilépés egy sessionből → másik lobby csatlakozás restart nélkül (minden statikus állapot, observer, transfer state, player cache teljes resetje).
+- **Debug eszközök**: desync detektor (hash/snapshot összehasonlítás), több log a load/sync pontokra.
 
-1. Tedd a mod mappáját a játék `mods` könyvtárába (vagy használd Workshopból, de ott egy frissítés felülírhatja a javításokat).
-2. Indítsd újra teljesen a játékot.
-3. Hostolj/ csatlakozz, majd ellenőrizd, hogy a lobby és a szerver indítás stabil marad.
+## Telepítés
 
-Workshop módosításokhoz ajánlott: másold ki a Workshop mappából egy **külön névvel** a `...\\KingdomsAndCastles_Data\\mods\\` alá, és a mod menüben kapcsold ki a Workshop verziót, hogy Steam frissítés ne írja felül.
+- Hostnak és **minden kliensnek ugyanaz a mod verzió** kell.
+- Workshop verzió frissítés felülírhatja a módosításokat. Ajánlott:
+  - kimásolni a modot a játék `...\\KingdomsAndCastles_Data\\mods\\` mappájába egy külön névvel,
+  - és a mod menüben kikapcsolni a Workshop verziót.
+- Változtatások után **teljes játék újraindítás** javasolt.
 
 ## Hibaelhárítás
 
-Ha továbbra is hibát látsz:
+**Log helye:** a mod mappájában gyakran van `output.txt`.
 
-- Küldd el a `output.txt` releváns részét (a hiba előtti/utáni stack trace-t), vagy írd le a pontos üzenetet.
-- Írd meg, hogy: hostoltál-e, hány kliens csatlakozott, és mindenkin ugyanaz a mod-verzió van-e.
-- Teszthez kapcsold ki a többi modot (különösen azokat, amik Harmony patch-elnek). A logban egy `Profiler` mod (`Profiler.ProfilerMod`) is hibázott, ez meg tudja zavarni a betöltést.
-- Farm/termés desync esetén írd meg: host vagy kliens oldalon nem látszik-e a termés, új világban történik-e vagy save betöltés után, és hány perc játék után jön elő.
+Nézd ezeket a kulcssorokat:
+- `Compilation failed` → a mod nem fordult le, nincs multiplayer.
+- `Save Transfer started/complete` → mentés átküldés/betöltés állapota.
+- `Error loading save` / `LoadError` → sérült/rossz típusú mentés, vagy verzió eltérés.
 
-## Repo higiénia
+Bug reporthoz küldd el:
+- a hiba környéki 50–100 sort a `output.txt`-ből,
+- host/kliens szerep, játék verzió, mod verzió,
+- új világban vagy mentés betöltés után jelentkezik-e.
 
-- A `.gitignore` kizárja a logokat (`output*.txt`) és tipikus IDE/build artifactokat, hogy ne kerüljenek fel GitHubra.
+## Fejlesztés
+
+Repo-szabályok és szerkezet: `AGENTS.md`.
