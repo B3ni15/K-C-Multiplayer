@@ -550,7 +550,12 @@ namespace KCM
         {
             public static bool Prefix(Player __instance)
             {
-                if (KCClient.client.IsConnected && __instance.gameObject.name.Contains("Client Player") && !LobbyManager.loadingSave)
+                var localPlayer = Player.inst;
+                if (KCClient.client.IsConnected &&
+                    __instance != null &&
+                    (localPlayer == null || __instance != localPlayer) &&
+                    __instance.gameObject != null &&
+                    __instance.gameObject.name.Contains("Client Player"))
                 {
                     try
                     {
@@ -1206,6 +1211,7 @@ namespace KCM
                 if (KCServer.IsRunning)
                 {
                     Main.helper.Log("Trying to load multiplayer save");
+                    KCM.StateManagement.Observers.StateObserver.ClearAll();
                     LoadSave.LastLoadDirectory = path;
                     path = path + "/" + filename;
 
@@ -1453,11 +1459,12 @@ namespace KCM
                             Main.helper.Log(e.Message);
                         }
 
-                        bool flag2 = building.GetComponent<Keep>() != null && building.TeamID() == p.PlayerLandmassOwner.teamId;
-                        Main.helper.Log("Set keep? " + flag2);
-                        if (flag2)
+                        var keep = building.GetComponent<Keep>();
+                        bool shouldSetKeep = keep != null && p.keep == null;
+                        Main.helper.Log("Set keep? " + shouldSetKeep);
+                        if (shouldSetKeep)
                         {
-                            p.keep = building.GetComponent<Keep>();
+                            p.keep = keep;
                             Main.helper.Log(p.keep.ToString());
                         }
 

@@ -1,6 +1,7 @@
 ﻿using KCM;
 using KCM.Enums;
 using KCM.Packets.Handlers;
+using KCM.StateManagement.Observers;
 using Steamworks;
 using UnityEngine;
 
@@ -156,6 +157,8 @@ namespace Riptide.Demos.Steam.PlayerHosted
 
             if (KCClient.client.IsConnected)
                 KCClient.client.Disconnect();
+
+            StateObserver.ClearAll();
 
             Main.helper.Log("clear players");
             Main.kCPlayers.Clear();

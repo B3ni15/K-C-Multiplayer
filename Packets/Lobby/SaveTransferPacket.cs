@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using KCM.StateManagement.Observers;
 using static KCM.Main;
 
 namespace KCM.Packets.Lobby
@@ -40,6 +41,8 @@ namespace KCM.Packets.Lobby
                 Main.helper.Log("Save Transfer started!");
                 loadingSave = true;
                 received = 0;
+
+                StateObserver.ClearAll();
 
                 saveData = new byte[saveSize];
                 chunksReceived = new bool[totalChunks];
