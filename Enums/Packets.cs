@@ -47,6 +47,7 @@ namespace KCM.Enums
         PlaceKeepRandomly = 91,
         ResyncRequest = 92,
         ResourceSnapshot = 93,
-        BuildingSnapshot = 94
+        BuildingSnapshot = 94,
+        VillagerSnapshot = 95
     }
 }

@@ -16,9 +16,11 @@ namespace KCM.StateManagement.Sync
         private const int MaxBuildingSnapshotBytes = 30000;
         private const int MaxVillagerTeleportsPerResync = 400;
         private const int VillagerValidationIntervalMs = 10000; // 10 seconds
+        private const int VillagerSnapshotIntervalMs = 1000;
 
         private static long lastResourceBroadcastMs;
         private static long lastVillagerValidationMs;
+        private static long lastVillagerSnapshotMs;
 
         private static FieldInfo freeResourceAmountField;
         private static MethodInfo resourceAmountGetMethod;
@@ -62,6 +64,20 @@ namespace KCM.StateManagement.Sync
             {
                 lastVillagerValidationMs = now;
                 ValidateAndCorrectVillagerStates();
+            }
+
+            if ((now - lastVillagerSnapshotMs) >= VillagerSnapshotIntervalMs)
+            {
+                lastVillagerSnapshotMs = now;
+                try
+                {
+                    BroadcastVillagerSnapshot();
+                }
+                catch (Exception ex)
+                {
+                    Main.helper.Log("Error broadcasting villager snapshot");
+                    Main.helper.Log(ex.ToString());
+                }
             }
         }
 
@@ -557,6 +573,44 @@ namespace KCM.StateManagement.Sync
             catch
             {
             }
+        }
+
+        private static void BroadcastVillagerSnapshot()
+        {
+            if (!KCServer.IsRunning)
+                return;
+
+            if (KCServer.server.ClientCount == 0)
+                return;
+
+            if (Villager.villagers == null || Villager.villagers.Count == 0)
+                return;
+
+            List<Guid> guids = new List<Guid>();
+            List<Vector3> positions = new List<Vector3>();
+            const int maxVillagersPerSnapshot = 200;
+
+            for (int i = 0; i < Villager.villagers.Count && guids.Count < maxVillagersPerSnapshot; i++)
+            {
+                Villager villager = Villager.villagers.data[i];
+                if (villager == null)
+                    continue;
+
+                guids.Add(villager.guid);
+                positions.Add(villager.Pos);
+            }
+
+            if (guids.Count == 0)
+                return;
+
+            VillagerSnapshotPacket snapshot = new VillagerSnapshotPacket
+            {
+                guids = guids,
+                positions = positions
+            };
+
+            ushort exceptId = KCClient.client != null ? KCClient.client.Id : (ushort)0;
+            snapshot.SendToAll(exceptId);
         }
 
         public static void ApplyResourceSnapshot(List<int> resourceTypes, List<int> amounts)
