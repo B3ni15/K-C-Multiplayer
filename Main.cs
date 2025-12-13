@@ -56,6 +56,76 @@ namespace KCM
         public static Dictionary<ushort, string> clientSteamIds = new Dictionary<ushort, string>();
 
         private static readonly Dictionary<int, long> lastTeamIdLookupLogMs = new Dictionary<int, long>();
+        private static int resetInProgress = 0;
+
+        public static void ResetMultiplayerState(string reason = null)
+        {
+            if (Interlocked.Exchange(ref resetInProgress, 1) == 1)
+                return;
+
+            try
+            {
+                if (!string.IsNullOrEmpty(reason))
+                    helper?.Log($"ResetMultiplayerState: {reason}");
+
+                try { StateObserver.ClearAll(); } catch { }
+                try { SaveTransferPacket.ResetTransferState(); } catch { }
+
+                try
+                {
+                    LoadSaveLoadHook.memoryStreamHook = false;
+                    LoadSaveLoadHook.saveBytes = new byte[0];
+                    LoadSaveLoadHook.saveContainer = null;
+                }
+                catch { }
+
+                try { LoadSaveLoadAtPathHook.saveData = new byte[0]; } catch { }
+
+                try { LobbyManager.loadingSave = false; } catch { }
+
+                try
+                {
+                    foreach (var player in kCPlayers.Values)
+                    {
+                        if (player?.gameObject != null && player.gameObject.name != null && player.gameObject.name.Contains("Client Player"))
+                            UnityEngine.Object.Destroy(player.gameObject);
+                    }
+                }
+                catch { }
+
+                try { LobbyHandler.ClearChatEntries(); } catch { }
+                try { LobbyHandler.ClearPlayerList(); } catch { }
+
+                try
+                {
+                    kCPlayers.Clear();
+                    clientSteamIds.Clear();
+                }
+                catch { }
+
+                try { lastTeamIdLookupLogMs.Clear(); } catch { }
+
+                try
+                {
+                    if (KCClient.client != null && KCClient.client.IsConnected)
+                        KCClient.client.Disconnect();
+                }
+                catch { }
+
+                try
+                {
+                    if (KCServer.IsRunning)
+                        KCServer.server.Stop();
+                }
+                catch { }
+
+                try { ServerBrowser.registerServer = false; } catch { }
+            }
+            finally
+            {
+                Interlocked.Exchange(ref resetInProgress, 0);
+            }
+        }
 
         public static KCPlayer GetPlayerByClientID(ushort clientId)
         {
@@ -310,6 +380,9 @@ namespace KCM
 
                 if (newState != MainMenuMode.State.Uninitialized)
                     Main.menuState = (MenuState)newState;
+
+                if ((MenuState)newState == MenuState.Menu && (KCClient.client.IsConnected || KCServer.IsRunning))
+                    ResetMultiplayerState("Returned to main menu");
             }
         }
 
@@ -1221,11 +1294,18 @@ namespace KCM
                     {
                         BinaryFormatter bf = new BinaryFormatter();
                         bf.Binder = new MultiplayerSaveDeserializationBinder();
-                        saveData = File.ReadAllBytes(path);
                         Stream file = new FileStream(path, FileMode.Open);
                         try
                         {
-                            MultiplayerSaveContainer loadData = (MultiplayerSaveContainer)bf.Deserialize(file);
+                            object deserialized = bf.Deserialize(file);
+                            MultiplayerSaveContainer loadData = deserialized as MultiplayerSaveContainer;
+                            if (loadData == null)
+                            {
+                                Main.helper.Log("Selected save is not a MultiplayerSaveContainer; falling back to vanilla load.");
+                                return true;
+                            }
+
+                            saveData = File.ReadAllBytes(path);
                             loadData.Unpack(null);
                             Broadcast.OnLoadedEvent.Broadcast(new OnLoadedEvent());
                         }
@@ -1335,19 +1415,33 @@ namespace KCM
                 {
                     Directory.CreateDirectory(LoadSave.GetSaveDir());
                     Guid guid = Guid.NewGuid();
-                    string path = (pathOverride != "") ? pathOverride : (LoadSave.GetSaveDir() + "/" + guid);
+                    bool hasOverride = !string.IsNullOrWhiteSpace(pathOverride);
+                    string path = hasOverride ? pathOverride : Path.Combine(LoadSave.GetSaveDir(), guid.ToString());
+                    if (hasOverride && !Path.IsPathRooted(path))
+                        path = Path.Combine(LoadSave.GetSaveDir(), pathOverride);
                     Directory.CreateDirectory(path);
                     Thread thread;
                     try
                     {
                         thread = new Thread(new ParameterizedThreadStart(OutToFile));
 
-                        MultiplayerSaveContainer packedData = new MultiplayerSaveContainer().Pack(null);
+                        MultiplayerSaveContainer packedData;
+                        try
+                        {
+                            packedData = new MultiplayerSaveContainer().Pack(null);
+                        }
+                        catch (Exception ex)
+                        {
+                            Main.helper.Log("Failed to pack multiplayer save data; falling back to vanilla save.");
+                            Main.helper.Log(ex.ToString());
+                            __result = null;
+                            return true;
+                        }
                         Broadcast.OnSaveEvent.Broadcast(new OnSaveEvent());
                         thread.Start(new OutData
                         {
                             LoadSaveContainer = packedData,
-                            Path = path + "/world"
+                            Path = Path.Combine(path, "world")
                         });
                     }
                     catch (Exception e)
@@ -1379,7 +1473,7 @@ namespace KCM
 
                     try
                     {
-                        World.inst.TakeScreenshot(path + "/cover", new Func<int, int, Texture2D>(World.inst.Func_CaptureWorldShot), onCompleteCallback);
+                        World.inst.TakeScreenshot(Path.Combine(path, "cover"), new Func<int, int, Texture2D>(World.inst.Func_CaptureWorldShot), onCompleteCallback);
                     }
                     catch (Exception e3)
                     {

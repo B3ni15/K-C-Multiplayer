@@ -39,6 +39,8 @@ namespace KCM
             Main.helper.Log("Client disconnected event start");
             try
             {
+                Main.ResetMultiplayerState("Client disconnected");
+
                 if (e.Message != null)
                 {
                     Main.helper.Log(e.Message.ToString());

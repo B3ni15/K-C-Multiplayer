@@ -27,12 +27,36 @@ namespace KCM.LoadSaveOverrides
             //this.PlayerSaveData = new PlayerSaveDataOverride().Pack(Player.inst);
             foreach (var player in Main.kCPlayers.Values)
             {
-                Main.helper.Log($"Attempting to pack data for: " + player.name + $"({player.steamId})");
-                Main.helper.Log($"{player.inst.ToString()} {player.inst?.gameObject.name}");
-                this.players.Add(player.steamId, new Player.PlayerSaveData().Pack(player.inst));
-                kingdomNames.Add(player.steamId, player.kingdomName);
+                try
+                {
+                    if (player == null)
+                        continue;
 
-                Main.helper.Log($"{players[player.steamId] == null}");
+                    if (string.IsNullOrWhiteSpace(player.steamId))
+                    {
+                        Main.helper.Log($"Skipping save for player with missing steamId (name={player.name ?? \"\"})");
+                        continue;
+                    }
+
+                    if (player.inst == null)
+                    {
+                        Main.helper.Log($"Skipping save for player {player.name ?? \"\"} ({player.steamId}) because Player.inst is null");
+                        continue;
+                    }
+
+                    Main.helper.Log($"Attempting to pack data for: {player.name} ({player.steamId})");
+                    Main.helper.Log($"Player object: {player.inst} {player.inst.gameObject?.name}");
+
+                    this.players[player.steamId] = new Player.PlayerSaveData().Pack(player.inst);
+                    kingdomNames[player.steamId] = player.kingdomName ?? " ";
+
+                    Main.helper.Log($"{players[player.steamId] == null}");
+                }
+                catch (Exception ex)
+                {
+                    Main.helper.Log($"Error packing player data for save (steamId={player?.steamId ?? \"\"}, name={player?.name ?? \"\"})");
+                    Main.helper.Log(ex.ToString());
+                }
             }
 
             this.WorldSaveData = new World.WorldSaveData().Pack(World.inst);

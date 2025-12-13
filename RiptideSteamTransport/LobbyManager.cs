@@ -154,23 +154,7 @@ namespace Riptide.Demos.Steam.PlayerHosted
             //NetworkManager.Singleton.StopServer();
             //NetworkManager.Singleton.DisconnectClient();
             SteamMatchmaking.LeaveLobby(lobbyId);
-
-            if (KCClient.client.IsConnected)
-                KCClient.client.Disconnect();
-
-            StateObserver.ClearAll();
-
-            Main.helper.Log("clear players");
-            Main.kCPlayers.Clear();
-            Main.clientSteamIds.Clear();
-            LobbyHandler.ClearPlayerList();
-            LobbyHandler.ClearChatEntries();
-            Main.helper.Log("end clear players");
-
-            if (KCServer.IsRunning)
-                KCServer.server.Stop();
-
-
+            Main.ResetMultiplayerState("LeaveLobby");
 
             Main.TransitionTo(MenuState.ServerBrowser);
             ServerBrowser.registerServer = false;

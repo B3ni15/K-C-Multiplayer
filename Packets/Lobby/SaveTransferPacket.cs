@@ -18,6 +18,14 @@ namespace KCM.Packets.Lobby
         public static bool loadingSave = false;
         public static int received = 0;
 
+        public static void ResetTransferState()
+        {
+            loadingSave = false;
+            received = 0;
+            saveData = new byte[1];
+            chunksReceived = new bool[1];
+        }
+
 
         public int chunkId { get; set; }
         public int chunkSize { get; set; }
