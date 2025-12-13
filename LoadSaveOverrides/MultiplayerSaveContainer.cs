@@ -45,7 +45,8 @@ namespace KCM.LoadSaveOverrides
                     }
 
                     Main.helper.Log($"Attempting to pack data for: {player.name} ({player.steamId})");
-                    Main.helper.Log($"Player object: {player.inst} {player.inst.gameObject?.name}");
+                    string playerGoName = (player.inst.gameObject != null) ? player.inst.gameObject.name : string.Empty;
+                    Main.helper.Log($"Player object: {player.inst} {playerGoName}");
 
                     this.players[player.steamId] = new Player.PlayerSaveData().Pack(player.inst);
                     kingdomNames[player.steamId] = player.kingdomName ?? " ";
@@ -54,7 +55,9 @@ namespace KCM.LoadSaveOverrides
                 }
                 catch (Exception ex)
                 {
-                    Main.helper.Log($"Error packing player data for save (steamId={player?.steamId ?? string.Empty}, name={player?.name ?? string.Empty})");
+                    string steamId = (player != null && player.steamId != null) ? player.steamId : string.Empty;
+                    string name = (player != null && player.name != null) ? player.name : string.Empty;
+                    Main.helper.Log($"Error packing player data for save (steamId={steamId}, name={name})");
                     Main.helper.Log(ex.ToString());
                 }
             }
