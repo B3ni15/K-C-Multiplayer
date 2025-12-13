@@ -577,14 +577,18 @@ namespace KCM.StateManagement.Sync
 
         private static void BroadcastVillagerSnapshot()
         {
-            if (!KCServer.IsRunning)
-                return;
+            // TEMPORARILY DISABLED: VillagerSnapshot causes packet overflow errors
+            // TODO: Fix villager synchronization properly
+            return;
 
-            if (KCServer.server.ClientCount == 0)
-                return;
+            // if (!KCServer.IsRunning)
+            //     return;
 
-            if (Villager.villagers == null || Villager.villagers.Count == 0)
-                return;
+            // if (KCServer.server.ClientCount == 0)
+            //     return;
+
+            // if (Villager.villagers == null || Villager.villagers.Count == 0)
+            //     return;
 
             List<Guid> guids = new List<Guid>();
             List<Vector3> positions = new List<Vector3>();

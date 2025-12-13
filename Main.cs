@@ -162,7 +162,27 @@ namespace KCM
 
                 PropertyInfo loadTickDelayProp = instance.GetType().GetProperty("loadTickDelay", BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
                 if (loadTickDelayProp != null && loadTickDelayProp.CanWrite && loadTickDelayProp.PropertyType == typeof(int))
+                {
                     loadTickDelayProp.SetValue(instance, ticks, null);
+                    return;
+                }
+
+                // Debug: list all fields if loadTickDelay not found
+                if (instance.GetType().Name == "VillagerSystem")
+                {
+                    helper?.Log("DEBUG: VillagerSystem fields:");
+                    foreach (var field in instance.GetType().GetFields(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public))
+                    {
+                        if (field.FieldType == typeof(int) || field.FieldType == typeof(bool))
+                            helper?.Log($"  Field: {field.Name} ({field.FieldType.Name})");
+                    }
+                    helper?.Log("DEBUG: VillagerSystem properties:");
+                    foreach (var prop in instance.GetType().GetProperties(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public))
+                    {
+                        if (prop.PropertyType == typeof(int) || prop.PropertyType == typeof(bool))
+                            helper?.Log($"  Property: {prop.Name} ({prop.PropertyType.Name})");
+                    }
+                }
             }
             catch (Exception e)
             {
@@ -259,6 +279,17 @@ namespace KCM
                     " Unit=" + GetLoadTickDelayOrMinusOne(UnitSystem.inst) +
                     " Job=" + GetLoadTickDelayOrMinusOne(JobSystem.inst) +
                     " Villager=" + GetLoadTickDelayOrMinusOne(VillagerSystem.inst));
+
+                // Try to enable VillagerSystem if it's disabled
+                if (VillagerSystem.inst != null && !VillagerSystem.inst.enabled)
+                {
+                    helper?.Log("VillagerSystem is disabled, enabling it");
+                    VillagerSystem.inst.enabled = true;
+                }
+                else if (VillagerSystem.inst != null)
+                {
+                    helper?.Log("VillagerSystem.enabled = " + VillagerSystem.inst.enabled);
+                }
             }
             catch (Exception e)
             {
