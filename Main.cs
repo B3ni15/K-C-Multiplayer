@@ -144,6 +144,45 @@ namespace KCM
             return kCPlayers[clientSteamIds[clientId]];
         }
 
+        private static void SetLoadTickDelay(object instance, int ticks)
+        {
+            if (instance == null)
+                return;
+
+            try
+            {
+                FieldInfo loadTickDelayField = instance.GetType().GetField("loadTickDelay", BindingFlags.Instance | BindingFlags.NonPublic);
+                if (loadTickDelayField != null)
+                    loadTickDelayField.SetValue(instance, ticks);
+            }
+            catch
+            {
+            }
+        }
+
+        public static void RunPostLoadRebuild(string reason)
+        {
+            try
+            {
+                helper?.Log("Post-load rebuild: " + (reason ?? string.Empty));
+
+                try { World.inst.SetupInitialPathCosts(); } catch (Exception e) { helper?.Log(e.ToString()); }
+                try { World.inst.RebuildVillagerGrid(); } catch (Exception e) { helper?.Log(e.ToString()); }
+                try { Player.inst.irrigation.UpdateIrrigation(); } catch (Exception e) { helper?.Log(e.ToString()); }
+                try { Player.inst.CalcMaxResources(null, -1); } catch (Exception e) { helper?.Log(e.ToString()); }
+
+                SetLoadTickDelay(Player.inst, 1);
+                SetLoadTickDelay(UnitSystem.inst, 1);
+                SetLoadTickDelay(JobSystem.inst, 1);
+                SetLoadTickDelay(VillagerSystem.inst, 1);
+            }
+            catch (Exception e)
+            {
+                helper?.Log("Post-load rebuild failed");
+                helper?.Log(e.ToString());
+            }
+        }
+
         public static Player GetPlayerByTeamID(int teamId) // Need to replace building / production types so that the correct player is used. IResourceStorage and IResourceProvider, and jobs
         {
             KCPlayer match = kCPlayers.Values.FirstOrDefault(p =>
@@ -1081,32 +1120,46 @@ namespace KCM
         {
             private static long lastTime = 0;
 
-            public static bool Prefix()
+            public static bool Prefix(ref bool __state)
             {
+                __state = false;
                 if (KCClient.client.IsConnected)
                 {
-                    if ((DateTimeOffset.Now.ToUnixTimeMilliseconds() - lastTime) < 250) // Set speed spam fix / hack
-                        return false;
+                    bool calledFromPacket = false;
+                    try
+                    {
+                        calledFromPacket = new StackFrame(3).GetMethod().Name.Contains("HandlePacket");
+                    }
+                    catch
+                    {
+                    }
 
-                    if (!new StackFrame(3).GetMethod().Name.Contains("HandlePacket"))
-                        return false;
+                    if (!calledFromPacket)
+                    {
+                        if ((DateTimeOffset.Now.ToUnixTimeMilliseconds() - lastTime) >= 250) // Set speed spam fix / hack
+                            __state = true;
+                    }
                 }
 
                 return true;
             }
 
-            public static void Postfix(int idx, bool skipNextSfx)
+            public static void Postfix(int idx, bool skipNextSfx, bool __state)
             {
                 if (KCClient.client.IsConnected)
                 {
+                    if (!__state)
+                        return;
+
                     /*Main.helper.Log($"set speed Called by 0: {new StackFrame(0).GetMethod()} {new StackFrame(0).GetMethod().Name.Contains("HandlePacket")}");
-                    Main.helper.Log($"set speed Called by 1: {new StackFrame(1).GetMethod()} {new StackFrame(1).GetMethod().Name.Contains("HandlePacket")}");
-                    Main.helper.Log($"set speed Called by 2: {new StackFrame(2).GetMethod()} {new StackFrame(2).GetMethod().Name.Contains("HandlePacket")}");
-                    Main.helper.Log($"set speed Called by 3: {new StackFrame(3).GetMethod()} {new StackFrame(3).GetMethod().Name.Contains("HandlePacket")}");*/
+                     Main.helper.Log($"set speed Called by 1: {new StackFrame(1).GetMethod()} {new StackFrame(1).GetMethod().Name.Contains("HandlePacket")}");
+                     Main.helper.Log($"set speed Called by 2: {new StackFrame(2).GetMethod()} {new StackFrame(2).GetMethod().Name.Contains("HandlePacket")}");
+                     Main.helper.Log($"set speed Called by 3: {new StackFrame(3).GetMethod()} {new StackFrame(3).GetMethod().Name.Contains("HandlePacket")}");*/
 
                     if (new StackFrame(3).GetMethod().Name.Contains("HandlePacket"))
                         return;
 
+                    Main.helper.Log("SpeedControlUI.SetSpeed (local): " + idx);
                     new SetSpeed()
                     {
                         speed = idx
@@ -1291,8 +1344,9 @@ namespace KCM
             //public static string saveFile = "";
             public static byte[] saveData = new byte[0];
 
-            public static bool Prefix(string path, string filename, bool visitedWorld)
+            public static bool Prefix(string path, string filename, bool visitedWorld, ref bool __state)
             {
+                __state = false;
                 if (KCServer.IsRunning)
                 {
                     Main.helper.Log("Trying to load multiplayer save");
@@ -1351,6 +1405,7 @@ namespace KCM
                         try
                         {
                             Main.SetMultiplayerSaveLoadInProgress(true);
+                            __state = true;
                             loadData.Unpack(null);
                         }
                         finally
@@ -1365,6 +1420,17 @@ namespace KCM
                 }
 
                 return true;
+            }
+
+            public static void Postfix(string path, string filename, bool visitedWorld, bool __state)
+            {
+                if (!KCClient.client.IsConnected)
+                    return;
+
+                if (__state)
+                    return;
+
+                RunPostLoadRebuild("LoadAtPath (vanilla)");
             }
         }
 
