@@ -760,22 +760,11 @@ namespace KCM.StateManagement.Sync
                     {
                         bool needsCorrection = false;
                         
-                        // Check if villager is stuck (not moving for too long while having a job)
-                        if (v.workerJob != null && v.brain != null)
+                        // Check if villager position is invalid
+                        if (float.IsNaN(v.Pos.x) || float.IsNaN(v.Pos.y) || float.IsNaN(v.Pos.z))
                         {
-                            // Check if villager is in invalid state
-                            if (v.brain.currentAction == null && v.workerJob.active)
-                            {
-                                needsCorrection = true;
-                                stuckVillagers++;
-                            }
-                            
-                            // Check if villager position is invalid
-                            if (float.IsNaN(v.Pos.x) || float.IsNaN(v.Pos.y) || float.IsNaN(v.Pos.z))
-                            {
-                                needsCorrection = true;
-                                stuckVillagers++;
-                            }
+                            needsCorrection = true;
+                            stuckVillagers++;
                         }
                         
                         if (needsCorrection)
@@ -783,25 +772,11 @@ namespace KCM.StateManagement.Sync
                             // Correct villager state
                             try
                             {
-                                // Restart AI brain
-                                if (v.brain != null)
-                                {
-                                    v.brain.Restart();
-                                }
-                                
                                 // Ensure valid position
                                 if (float.IsNaN(v.Pos.x) || float.IsNaN(v.Pos.y) || float.IsNaN(v.Pos.z))
                                 {
-                                    // Teleport to a safe position near their workplace or home
-                                    Vector3 safePos = Vector3.zero;
-                                    if (v.workerJob != null && v.workerJob.employer != null)
-                                    {
-                                        safePos = v.workerJob.employer.transform.position;
-                                    }
-                                    else
-                                    {
-                                        safePos = new Vector3(World.inst.GridWidth / 2, 0, World.inst.GridHeight / 2);
-                                    }
+                                    // Teleport to a safe position
+                                    Vector3 safePos = new Vector3(World.inst.GridWidth / 2, 0, World.inst.GridHeight / 2);
                                     v.TeleportTo(safePos);
                                 }
                                 
@@ -822,6 +797,34 @@ namespace KCM.StateManagement.Sync
                 if (stuckVillagers > 0)
                 {
                     Main.helper.Log($"Villager validation: Found {stuckVillagers} stuck villagers, corrected {correctedVillagers}");
+                }
+                
+                // Force villager system refresh if we found issues
+                if (stuckVillagers > 0 && VillagerSystem.inst != null)
+                {
+                    try
+                    {
+                        var villagerSystemType = typeof(VillagerSystem);
+                        var refreshMethods = villagerSystemType.GetMethods(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
+                            .Where(m => m.Name.Contains("Refresh") || m.Name.Contains("Update") || m.Name.Contains("Restart"));
+                            
+                        foreach (var method in refreshMethods)
+                        {
+                            if (method.GetParameters().Length == 0)
+                            {
+                                try
+                                {
+                                    method.Invoke(VillagerSystem.inst, null);
+                                    Main.helper.Log($"Called VillagerSystem.{method.Name} for validation");
+                                }
+                                catch { }
+                            }
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        Main.helper.Log($"Error refreshing villager system: {e.Message}");
+                    }
                 }
             }
             catch (Exception e)

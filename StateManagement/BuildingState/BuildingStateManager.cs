@@ -1,4 +1,4 @@
-﻿using KCM.Packets;
+using KCM.Packets;
 using KCM.Packets.State;
 using KCM.StateManagement.Observers;
 using System;
@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UnityEngine;
 using static KCM.StateManagement.Observers.Observer;
 
 namespace KCM.StateManagement.BuildingState

@@ -8,6 +8,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using UnityEngine;
 
 namespace KCM.LoadSaveOverrides
 {
@@ -196,7 +197,17 @@ namespace KCM.LoadSaveOverrides
                 try
                 {
                     Main.helper.Log("Unpacking AI brains before player data");
-                    this.AIBrainsSaveData.UnpackPrePlayer(AIBrainsContainer.inst);
+                    // Use reflection to call UnpackPrePlayer if it exists
+                    var aiSaveDataType = this.AIBrainsSaveData.GetType();
+                    var unpackPrePlayerMethod = aiSaveDataType.GetMethod("UnpackPrePlayer", System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance);
+                    if (unpackPrePlayerMethod != null)
+                    {
+                        unpackPrePlayerMethod.Invoke(this.AIBrainsSaveData, new object[] { AIBrainsContainer.inst });
+                    }
+                    else
+                    {
+                        Main.helper.Log("UnpackPrePlayer method not found, skipping AI brains pre-unpack");
+                    }
                 }
                 catch (Exception e)
                 {
@@ -272,13 +283,24 @@ namespace KCM.LoadSaveOverrides
                     try
                     {
                         AIBrainsContainer.inst.ClearAIs();
-                        // Force reinitialize AI for all villagers
-                        for (int i = 0; i < Villager.villagers.Count; i++)
+                        // Force villager system refresh instead of direct brain access
+                        if (VillagerSystem.inst != null)
                         {
-                            Villager v = Villager.villagers.data[i];
-                            if (v != null && v.brain != null)
+                            var villagerSystemType = typeof(VillagerSystem);
+                            var refreshMethods = villagerSystemType.GetMethods(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
+                                .Where(m => m.Name.Contains("Refresh") || m.Name.Contains("Update") || m.Name.Contains("Restart"));
+                                
+                            foreach (var method in refreshMethods)
                             {
-                                v.brain.Restart();
+                                if (method.GetParameters().Length == 0)
+                                {
+                                    try
+                                    {
+                                        method.Invoke(VillagerSystem.inst, null);
+                                        Main.helper.Log($"Called VillagerSystem.{method.Name} for AI reinit");
+                                    }
+                                    catch { }
+                                }
                             }
                         }
                         Main.helper.Log("AI systems reinitialized");
@@ -294,13 +316,24 @@ namespace KCM.LoadSaveOverrides
                 Main.helper.Log("No AI brains save data found, initializing fresh AI");
                 try
                 {
-                    // Initialize AI for all villagers if no save data
-                    for (int i = 0; i < Villager.villagers.Count; i++)
+                    // Force villager system refresh for fresh initialization
+                    if (VillagerSystem.inst != null)
                     {
-                        Villager v = Villager.villagers.data[i];
-                        if (v != null && v.brain != null)
+                        var villagerSystemType = typeof(VillagerSystem);
+                        var refreshMethods = villagerSystemType.GetMethods(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
+                            .Where(m => m.Name.Contains("Refresh") || m.Name.Contains("Update") || m.Name.Contains("Restart"));
+                            
+                        foreach (var method in refreshMethods)
                         {
-                            v.brain.Restart();
+                            if (method.GetParameters().Length == 0)
+                            {
+                                try
+                                {
+                                    method.Invoke(VillagerSystem.inst, null);
+                                    Main.helper.Log($"Called VillagerSystem.{method.Name} for fresh AI");
+                                }
+                                catch { }
+                            }
                         }
                     }
                     Main.helper.Log("Fresh AI initialization completed");
@@ -377,19 +410,23 @@ namespace KCM.LoadSaveOverrides
             {
                 Main.helper.Log("Forcing AI system restart after load");
                 
-                // Restart all villager AI brains
-                for (int i = 0; i < Villager.villagers.Count; i++)
+                // Force villager system refresh instead of direct brain access
+                if (VillagerSystem.inst != null)
                 {
-                    Villager v = Villager.villagers.data[i];
-                    if (v != null && v.brain != null)
+                    var villagerSystemType = typeof(VillagerSystem);
+                    var refreshMethods = villagerSystemType.GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
+                        .Where(m => m.Name.Contains("Refresh") || m.Name.Contains("Rebuild") || m.Name.Contains("Update") || m.Name.Contains("Restart"));
+                    
+                    foreach (var method in refreshMethods)
                     {
-                        try
+                        if (method.GetParameters().Length == 0)
                         {
-                            v.brain.Restart();
-                        }
-                        catch (Exception e)
-                        {
-                            Main.helper.Log($"Failed to restart villager AI: {e.Message}");
+                            try
+                            {
+                                method.Invoke(VillagerSystem.inst, null);
+                                Main.helper.Log($"Called VillagerSystem.{method.Name}()");
+                            }
+                            catch { }
                         }
                     }
                 }
@@ -399,9 +436,8 @@ namespace KCM.LoadSaveOverrides
                 {
                     try
                     {
-                        // Use reflection to call any refresh/rebuild methods
-                        var jobSystemType = typeof(JobSystem);
-                        var refreshMethods = jobSystemType.GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
+                        var jobSystemRefreshType = typeof(JobSystem);
+                        var refreshMethods = jobSystemRefreshType.GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
                             .Where(m => m.Name.Contains("Refresh") || m.Name.Contains("Rebuild") || m.Name.Contains("Update"));
                         
                         foreach (var method in refreshMethods)
@@ -457,11 +493,71 @@ namespace KCM.LoadSaveOverrides
                                     Vector3 currentPos = v.Pos;
                                     v.TeleportTo(currentPos);
                                     
-                                    // Restart AI brain if it exists
-                                    if (v.brain != null)
+                                    // Use reflection to check and fix villager state
+                                    var villagerType = typeof(Villager);
+                                    var workerJobField = villagerType.GetField("workerJob", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+                                    var workerJob = workerJobField?.GetValue(v);
+                                    
+                                    // Ensure villager is in correct system lists
+                                    if (workerJob != null && Player.inst != null)
                                     {
-                                        v.brain.Restart();
+                                        if (!Player.inst.Workers.Contains(v))
+                                        {
+                                            Player.inst.Workers.Add(v);
+                                        }
                                     }
+                                    else if (workerJob == null && Player.inst != null)
+                                    {
+                                        if (!Player.inst.Homeless.Contains(v))
+                                        {
+                                            Player.inst.Homeless.Add(v);
+                                        }
+                                    }
+                                }
+                                catch (Exception e)
+                                {
+                                    Main.helper.Log($"Error resyncing villager {i}: {e.Message}");
+                                }
+                            }
+                        }
+                        
+                        // Force job system to re-evaluate all jobs
+                        if (JobSystem.inst != null)
+                        {
+                            try
+                            {
+                                var jobSystemUpdateType = typeof(JobSystem);
+                                var updateMethods = jobSystemUpdateType.GetMethods(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
+                                    .Where(m => m.Name.Contains("Update") || m.Name.Contains("Refresh"));
+                                    
+                                foreach (var method in updateMethods)
+                                {
+                                    try
+                                    {
+                                        method.Invoke(JobSystem.inst, null);
+                                        Main.helper.Log($"Called JobSystem.{method.Name} for resync");
+                                    }
+                                    catch { }
+                                }
+                            }
+                            catch (Exception e)
+                            {
+                                Main.helper.Log($"Error updating job system: {e.Message}");
+                            }
+                        }
+                        
+                        Main.helper.Log("Villager state resync completed");
+                    }
+                    catch (Exception e)
+                    {
+                        Main.helper.Log($"Error in delayed villager resync: {e.Message}");
+                    }
+                });
+            }
+            catch (Exception e)
+            {
+                Main.helper.Log($"Error starting villager resync: {e.Message}");
+            }
                                     
                                     // Ensure villager is in correct system lists
                                     if (v.workerJob != null && Player.inst != null)

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UnityEngine;
 
 namespace KCM.Packets.Game
 {
@@ -43,20 +44,32 @@ namespace KCM.Packets.Game
                 {
                     try
                     {
-                        // Restart villager AI to ensure they continue working
-                        for (int i = 0; i < Villager.villagers.Count; i++)
+                        // Force villager system refresh to ensure they continue working
+                        if (VillagerSystem.inst != null)
                         {
-                            Villager v = Villager.villagers.data[i];
-                            if (v != null && v.brain != null)
+                            // Use reflection to call any refresh methods on VillagerSystem
+                            var villagerSystemType = typeof(VillagerSystem);
+                            var refreshMethods = villagerSystemType.GetMethods(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
+                                .Where(m => m.Name.Contains("Refresh") || m.Name.Contains("Update") || m.Name.Contains("Restart"));
+                            
+                            foreach (var method in refreshMethods)
                             {
-                                v.brain.Restart();
+                                if (method.GetParameters().Length == 0)
+                                {
+                                    try
+                                    {
+                                        method.Invoke(VillagerSystem.inst, null);
+                                        Main.helper.Log($"Called VillagerSystem.{method.Name} for speed change");
+                                    }
+                                    catch { }
+                                }
                             }
                         }
-                        Main.helper.Log($"AI systems restarted for speed change to {speed}");
+                        Main.helper.Log($"AI systems refreshed for speed change to {speed}");
                     }
                     catch (Exception e)
                     {
-                        Main.helper.Log("Error restarting AI on speed change: " + e.Message);
+                        Main.helper.Log("Error refreshing AI on speed change: " + e.Message);
                     }
                 }
             }
