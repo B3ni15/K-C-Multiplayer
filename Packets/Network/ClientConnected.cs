@@ -51,6 +51,20 @@ namespace KCM.Packets.Network
         {
             Main.helper.Log("Server Player Connected: " + Name + " Id: " + clientId + " SteamID: " + SteamId);
 
+            KCPlayer player;
+            if (Main.kCPlayers.TryGetValue(SteamId, out player))
+            {
+                player.id = clientId;
+                player.name = Name;
+                player.steamId = SteamId;
+            }
+            else
+            {
+                Main.kCPlayers[SteamId] = new KCPlayer(Name, clientId, SteamId);
+            }
+
+            Main.clientSteamIds[clientId] = SteamId;
+
             List<KCPlayer> list = Main.kCPlayers.Select(x => x.Value).OrderBy(x => x.id).ToList();
 
             if (list.Count > 0)
