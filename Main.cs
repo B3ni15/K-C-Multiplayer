@@ -171,6 +171,83 @@ namespace KCM
             }
         }
 
+        private static bool TryGetVillagerPosition(Villager villager, out Vector3 position)
+        {
+            position = Vector3.zero;
+            if (villager == null)
+                return false;
+
+            try
+            {
+                var flags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
+                Type type = villager.GetType();
+
+                string[] gameObjectNames = new string[] { "gameObject", "go", "Go" };
+                for (int i = 0; i < gameObjectNames.Length; i++)
+                {
+                    string name = gameObjectNames[i];
+
+                    PropertyInfo prop = type.GetProperty(name, flags);
+                    if (prop != null && typeof(GameObject).IsAssignableFrom(prop.PropertyType))
+                    {
+                        GameObject go = prop.GetValue(villager, null) as GameObject;
+                        if (go != null)
+                        {
+                            position = go.transform.position;
+                            return true;
+                        }
+                    }
+
+                    FieldInfo field = type.GetField(name, flags);
+                    if (field != null && typeof(GameObject).IsAssignableFrom(field.FieldType))
+                    {
+                        GameObject go = field.GetValue(villager) as GameObject;
+                        if (go != null)
+                        {
+                            position = go.transform.position;
+                            return true;
+                        }
+                    }
+                }
+
+                string[] positionNames = new string[] { "pos", "Pos", "position", "Position" };
+                for (int i = 0; i < positionNames.Length; i++)
+                {
+                    string name = positionNames[i];
+
+                    PropertyInfo prop = type.GetProperty(name, flags);
+                    if (prop != null && prop.PropertyType == typeof(Vector3))
+                    {
+                        position = (Vector3)prop.GetValue(villager, null);
+                        return true;
+                    }
+
+                    FieldInfo field = type.GetField(name, flags);
+                    if (field != null && field.FieldType == typeof(Vector3))
+                    {
+                        position = (Vector3)field.GetValue(villager);
+                        return true;
+                    }
+                }
+
+                string[] getPosNames = new string[] { "GetPos", "GetPosition" };
+                for (int i = 0; i < getPosNames.Length; i++)
+                {
+                    MethodInfo method = type.GetMethod(getPosNames[i], flags, null, new Type[0], null);
+                    if (method != null && method.ReturnType == typeof(Vector3))
+                    {
+                        position = (Vector3)method.Invoke(villager, null);
+                        return true;
+                    }
+                }
+            }
+            catch
+            {
+            }
+
+            return false;
+        }
+
         public static void RunPostLoadRebuild(string reason)
         {
             try
@@ -204,18 +281,19 @@ namespace KCM
                         for (int i = 0; i < workers.Count; i++)
                         {
                             Villager v = workers.data[i];
-                            if (v == null)
-                                continue;
+                        if (v == null)
+                            continue;
 
-                            try
-                            {
-                                Vector3 pos = v.transform != null ? v.transform.position : Vector3.zero;
+                        try
+                        {
+                            Vector3 pos;
+                            if (TryGetVillagerPosition(v, out pos))
                                 v.TeleportTo(pos);
-                            }
-                            catch
-                            {
-                            }
                         }
+                        catch
+                        {
+                        }
+                    }
                     }
                 }
                 catch (Exception e)
