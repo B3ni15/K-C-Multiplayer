@@ -159,6 +159,7 @@ namespace Riptide.Demos.Steam.PlayerHosted
 
             Main.helper.Log("clear players");
             Main.kCPlayers.Clear();
+            Main.clientSteamIds.Clear();
             LobbyHandler.ClearPlayerList();
             LobbyHandler.ClearChatEntries();
             Main.helper.Log("end clear players");
