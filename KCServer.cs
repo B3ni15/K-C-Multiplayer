@@ -58,15 +58,38 @@ namespace KCM
 
             server.ClientDisconnected += (obj, ev) =>
             {
-                new ChatSystemMessage()
+                try
                 {
-                    Message = $"{Main.GetPlayerByClientID(ev.Client.Id).name} has left the server.",
-                }.SendToAll();
+                    var playerName = $"Client {ev.Client.Id}";
+                    if (Main.clientSteamIds.TryGetValue(ev.Client.Id, out var steamId) && !string.IsNullOrEmpty(steamId))
+                    {
+                        if (Main.kCPlayers.TryGetValue(steamId, out var player) && player != null && !string.IsNullOrEmpty(player.name))
+                            playerName = player.name;
 
-                Main.kCPlayers.Remove(Main.GetPlayerByClientID(ev.Client.Id).steamId);
-                Destroy(LobbyHandler.playerEntries.Select(x => x.GetComponent<PlayerEntryScript>()).Where(x => x.Client == ev.Client.Id).FirstOrDefault().gameObject);
+                        Main.kCPlayers.Remove(steamId);
+                    }
 
-                Main.helper.Log($"Client disconnected. {ev.Reason}");
+                    Main.clientSteamIds.Remove(ev.Client.Id);
+
+                    new ChatSystemMessage()
+                    {
+                        Message = $"{playerName} has left the server.",
+                    }.SendToAll();
+
+                    var entry = LobbyHandler.playerEntries
+                        .Select(x => x != null ? x.GetComponent<PlayerEntryScript>() : null)
+                        .FirstOrDefault(x => x != null && x.Client == ev.Client.Id);
+
+                    if (entry != null)
+                        Destroy(entry.gameObject);
+
+                    Main.helper.Log($"Client disconnected. {ev.Reason}");
+                }
+                catch (Exception ex)
+                {
+                    Main.helper.Log("Error handling client disconnect");
+                    Main.helper.Log(ex.ToString());
+                }
             };
 
             Main.helper.Log($"Listening on port 7777. Max {LobbyHandler.ServerSettings.MaxPlayers} clients.");
