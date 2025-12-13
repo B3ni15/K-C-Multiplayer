@@ -35,6 +35,7 @@ namespace KCM.Packets.Handlers
                 if (!KCServer.IsRunning)
                 {
                     Main.kCPlayers.Clear();
+                    Main.clientSteamIds.Clear();
                 }
             }
             catch (Exception ex)
