@@ -22,3 +22,5 @@ Desktop.ini
 **/obj/
 **/*.mdb
 **/*.pdb
+
+/.claude
