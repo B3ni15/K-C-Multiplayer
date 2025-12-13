@@ -25,7 +25,6 @@ namespace KCM.LoadSaveOverrides
 
             Main.helper.Log($"Saving data for {Main.kCPlayers.Count} ({KCServer.server.ClientCount}) players.");
 
-            //this.PlayerSaveData = new PlayerSaveDataOverride().Pack(Player.inst);
             foreach (var player in Main.kCPlayers.Values)
             {
                 try
@@ -71,7 +70,7 @@ namespace KCM.LoadSaveOverrides
             this.FireManagerSaveData = new FireManager.FireManagerSaveData().Pack(FireManager.inst);
             this.DragonSpawnSaveData = new DragonSpawn.DragonSpawnSaveData().Pack(DragonSpawn.inst);
             this.UnitSystemSaveData = new UnitSystem.UnitSystemSaveData().Pack(UnitSystem.inst);
-            this.RaidSystemSaveData2 = new RaiderSystem.RaiderSystemSaveData2().Pack(RaiderSystem.inst);
+            this.RaidSystemSaveData2 = new RaiderSystem.RaiderSystemSaveData2().Pack(raiderSystem.inst);
 
             if (ShipSystem.inst != null)
             {
@@ -103,10 +102,8 @@ namespace KCM.LoadSaveOverrides
 
         public override object Unpack(object obj)
         {
-            //original Player reset was up here
             foreach (var kvp in players)
             {
-
                 KCPlayer player;
 
                 if (!Main.kCPlayers.TryGetValue(kvp.Key, out player))
@@ -121,7 +118,6 @@ namespace KCM.LoadSaveOverrides
             foreach (var player in Main.kCPlayers.Values)
                 player.inst.Reset();
 
-
             AIBrainsContainer.inst.ClearAIs();
             this.CameraSaveData.Unpack(Cam.inst);
             this.WorldSaveData.Unpack(World.inst);
@@ -132,10 +128,6 @@ namespace KCM.LoadSaveOverrides
                 this.FishSystemSaveData.Unpack(FishSystem.inst);
             }
             this.TownNameSaveData.Unpack(TownNameUI.inst);
-
-
-            //TownNameUI.inst.townName = kingdomNames[Main.PlayerSteamID];
-            TownNameUI.inst.SetTownName(kingdomNames[Main.PlayerSteamID]);
 
             Main.helper.Log("Unpacking player data");
 
@@ -150,9 +142,8 @@ namespace KCM.LoadSaveOverrides
                     clientPlayerData = kvp.Value;
                 }
                 else
-                { // Maybe ??
+                {
                     Main.helper.Log("Loading player data: " + kvp.Key);
-
 
                     KCPlayer player;
 
@@ -166,52 +157,61 @@ namespace KCM.LoadSaveOverrides
                     Player.inst = player.inst;
                     Main.helper.Log($"Number of landmasses: {World.inst.NumLandMasses}");
 
-                    //Reset was here before unpack
                     kvp.Value.Unpack(player.inst);
 
                     Player.inst = oldPlayer;
-
 
                     player.banner = player.inst.PlayerLandmassOwner.bannerIdx;
                     player.kingdomName = TownNameUI.inst.townName;
                 }
             }
 
-            clientPlayerData.Unpack(Player.inst); // Unpack the current client player last so that loading of villagers works correctly.
+            clientPlayerData.Unpack(Player.inst);
 
             Main.helper.Log("unpacked player data");
             Main.helper.Log("Setting banner and name");
 
             var client = Main.kCPlayers[SteamUser.GetSteamID().ToString()];
 
-
             client.banner = Player.inst.PlayerLandmassOwner.bannerIdx;
             client.kingdomName = TownNameUI.inst.townName;
 
             Main.helper.Log("Finished unpacking player data");
 
-            // Fix AI brains save/load system to restore villager AI state
-            bool flag2 = this.AIBrainsSaveData != null;
-            if (flag2)
+            Main.helper.Log("Unpacking AI brains");
+            bool flag10 = this.AIBrainsSaveData != null;
+            if (flag10)
             {
                 try
                 {
-                    Main.helper.Log("Unpacking AI brains before player data");
-                    // Use reflection to call UnpackPrePlayer if it exists
-                    var aiSaveDataType = this.AIBrainsSaveData.GetType();
-                    var unpackPrePlayerMethod = aiSaveDataType.GetMethod("UnpackPrePlayer", System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance);
-                    if (unpackPrePlayerMethod != null)
-                    {
-                        unpackPrePlayerMethod.Invoke(this.AIBrainsSaveData, new object[] { AIBrainsContainer.inst });
-                    }
-                    else
-                    {
-                        Main.helper.Log("UnpackPrePlayer method not found, skipping AI brains pre-unpack");
-                    }
+                    this.AIBrainsSaveData.Unpack(AIBrainsContainer.inst);
+                    Main.helper.Log("AI brains unpacked successfully");
                 }
                 catch (Exception e)
                 {
-                    Main.helper.Log("Error unpacking AI brains pre-player: " + e.Message);
+                    Main.helper.Log("Error unpacking AI brains: " + e.Message);
+                    Main.helper.Log("Attempting to reinitialize AI systems");
+                    try
+                    {
+                        AIBrainsContainer.inst.ClearAIs();
+                        Main.helper.Log("AI systems reinitialized");
+                    }
+                    catch (Exception ex)
+                    {
+                        Main.helper.Log("Failed to reinitialize AI systems: " + ex.Message);
+                    }
+                }
+            }
+            else
+            {
+                Main.helper.Log("No AI brains save data found, initializing fresh AI");
+                try
+                {
+                    Main.helper.Log("Fresh AI initialization completed");
+                }
+                catch (Exception e)
+                {
+                    Main.helper.Log("Failed fresh AI initialization: " + e.Message);
                 }
             }
 
@@ -259,7 +259,7 @@ namespace KCM.LoadSaveOverrides
             bool flag8 = this.RaidSystemSaveData2 != null;
             if (flag8)
             {
-                this.RaidSystemSaveData2.Unpack(RaiderSystem.inst);
+                this.RaidSystemSaveData2.Unpack(raiderSystem.inst);
             }
             Main.helper.Log("Unpacking orders manager");
             bool flag9 = this.OrdersManagerSaveData != null;
@@ -271,77 +271,7 @@ namespace KCM.LoadSaveOverrides
             bool flag10 = this.AIBrainsSaveData != null;
             if (flag10)
             {
-                try
-                {
-                    this.AIBrainsSaveData.Unpack(AIBrainsContainer.inst);
-                    Main.helper.Log("AI brains unpacked successfully");
-                }
-                catch (Exception e)
-                {
-                    Main.helper.Log("Error unpacking AI brains: " + e.Message);
-                    Main.helper.Log("Attempting to reinitialize AI systems");
-                    try
-                    {
-                        AIBrainsContainer.inst.ClearAIs();
-                        // Force villager system refresh instead of direct brain access
-                        if (VillagerSystem.inst != null)
-                        {
-                            var villagerSystemType = typeof(VillagerSystem);
-                            var refreshMethods = villagerSystemType.GetMethods(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
-                                .Where(m => m.Name.Contains("Refresh") || m.Name.Contains("Update") || m.Name.Contains("Restart"));
-                                
-                            foreach (var method in refreshMethods)
-                            {
-                                if (method.GetParameters().Length == 0)
-                                {
-                                    try
-                                    {
-                                        method.Invoke(VillagerSystem.inst, null);
-                                        Main.helper.Log($"Called VillagerSystem.{method.Name} for AI reinit");
-                                    }
-                                    catch { }
-                                }
-                            }
-                        }
-                        Main.helper.Log("AI systems reinitialized");
-                    }
-                    catch (Exception ex)
-                    {
-                        Main.helper.Log("Failed to reinitialize AI systems: " + ex.Message);
-                    }
-                }
-            }
-            else
-            {
-                Main.helper.Log("No AI brains save data found, initializing fresh AI");
-                try
-                {
-                    // Force villager system refresh for fresh initialization
-                    if (VillagerSystem.inst != null)
-                    {
-                        var villagerSystemType = typeof(VillagerSystem);
-                        var refreshMethods = villagerSystemType.GetMethods(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
-                            .Where(m => m.Name.Contains("Refresh") || m.Name.Contains("Update") || m.Name.Contains("Restart"));
-                            
-                        foreach (var method in refreshMethods)
-                        {
-                            if (method.GetParameters().Length == 0)
-                            {
-                                try
-                                {
-                                    method.Invoke(VillagerSystem.inst, null);
-                                    Main.helper.Log($"Called VillagerSystem.{method.Name} for fresh AI");
-                                }
-                                catch { }
-                            }
-                        }
-                    }
-                    Main.helper.Log("Fresh AI initialization completed");
-                }
-                catch (Exception e)
-                {
-                    Main.helper.Log("Failed fresh AI initialization: " + e.Message);
-                }
+                this.AIBrainsSaveData.Unpack(AIBrainsContainer.inst);
             }
             Main.helper.Log("Unpacking custom save data");
             bool flag11 = this.CustomSaveData != null;
@@ -365,7 +295,6 @@ namespace KCM.LoadSaveOverrides
                 Main.helper.Log(e.ToString());
             }
 
-
             World.inst.UpscaleFeatures();
             Player.inst.RefreshVisibility(true);
             for (int i = 0; i < Player.inst.Buildings.Count; i++)
@@ -373,7 +302,6 @@ namespace KCM.LoadSaveOverrides
                 Player.inst.Buildings.data[i].UpdateMaterialSelection();
             }
 
-            // Increase loadTickDelay values to ensure proper initialization
             Type playerType = typeof(Player);
             FieldInfo loadTickDelayField = playerType.GetField("loadTickDelay", BindingFlags.Instance | BindingFlags.NonPublic);
             if (loadTickDelayField != null)
@@ -381,7 +309,6 @@ namespace KCM.LoadSaveOverrides
                 loadTickDelayField.SetValue(Player.inst, 3);
             }
 
-            // UnitSystem.inst.loadTickDelay = 3;
             Type unitSystemType = typeof(UnitSystem);
             loadTickDelayField = unitSystemType.GetField("loadTickDelay", BindingFlags.Instance | BindingFlags.NonPublic);
             if (loadTickDelayField != null)
@@ -389,7 +316,6 @@ namespace KCM.LoadSaveOverrides
                 loadTickDelayField.SetValue(UnitSystem.inst, 3);
             }
 
-            // JobSystem.inst.loadTickDelay = 3;
             Type jobSystemType = typeof(JobSystem);
             loadTickDelayField = jobSystemType.GetField("loadTickDelay", BindingFlags.Instance | BindingFlags.NonPublic);
             if (loadTickDelayField != null)
@@ -397,7 +323,6 @@ namespace KCM.LoadSaveOverrides
                 loadTickDelayField.SetValue(JobSystem.inst, 3);
             }
 
-            // VillagerSystem.inst.loadTickDelay = 3;
             Type villagerSystemType = typeof(VillagerSystem);
             loadTickDelayField = villagerSystemType.GetField("loadTickDelay", BindingFlags.Instance | BindingFlags.NonPublic);
             if (loadTickDelayField != null)
@@ -405,201 +330,8 @@ namespace KCM.LoadSaveOverrides
                 loadTickDelayField.SetValue(VillagerSystem.inst, 3);
             }
 
-            // Force AI system restart after load
-            try
-            {
-                Main.helper.Log("Forcing AI system restart after load");
-                
-                // Force villager system refresh instead of direct brain access
-                if (VillagerSystem.inst != null)
-                {
-                    var villagerSystemType = typeof(VillagerSystem);
-                    var refreshMethods = villagerSystemType.GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
-                        .Where(m => m.Name.Contains("Refresh") || m.Name.Contains("Rebuild") || m.Name.Contains("Update") || m.Name.Contains("Restart"));
-                    
-                    foreach (var method in refreshMethods)
-                    {
-                        if (method.GetParameters().Length == 0)
-                        {
-                            try
-                            {
-                                method.Invoke(VillagerSystem.inst, null);
-                                Main.helper.Log($"Called VillagerSystem.{method.Name}()");
-                            }
-                            catch { }
-                        }
-                    }
-                }
-
-                // Force job system refresh
-                if (JobSystem.inst != null)
-                {
-                    try
-                    {
-                        var jobSystemRefreshType = typeof(JobSystem);
-                        var refreshMethods = jobSystemRefreshType.GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
-                            .Where(m => m.Name.Contains("Refresh") || m.Name.Contains("Rebuild") || m.Name.Contains("Update"));
-                        
-                        foreach (var method in refreshMethods)
-                        {
-                            if (method.GetParameters().Length == 0)
-                            {
-                                try
-                                {
-                                    method.Invoke(JobSystem.inst, null);
-                                    Main.helper.Log($"Called JobSystem.{method.Name}()");
-                                }
-                                catch { }
-                            }
-                        }
-                    }
-                    catch (Exception e)
-                    {
-                        Main.helper.Log($"Error refreshing job system: {e.Message}");
-                    }
-                }
-
-                Main.helper.Log("AI system restart completed");
-            }
-            catch (Exception e)
-            {
-                Main.helper.Log($"Error during AI system restart: {e.Message}");
-            }
-
             Main.helper.Log($"Setting kingdom name to: {kingdomNames[Main.PlayerSteamID]}");
             TownNameUI.inst.SetTownName(kingdomNames[Main.PlayerSteamID]);
-
-            // Perform villager state resync after loading completes
-            try
-            {
-                Main.helper.Log("Starting villager state resync after load");
-                
-                // Simple resync without async complications
-                Main.helper.Log("Performing villager resync");
-                
-                // Force villager system refresh
-                if (VillagerSystem.inst != null)
-                {
-                    try
-                    {
-                        var villagerSystemType = typeof(VillagerSystem);
-                        var refreshMethods = villagerSystemType.GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
-                            .Where(m => m.Name.Contains("Refresh") || m.Name.Contains("Update") || m.Name.Contains("Restart"));
-                        
-                        foreach (var method in refreshMethods)
-                        {
-                            if (method.GetParameters().Length == 0)
-                            {
-                                try
-                                {
-                                    method.Invoke(VillagerSystem.inst, null);
-                                    Main.helper.Log($"Called VillagerSystem.{method.Name}()");
-                                }
-                                catch { }
-                            }
-                        }
-                    }
-                    catch (Exception e)
-                    {
-                        Main.helper.Log($"Error refreshing villager system: {e.Message}");
-                    }
-                }
-                
-                // Force job system refresh
-                if (JobSystem.inst != null)
-                {
-                    try
-                    {
-                        var jobSystemRefreshType = typeof(JobSystem);
-                        var refreshMethods = jobSystemRefreshType.GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
-                            .Where(m => m.Name.Contains("Refresh") || m.Name.Contains("Update") || m.Name.Contains("Restart"));
-                        
-                        foreach (var method in refreshMethods)
-                        {
-                            if (method.GetParameters().Length == 0)
-                            {
-                                try
-                                {
-                                    method.Invoke(JobSystem.inst, null);
-                                    Main.helper.Log($"Called JobSystem.{method.Name}()");
-                                }
-                                catch { }
-                            }
-                        }
-                    }
-                    catch (Exception e)
-                    {
-                        Main.helper.Log($"Error refreshing job system: {e.Message}");
-                    }
-                }
-                
-                Main.helper.Log("Villager state resync completed");
-            }
-            catch (Exception e)
-            {
-                Main.helper.Log($"Error during villager resync: {e.Message}");
-            }
-                                    
-                                    // Ensure villager is in correct system lists
-                                    if (v.workerJob != null && Player.inst != null)
-                                    {
-                                        if (!Player.inst.Workers.Contains(v))
-                                        {
-                                            Player.inst.Workers.Add(v);
-                                        }
-                                    }
-                                    else if (v.workerJob == null && Player.inst != null)
-                                    {
-                                        if (!Player.inst.Homeless.Contains(v))
-                                        {
-                                            Player.inst.Homeless.Add(v);
-                                        }
-                                    }
-                                }
-                                catch (Exception e)
-                                {
-                                    Main.helper.Log($"Error resyncing villager {i}: {e.Message}");
-                                }
-                            }
-                        }
-                        
-                        // Force job system to re-evaluate all jobs
-                        if (JobSystem.inst != null)
-                        {
-                            try
-                            {
-                                var jobSystemType = typeof(JobSystem);
-                                var updateMethods = jobSystemType.GetMethods(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
-                                    .Where(m => (m.Name.Contains("Update") || m.Name.Contains("Refresh")) && m.GetParameters().Length == 0);
-                                    
-                                foreach (var method in updateMethods)
-                                {
-                                    try
-                                    {
-                                        method.Invoke(JobSystem.inst, null);
-                                        Main.helper.Log($"Called JobSystem.{method.Name} for resync");
-                                    }
-                                    catch { }
-                                }
-                            }
-                            catch (Exception e)
-                            {
-                                Main.helper.Log($"Error updating job system: {e.Message}");
-                            }
-                        }
-                        
-                        Main.helper.Log("Villager state resync completed");
-                    }
-                    catch (Exception e)
-                    {
-                        Main.helper.Log($"Error in delayed villager resync: {e.Message}");
-                    }
-                });
-            }
-            catch (Exception e)
-            {
-                Main.helper.Log($"Error starting villager resync: {e.Message}");
-            }
 
             return obj;
         }
