@@ -15,8 +15,10 @@ namespace KCM.StateManagement.Sync
         private const int ResourceBroadcastIntervalMs = 2000;
         private const int MaxBuildingSnapshotBytes = 30000;
         private const int MaxVillagerTeleportsPerResync = 400;
+        private const int VillagerValidationIntervalMs = 10000; // 10 seconds
 
         private static long lastResourceBroadcastMs;
+        private static long lastVillagerValidationMs;
 
         private static FieldInfo freeResourceAmountField;
         private static MethodInfo resourceAmountGetMethod;
@@ -30,27 +32,36 @@ namespace KCM.StateManagement.Sync
                 return;
 
             long now = DateTimeOffset.Now.ToUnixTimeMilliseconds();
-            if ((now - lastResourceBroadcastMs) < ResourceBroadcastIntervalMs)
-                return;
-
-            lastResourceBroadcastMs = now;
-
-            try
+            
+            // Resource broadcast
+            if ((now - lastResourceBroadcastMs) >= ResourceBroadcastIntervalMs)
             {
-                ResourceSnapshotPacket snapshot = BuildResourceSnapshotPacket();
-                if (snapshot == null)
-                    return;
+                lastResourceBroadcastMs = now;
 
-                snapshot.clientId = KCClient.client != null ? KCClient.client.Id : (ushort)0;
+                try
+                {
+                    ResourceSnapshotPacket snapshot = BuildResourceSnapshotPacket();
+                    if (snapshot == null)
+                        return;
 
-                // Exclude host/local client from receiving its own snapshot.
-                ushort exceptId = KCClient.client != null ? KCClient.client.Id : (ushort)0;
-                snapshot.SendToAll(exceptId);
+                    snapshot.clientId = KCClient.client != null ? KCClient.client.Id : (ushort)0;
+
+                    // Exclude host/local client from receiving its own snapshot.
+                    ushort exceptId = KCClient.client != null ? KCClient.client.Id : (ushort)0;
+                    snapshot.SendToAll(exceptId);
+                }
+                catch (Exception ex)
+                {
+                    Main.helper.Log("Error broadcasting resource snapshot");
+                    Main.helper.Log(ex.ToString());
+                }
             }
-            catch (Exception ex)
+            
+            // Villager state validation
+            if ((now - lastVillagerValidationMs) >= VillagerValidationIntervalMs)
             {
-                Main.helper.Log("Error broadcasting resource snapshot");
-                Main.helper.Log(ex.ToString());
+                lastVillagerValidationMs = now;
+                ValidateAndCorrectVillagerStates();
             }
         }
 
@@ -729,6 +740,93 @@ namespace KCM.StateManagement.Sync
             }
             catch
             {
+            }
+        }
+
+        private static void ValidateAndCorrectVillagerStates()
+        {
+            try
+            {
+                int stuckVillagers = 0;
+                int correctedVillagers = 0;
+                
+                for (int i = 0; i < Villager.villagers.Count; i++)
+                {
+                    Villager v = Villager.villagers.data[i];
+                    if (v == null)
+                        continue;
+                        
+                    try
+                    {
+                        bool needsCorrection = false;
+                        
+                        // Check if villager is stuck (not moving for too long while having a job)
+                        if (v.workerJob != null && v.brain != null)
+                        {
+                            // Check if villager is in invalid state
+                            if (v.brain.currentAction == null && v.workerJob.active)
+                            {
+                                needsCorrection = true;
+                                stuckVillagers++;
+                            }
+                            
+                            // Check if villager position is invalid
+                            if (float.IsNaN(v.Pos.x) || float.IsNaN(v.Pos.y) || float.IsNaN(v.Pos.z))
+                            {
+                                needsCorrection = true;
+                                stuckVillagers++;
+                            }
+                        }
+                        
+                        if (needsCorrection)
+                        {
+                            // Correct villager state
+                            try
+                            {
+                                // Restart AI brain
+                                if (v.brain != null)
+                                {
+                                    v.brain.Restart();
+                                }
+                                
+                                // Ensure valid position
+                                if (float.IsNaN(v.Pos.x) || float.IsNaN(v.Pos.y) || float.IsNaN(v.Pos.z))
+                                {
+                                    // Teleport to a safe position near their workplace or home
+                                    Vector3 safePos = Vector3.zero;
+                                    if (v.workerJob != null && v.workerJob.employer != null)
+                                    {
+                                        safePos = v.workerJob.employer.transform.position;
+                                    }
+                                    else
+                                    {
+                                        safePos = new Vector3(World.inst.GridWidth / 2, 0, World.inst.GridHeight / 2);
+                                    }
+                                    v.TeleportTo(safePos);
+                                }
+                                
+                                correctedVillagers++;
+                            }
+                            catch (Exception e)
+                            {
+                                Main.helper.Log($"Error correcting villager {i}: {e.Message}");
+                            }
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        Main.helper.Log($"Error validating villager {i}: {e.Message}");
+                    }
+                }
+                
+                if (stuckVillagers > 0)
+                {
+                    Main.helper.Log($"Villager validation: Found {stuckVillagers} stuck villagers, corrected {correctedVillagers}");
+                }
+            }
+            catch (Exception e)
+            {
+                Main.helper.Log("Error in villager state validation: " + e.Message);
             }
         }
     }

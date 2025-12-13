@@ -1,4 +1,4 @@
-﻿using Assets.Code;
+using Assets.Code;
 using Assets.Code.UI;
 using Assets.Interface;
 using Harmony;
@@ -1160,9 +1160,11 @@ namespace KCM
                         return;
 
                     Main.helper.Log("SpeedControlUI.SetSpeed (local): " + idx);
+                    bool isPaused = (idx == 0);
                     new SetSpeed()
                     {
-                        speed = idx
+                        speed = idx,
+                        isPaused = isPaused
                     }.Send();
 
                     lastTime = DateTimeOffset.Now.ToUnixTimeMilliseconds();

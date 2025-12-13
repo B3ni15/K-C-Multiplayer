@@ -1,4 +1,4 @@
-﻿using Assets.Code;
+using Assets.Code;
 using Riptide;
 using Riptide.Transports;
 using Steamworks;
@@ -189,15 +189,20 @@ namespace KCM.LoadSaveOverrides
 
             Main.helper.Log("Finished unpacking player data");
 
-            /*
-             *  Not even going to bother fixing AI brains save data yet, not in short-term roadmap
-             */
-
-            /*bool flag2 = this.AIBrainsSaveData != null;
+            // Fix AI brains save/load system to restore villager AI state
+            bool flag2 = this.AIBrainsSaveData != null;
             if (flag2)
             {
-                this.AIBrainsSaveData.UnpackPrePlayer(AIBrainsContainer.inst);
-            }*/
+                try
+                {
+                    Main.helper.Log("Unpacking AI brains before player data");
+                    this.AIBrainsSaveData.UnpackPrePlayer(AIBrainsContainer.inst);
+                }
+                catch (Exception e)
+                {
+                    Main.helper.Log("Error unpacking AI brains pre-player: " + e.Message);
+                }
+            }
 
             Main.helper.Log("Unpacking free resource manager");
             this.FreeResourceManagerSaveData.Unpack(FreeResourceManager.inst);
@@ -255,7 +260,55 @@ namespace KCM.LoadSaveOverrides
             bool flag10 = this.AIBrainsSaveData != null;
             if (flag10)
             {
-                this.AIBrainsSaveData.Unpack(AIBrainsContainer.inst);
+                try
+                {
+                    this.AIBrainsSaveData.Unpack(AIBrainsContainer.inst);
+                    Main.helper.Log("AI brains unpacked successfully");
+                }
+                catch (Exception e)
+                {
+                    Main.helper.Log("Error unpacking AI brains: " + e.Message);
+                    Main.helper.Log("Attempting to reinitialize AI systems");
+                    try
+                    {
+                        AIBrainsContainer.inst.ClearAIs();
+                        // Force reinitialize AI for all villagers
+                        for (int i = 0; i < Villager.villagers.Count; i++)
+                        {
+                            Villager v = Villager.villagers.data[i];
+                            if (v != null && v.brain != null)
+                            {
+                                v.brain.Restart();
+                            }
+                        }
+                        Main.helper.Log("AI systems reinitialized");
+                    }
+                    catch (Exception ex)
+                    {
+                        Main.helper.Log("Failed to reinitialize AI systems: " + ex.Message);
+                    }
+                }
+            }
+            else
+            {
+                Main.helper.Log("No AI brains save data found, initializing fresh AI");
+                try
+                {
+                    // Initialize AI for all villagers if no save data
+                    for (int i = 0; i < Villager.villagers.Count; i++)
+                    {
+                        Villager v = Villager.villagers.data[i];
+                        if (v != null && v.brain != null)
+                        {
+                            v.brain.Restart();
+                        }
+                    }
+                    Main.helper.Log("Fresh AI initialization completed");
+                }
+                catch (Exception e)
+                {
+                    Main.helper.Log("Failed fresh AI initialization: " + e.Message);
+                }
             }
             Main.helper.Log("Unpacking custom save data");
             bool flag11 = this.CustomSaveData != null;
@@ -287,40 +340,189 @@ namespace KCM.LoadSaveOverrides
                 Player.inst.Buildings.data[i].UpdateMaterialSelection();
             }
 
-            // Player.inst.loadTickDelay = 1;
+            // Increase loadTickDelay values to ensure proper initialization
             Type playerType = typeof(Player);
             FieldInfo loadTickDelayField = playerType.GetField("loadTickDelay", BindingFlags.Instance | BindingFlags.NonPublic);
             if (loadTickDelayField != null)
             {
-                loadTickDelayField.SetValue(Player.inst, 1);
+                loadTickDelayField.SetValue(Player.inst, 3);
             }
 
-            // UnitSystem.inst.loadTickDelay = 1;
+            // UnitSystem.inst.loadTickDelay = 3;
             Type unitSystemType = typeof(UnitSystem);
             loadTickDelayField = unitSystemType.GetField("loadTickDelay", BindingFlags.Instance | BindingFlags.NonPublic);
             if (loadTickDelayField != null)
             {
-                loadTickDelayField.SetValue(UnitSystem.inst, 1);
+                loadTickDelayField.SetValue(UnitSystem.inst, 3);
             }
 
-            // JobSystem.inst.loadTickDelay = 1;
+            // JobSystem.inst.loadTickDelay = 3;
             Type jobSystemType = typeof(JobSystem);
             loadTickDelayField = jobSystemType.GetField("loadTickDelay", BindingFlags.Instance | BindingFlags.NonPublic);
             if (loadTickDelayField != null)
             {
-                loadTickDelayField.SetValue(JobSystem.inst, 1);
+                loadTickDelayField.SetValue(JobSystem.inst, 3);
             }
 
-            // VillagerSystem.inst.loadTickDelay = 1;
+            // VillagerSystem.inst.loadTickDelay = 3;
             Type villagerSystemType = typeof(VillagerSystem);
             loadTickDelayField = villagerSystemType.GetField("loadTickDelay", BindingFlags.Instance | BindingFlags.NonPublic);
             if (loadTickDelayField != null)
             {
-                loadTickDelayField.SetValue(VillagerSystem.inst, 1);
+                loadTickDelayField.SetValue(VillagerSystem.inst, 3);
+            }
+
+            // Force AI system restart after load
+            try
+            {
+                Main.helper.Log("Forcing AI system restart after load");
+                
+                // Restart all villager AI brains
+                for (int i = 0; i < Villager.villagers.Count; i++)
+                {
+                    Villager v = Villager.villagers.data[i];
+                    if (v != null && v.brain != null)
+                    {
+                        try
+                        {
+                            v.brain.Restart();
+                        }
+                        catch (Exception e)
+                        {
+                            Main.helper.Log($"Failed to restart villager AI: {e.Message}");
+                        }
+                    }
+                }
+
+                // Force job system refresh
+                if (JobSystem.inst != null)
+                {
+                    try
+                    {
+                        // Use reflection to call any refresh/rebuild methods
+                        var jobSystemType = typeof(JobSystem);
+                        var refreshMethods = jobSystemType.GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
+                            .Where(m => m.Name.Contains("Refresh") || m.Name.Contains("Rebuild") || m.Name.Contains("Update"));
+                        
+                        foreach (var method in refreshMethods)
+                        {
+                            if (method.GetParameters().Length == 0)
+                            {
+                                try
+                                {
+                                    method.Invoke(JobSystem.inst, null);
+                                    Main.helper.Log($"Called JobSystem.{method.Name}()");
+                                }
+                                catch { }
+                            }
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        Main.helper.Log($"Error refreshing job system: {e.Message}");
+                    }
+                }
+
+                Main.helper.Log("AI system restart completed");
+            }
+            catch (Exception e)
+            {
+                Main.helper.Log($"Error during AI system restart: {e.Message}");
             }
 
             Main.helper.Log($"Setting kingdom name to: {kingdomNames[Main.PlayerSteamID]}");
             TownNameUI.inst.SetTownName(kingdomNames[Main.PlayerSteamID]);
+
+            // Perform villager state resync after loading completes
+            try
+            {
+                Main.helper.Log("Starting villager state resync after load");
+                
+                // Wait a frame for all systems to initialize
+                System.Threading.Tasks.Task.Delay(100).ContinueWith(_ => 
+                {
+                    try
+                    {
+                        Main.helper.Log("Performing delayed villager resync");
+                        
+                        // Resync all villager positions and states
+                        for (int i = 0; i < Villager.villagers.Count; i++)
+                        {
+                            Villager v = Villager.villagers.data[i];
+                            if (v != null)
+                            {
+                                try
+                                {
+                                    // Force position update
+                                    Vector3 currentPos = v.Pos;
+                                    v.TeleportTo(currentPos);
+                                    
+                                    // Restart AI brain if it exists
+                                    if (v.brain != null)
+                                    {
+                                        v.brain.Restart();
+                                    }
+                                    
+                                    // Ensure villager is in correct system lists
+                                    if (v.workerJob != null && Player.inst != null)
+                                    {
+                                        if (!Player.inst.Workers.Contains(v))
+                                        {
+                                            Player.inst.Workers.Add(v);
+                                        }
+                                    }
+                                    else if (v.workerJob == null && Player.inst != null)
+                                    {
+                                        if (!Player.inst.Homeless.Contains(v))
+                                        {
+                                            Player.inst.Homeless.Add(v);
+                                        }
+                                    }
+                                }
+                                catch (Exception e)
+                                {
+                                    Main.helper.Log($"Error resyncing villager {i}: {e.Message}");
+                                }
+                            }
+                        }
+                        
+                        // Force job system to re-evaluate all jobs
+                        if (JobSystem.inst != null)
+                        {
+                            try
+                            {
+                                var jobSystemType = typeof(JobSystem);
+                                var updateMethods = jobSystemType.GetMethods(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
+                                    .Where(m => (m.Name.Contains("Update") || m.Name.Contains("Refresh")) && m.GetParameters().Length == 0);
+                                    
+                                foreach (var method in updateMethods)
+                                {
+                                    try
+                                    {
+                                        method.Invoke(JobSystem.inst, null);
+                                        Main.helper.Log($"Called JobSystem.{method.Name} for resync");
+                                    }
+                                    catch { }
+                                }
+                            }
+                            catch (Exception e)
+                            {
+                                Main.helper.Log($"Error updating job system: {e.Message}");
+                            }
+                        }
+                        
+                        Main.helper.Log("Villager state resync completed");
+                    }
+                    catch (Exception e)
+                    {
+                        Main.helper.Log($"Error in delayed villager resync: {e.Message}");
+                    }
+                });
+            }
+            catch (Exception e)
+            {
+                Main.helper.Log($"Error starting villager resync: {e.Message}");
+            }
 
             return obj;
         }
