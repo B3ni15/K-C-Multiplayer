@@ -61,9 +61,11 @@ namespace KCM
                 try
                 {
                     var playerName = $"Client {ev.Client.Id}";
-                    if (Main.clientSteamIds.TryGetValue(ev.Client.Id, out var steamId) && !string.IsNullOrEmpty(steamId))
+                    string steamId;
+                    if (Main.clientSteamIds.TryGetValue(ev.Client.Id, out steamId) && !string.IsNullOrEmpty(steamId))
                     {
-                        if (Main.kCPlayers.TryGetValue(steamId, out var player) && player != null && !string.IsNullOrEmpty(player.name))
+                        KCPlayer player;
+                        if (Main.kCPlayers.TryGetValue(steamId, out player) && player != null && !string.IsNullOrEmpty(player.name))
                             playerName = player.name;
 
                         Main.kCPlayers.Remove(steamId);

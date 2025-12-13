@@ -35,7 +35,8 @@ namespace KCM.Packets.Lobby
 
                 Main.helper.Log("PlayerList: " + playersName[i] + " " + playersId[i] + " " + steamIds[i]);
 
-                if (!Main.kCPlayers.TryGetValue(steamIds[i], out var player) || player == null)
+                KCPlayer player;
+                if (!Main.kCPlayers.TryGetValue(steamIds[i], out player) || player == null)
                 {
                     player = new KCPlayer(playersName[i], playersId[i], steamIds[i]);
                     Main.kCPlayers[steamIds[i]] = player;

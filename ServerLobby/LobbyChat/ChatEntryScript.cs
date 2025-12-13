@@ -54,10 +54,12 @@ namespace KCM.ServerLobby.LobbyChat
                 if (banner == null)
                     return;
 
-                if (!Main.clientSteamIds.TryGetValue(Client, out var steamId))
+                string steamId;
+                if (!Main.clientSteamIds.TryGetValue(Client, out steamId))
                     return;
 
-                if (!Main.kCPlayers.TryGetValue(steamId, out var player) || player == null)
+                KCPlayer player;
+                if (!Main.kCPlayers.TryGetValue(steamId, out player) || player == null)
                     return;
 
                 if (World.inst == null || World.inst.liverySets == null)
