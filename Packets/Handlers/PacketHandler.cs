@@ -222,7 +222,13 @@ namespace KCM.Packets.Handlers
             try
             {
                 var packetRef = Packets[packet.packetId];
-                Message message = Message.Create(MessageSendMode.Reliable, packet.packetId);
+
+                MessageSendMode sendMode = MessageSendMode.Reliable;
+                Packet basePacket = packet as Packet;
+                if (basePacket != null)
+                    sendMode = basePacket.sendMode;
+
+                Message message = Message.Create(sendMode, packet.packetId);
 
                 foreach (var prop in packetRef.properties)
                 {

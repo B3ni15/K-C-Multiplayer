@@ -21,6 +21,9 @@ namespace KCM
         public static Server server = new Server(Main.steamServer);
         public static bool started = false;
 
+        private static readonly Dictionary<ushort, Queue<SaveTransferPacket>> saveTransferQueues = new Dictionary<ushort, Queue<SaveTransferPacket>>();
+        private const int SaveTransferPacketsPerUpdatePerClient = 10;
+
         static KCServer()
         {
             //server.registerMessageHandler(typeof(KCServer).GetMethod("ClientJoined"));
@@ -50,6 +53,7 @@ namespace KCM
                 }
 
                 ev.Client.CanQualityDisconnect = false;
+                ev.Client.MaxSendAttempts = 50;
 
                 Main.helper.Log("Client ID is: " + ev.Client.Id);
 
@@ -84,6 +88,8 @@ namespace KCM
 
                     if (entry != null)
                         Destroy(entry.gameObject);
+
+                    saveTransferQueues.Remove(ev.Client.Id);
 
                     Main.helper.Log($"Client disconnected. {ev.Reason}");
                 }
@@ -125,6 +131,68 @@ namespace KCM
         private void Update()
         {
             server.Update();
+            ProcessSaveTransfers();
+        }
+
+        private static void ProcessSaveTransfers()
+        {
+            if (!KCServer.IsRunning)
+                return;
+
+            if (saveTransferQueues.Count == 0)
+                return;
+
+            var clients = saveTransferQueues.Keys.ToList();
+            foreach (var clientId in clients)
+            {
+                Queue<SaveTransferPacket> queue;
+                if (!saveTransferQueues.TryGetValue(clientId, out queue) || queue == null)
+                    continue;
+
+                int sentThisUpdate = 0;
+                while (sentThisUpdate < SaveTransferPacketsPerUpdatePerClient && queue.Count > 0)
+                {
+                    var packet = queue.Dequeue();
+                    packet.Send(clientId);
+                    sentThisUpdate++;
+                }
+
+                if (queue.Count == 0)
+                    saveTransferQueues.Remove(clientId);
+            }
+        }
+
+        public static void EnqueueSaveTransfer(ushort toClient, byte[] bytes)
+        {
+            if (bytes == null)
+                return;
+
+            int chunkSize = 900;
+            int sent = 0;
+            int totalChunks = (int)Math.Ceiling((double)bytes.Length / chunkSize);
+
+            var queue = new Queue<SaveTransferPacket>(totalChunks);
+            for (int i = 0; i < totalChunks; i++)
+            {
+                int currentChunkSize = Math.Min(chunkSize, bytes.Length - sent);
+                var chunk = new byte[currentChunkSize];
+                Array.Copy(bytes, sent, chunk, 0, currentChunkSize);
+
+                queue.Enqueue(new SaveTransferPacket()
+                {
+                    saveSize = bytes.Length,
+                    saveDataChunk = chunk,
+                    chunkId = i,
+                    chunkSize = chunk.Length,
+                    saveDataIndex = sent,
+                    totalChunks = totalChunks
+                });
+
+                sent += currentChunkSize;
+            }
+
+            saveTransferQueues[toClient] = queue;
+            Main.helper.Log($"Queued {totalChunks} save data chunks for client {toClient}");
         }
 
         private void OnApplicationQuit()

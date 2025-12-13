@@ -92,36 +92,7 @@ namespace KCM.Packets.Network
                     return;
 
                 byte[] bytes = LoadSaveLoadAtPathHook.saveData;
-                int chunkSize = 900; // 900 bytes per chunk to fit within packet size limit
-
-                List<byte[]> chunks = SplitByteArrayIntoChunks(bytes, chunkSize);
-                Main.helper.Log("Save Transfer started!");
-
-                int sent = 0;
-                int packetsSent = 0;
-
-                for (int i = 0; i < chunks.Count; i++)
-                {
-                    var chunk = chunks[i];
-
-
-                    new SaveTransferPacket()
-                    {
-                        saveSize = bytes.Length,
-                        saveDataChunk = chunk,
-                        chunkId = i,
-                        chunkSize = chunk.Length,
-                        saveDataIndex = sent,
-                        totalChunks = chunks.Count
-                    }.Send(clientId);
-
-                    Main.helper.Log(" ");
-
-                    packetsSent++;
-                    sent += chunk.Length;
-                }
-
-                Main.helper.Log($"Sent {packetsSent} save data chunks to client");
+                KCServer.EnqueueSaveTransfer(clientId, bytes);
             }
             else
             {

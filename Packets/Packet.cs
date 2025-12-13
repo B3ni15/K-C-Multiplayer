@@ -11,6 +11,7 @@ namespace KCM.Packets
     {
         public abstract ushort packetId { get; }
         public ushort clientId { get; set; }
+        public virtual Riptide.MessageSendMode sendMode => Riptide.MessageSendMode.Reliable;
 
         public KCPlayer player
         {

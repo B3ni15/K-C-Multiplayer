@@ -23,6 +23,9 @@ A mellékelt log (`output.txt`) alapján több tipikus hiba okozta a szerver ind
 - Mentés betöltéskor a `ProcessBuilding` útvonal kiegészítése `World.inst.PlaceFromLoad(...)` + `UnpackStage2(...)` hívásokkal (különösen fontos a “világba helyezés” mellékhatásai miatt, pl. farm/field regisztráció)
 - Save transfer kliens oldalon robusztusabb inicializálás/reset (ne ragadjon be a statikus állapot több betöltés után, plusz bounds/null ellenőrzések)
 - Kompatibilitási fix: `World.inst.liverySets` lista esetén `.Count` használata `.Length` helyett (különben `Compilation failed` lehet egyes verziókon)
+- Hálózati stabilitás: `BuildingStatePacket` most `Unreliable` módban megy (state jellegű csomagoknál jobb, ha a legfrissebb állapot érkezik meg és nem torlódik fel a megbízható sor)
+- Mentés-szinkron stabilitás: szerver oldalon a save chunkok már nem egy nagy for-ciklusban mennek ki, hanem ütemezve (csökkenti a “The gap between received sequence IDs…” / “Poor connection” diszkonnekteket)
+- Kapcsolat tuning: kliens és szerver oldalon emelt `MaxSendAttempts`, és tiltott minőség-alapú auto-disconnect (különösen save transfer közben volt agresszív)
 
 Érintett fájlok (főbb pontok):
 
@@ -36,6 +39,8 @@ A mellékelt log (`output.txt`) alapján több tipikus hiba okozta a szerver ind
 - `KCServer.cs`
 - `Packets/Handlers/LobbyHandler.cs`
 - `RiptideSteamTransport/LobbyManager.cs`
+- `Packets/Handlers/PacketHandler.cs`
+- `Packets/State/BuildingStatePacket.cs`
 
 ## Telepítés / használat
 

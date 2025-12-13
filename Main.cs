@@ -55,6 +55,8 @@ namespace KCM
         public static Dictionary<string, KCPlayer> kCPlayers = new Dictionary<string, KCPlayer>();
         public static Dictionary<ushort, string> clientSteamIds = new Dictionary<ushort, string>();
 
+        private static readonly Dictionary<int, long> lastTeamIdLookupLogMs = new Dictionary<int, long>();
+
         public static KCPlayer GetPlayerByClientID(ushort clientId)
         {
             return kCPlayers[clientSteamIds[clientId]];
@@ -62,23 +64,33 @@ namespace KCM
 
         public static Player GetPlayerByTeamID(int teamId) // Need to replace building / production types so that the correct player is used. IResourceStorage and IResourceProvider, and jobs
         {
-            try
-            {
-                var player = kCPlayers.Values.FirstOrDefault(p => p.inst.PlayerLandmassOwner.teamId == teamId).inst;
+            KCPlayer match = kCPlayers.Values.FirstOrDefault(p =>
+                p != null &&
+                p.inst != null &&
+                p.inst.PlayerLandmassOwner != null &&
+                p.inst.PlayerLandmassOwner.teamId == teamId);
 
-                return player;
-            }
-            catch (Exception e)
+            if (match != null && match.inst != null)
+                return match.inst;
+
+            if (KCServer.IsRunning || KCClient.client.IsConnected)
             {
-                if (KCServer.IsRunning || KCClient.client.IsConnected)
+                long now = DateTimeOffset.Now.ToUnixTimeMilliseconds();
+                long last;
+                if (!lastTeamIdLookupLogMs.TryGetValue(teamId, out last) || (now - last) > 2000)
                 {
-                    Main.helper.Log("Failed finding player by teamID: " + teamId + " My teamID is: " + Player.inst.PlayerLandmassOwner.teamId);
+                    lastTeamIdLookupLogMs[teamId] = now;
+
+                    string myTeamId = (Player.inst != null && Player.inst.PlayerLandmassOwner != null)
+                        ? Player.inst.PlayerLandmassOwner.teamId.ToString()
+                        : "unknown";
+
+                    Main.helper.Log("Failed finding player by teamID: " + teamId + " My teamID is: " + myTeamId);
                     Main.helper.Log(kCPlayers.Count.ToString());
-                    Main.helper.Log(string.Join(", ", kCPlayers.Values.Select(p => p.inst.PlayerLandmassOwner.teamId.ToString())));
-                    Main.helper.Log(e.Message);
-                    Main.helper.Log(e.StackTrace);
+                    Main.helper.Log(string.Join(", ", kCPlayers.Values.Where(p => p != null && p.inst != null && p.inst.PlayerLandmassOwner != null).Select(p => p.inst.PlayerLandmassOwner.teamId.ToString())));
                 }
             }
+
             return Player.inst;
         }
 

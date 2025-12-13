@@ -76,7 +76,19 @@ namespace KCM
 
         private static void Client_Connected(object sender, EventArgs e)
         {
-
+            try
+            {
+                if (client != null && client.Connection != null)
+                {
+                    client.Connection.CanQualityDisconnect = false;
+                    client.Connection.MaxSendAttempts = 50;
+                }
+            }
+            catch (Exception ex)
+            {
+                Main.helper.Log("Error configuring client connection");
+                Main.helper.Log(ex.ToString());
+            }
 
         }
 
