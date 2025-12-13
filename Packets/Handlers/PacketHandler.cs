@@ -84,7 +84,9 @@ namespace KCM.Packets.Handlers
                 {
 
                     IPacket p = (IPacket)Activator.CreateInstance(packet);
-                    var properties = packet.GetProperties(BindingFlags.Instance | BindingFlags.Public).Where(prop => prop.Name != "packetId").ToArray();
+                    var properties = packet.GetProperties(BindingFlags.Instance | BindingFlags.Public)
+                        .Where(prop => prop.Name != "packetId" && prop.Name != "sendMode")
+                        .ToArray();
                     Array.Sort(properties, (x, y) => String.Compare(x.Name, y.Name));
                     ushort id = (ushort)p.GetType().GetProperty("packetId").GetValue(p, null);
 
@@ -235,7 +237,7 @@ namespace KCM.Packets.Handlers
                     if (prop.PropertyType.IsEnum)
                     {
                         currentPropName = prop.Name;
-                        message.AddInt((int)prop.GetValue(packet, null));
+                        message.AddInt(Convert.ToInt32(prop.GetValue(packet, null)));
                     }
                     else if (prop.PropertyType == typeof(ushort))
                     {
@@ -467,9 +469,7 @@ namespace KCM.Packets.Handlers
                     if (prop.PropertyType.IsEnum)
                     {
                         int enumValue = message.GetInt();
-                        string enumName = Enum.GetName(prop.PropertyType, enumValue);
-
-                        prop.SetValue(p, Enum.Parse(prop.PropertyType, enumName));
+                        prop.SetValue(p, Enum.ToObject(prop.PropertyType, enumValue));
                     }
                     else if (prop.PropertyType == typeof(ushort))
                     {

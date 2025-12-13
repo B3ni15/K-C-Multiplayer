@@ -26,6 +26,7 @@ A mellékelt log (`output.txt`) alapján több tipikus hiba okozta a szerver ind
 - Hálózati stabilitás: `BuildingStatePacket` most `Unreliable` módban megy (state jellegű csomagoknál jobb, ha a legfrissebb állapot érkezik meg és nem torlódik fel a megbízható sor)
 - Mentés-szinkron stabilitás: szerver oldalon a save chunkok már nem egy nagy for-ciklusban mennek ki, hanem ütemezve (csökkenti a “The gap between received sequence IDs…” / “Poor connection” diszkonnekteket)
 - Kapcsolat tuning: kliens és szerver oldalon emelt `MaxSendAttempts`, és tiltott minőség-alapú auto-disconnect (különösen save transfer közben volt agresszív)
+- Fix: a `sendMode` csak a Riptide üzenetküldési mód kiválasztására szolgál, nem kerül szériázásra; az enum csomagmezők szériázása/deszériázása robusztusabb lett (különben csatlakozáskor packet-parszolás szétesett)
 
 Érintett fájlok (főbb pontok):
 
