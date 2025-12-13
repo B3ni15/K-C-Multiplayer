@@ -199,6 +199,43 @@ namespace KCM
             return -1;
         }
 
+        private static string TryGetGameModeName()
+        {
+            try
+            {
+                if (GameState.inst == null)
+                    return "null";
+
+                var t = GameState.inst.GetType();
+
+                var modeProp = t.GetProperty("mode", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
+                    ?? t.GetProperty("Mode", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
+                    ?? t.GetProperty("CurrentMode", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+
+                if (modeProp != null)
+                {
+                    object m = modeProp.GetValue(GameState.inst, null);
+                    return m != null ? m.GetType().Name : "null";
+                }
+
+                var modeField = t.GetField("mode", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
+                    ?? t.GetField("Mode", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
+                    ?? t.GetField("currentMode", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
+                    ?? t.GetField("currMode", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+
+                if (modeField != null)
+                {
+                    object fm = modeField.GetValue(GameState.inst);
+                    return fm != null ? fm.GetType().Name : "null";
+                }
+            }
+            catch
+            {
+            }
+
+            return "unknown";
+        }
+
         public static void RunPostLoadRebuild(string reason)
         {
             try
@@ -439,6 +476,8 @@ namespace KCM
                                 Main.helper.Log(
                                     "VillagerStallDetect: no movement for " + (now - lastVillagerMoveMs) +
                                     "ms timeScale=" + Time.timeScale +
+                                    " mode=" + TryGetGameModeName() +
+                                    " villagerSystemEnabled=" + (VillagerSystem.inst != null && VillagerSystem.inst.enabled) +
                                     " villagers=" + Villager.villagers.Count +
                                     " sampleGuid=" + probedVillagerGuid +
                                     " samplePos=" + v.Pos);

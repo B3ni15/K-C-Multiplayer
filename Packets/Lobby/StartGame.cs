@@ -39,6 +39,25 @@ namespace KCM.Packets.Lobby
                         Main.helper.Log(ex.ToString());
                     }
 
+                    try
+                    {
+                        GameState.inst.SetNewMode(GameState.inst.playingMode);
+                        Main.helper.Log("StartGame: forced playing mode");
+                    }
+                    catch (Exception ex)
+                    {
+                        Main.helper.Log("StartGame: failed forcing playing mode");
+                        Main.helper.Log(ex.ToString());
+                    }
+
+                    try
+                    {
+                        Main.RunPostLoadRebuild("StartGame");
+                    }
+                    catch
+                    {
+                    }
+
                     SpeedControlUI.inst.SetSpeed(0);
                 }
                 else
