@@ -9,6 +9,9 @@ A mellékelt log (`output.txt`) alapján több tipikus hiba okozta a szerver ind
 - `NullReferenceException` a lobby player UI frissítésében (`PlayerEntryScript.SetValues`)
 - duplikált SteamID miatti `ArgumentException: same key already added` a handshake során
 - csomagkezelés közben `KeyNotFoundException` / `NullReferenceException` (hiányzó `clientId -> steamId` map, race/állapot problémák)
+- Save/load utani desync: a kliens oldali "Client Player" Reset nem futott mentés betöltése közben (loading flag miatt), így remote player állapot (registry/field/worker) beragadhatott; ez okozhatott "nem látni az aratást/elszállítást", hiányzó épület/resource state, és UI anomáliákat.
+- Save/load utani "kezdo keep" kerese: betöltéskor a keep beallitasa túl szigorúan teamId-hez volt kötve, ezért előfordult hogy a kliensnél nem lett beállítva a már létező keep, és újra kérte a játék a kezdő lerakást.
+- Többszöri load után romló sync: a statikus StateObserver/observer GameObject-ok nem lettek kitakarítva új load előtt, így régi világ/objektum referenciák maradhattak bent és rossz state frissítéseket küldhettek.
 
 ## Mit javít ez a verzió?
 
@@ -22,6 +25,9 @@ A mellékelt log (`output.txt`) alapján több tipikus hiba okozta a szerver ind
 - `FieldSystem` `Player.inst` referenciáinak patch-elése (farm/termés állapotkezelés több helyen erre támaszkodik)
 - Mentés betöltéskor a `ProcessBuilding` útvonal kiegészítése `World.inst.PlaceFromLoad(...)` + `UnpackStage2(...)` hívásokkal (különösen fontos a “világba helyezés” mellékhatásai miatt, pl. farm/field regisztráció)
 - Save transfer kliens oldalon robusztusabb inicializálás/reset (ne ragadjon be a statikus állapot több betöltés után, plusz bounds/null ellenőrzések)
+- Fix: save/load közben is lefut a remote "Client Player" Reset (nem csak új világ generálásnál), hogy a player alrendszerek mindig tiszta alapból induljanak.
+- Fix: keep detektálás betöltéskor (ne teamId egyezésen múljon), így nem kéri a játék a kezdő keep lerakását, ha már létezik.
+- Fix: új load előtt StateObserver takarítás (save transfer kezdetén, host oldali `LoadAtPath` elején, lobby elhagyásakor), hogy ne maradjanak beragadt observer objektumok.
 - Kompatibilitási fix: `World.inst.liverySets` lista esetén `.Count` használata `.Length` helyett (különben `Compilation failed` lehet egyes verziókon)
 - Hálózati stabilitás: `BuildingStatePacket` most `Unreliable` módban megy (state jellegű csomagoknál jobb, ha a legfrissebb állapot érkezik meg és nem torlódik fel a megbízható sor)
 - Mentés-szinkron stabilitás: szerver oldalon a save chunkok már nem egy nagy for-ciklusban mennek ki, hanem ütemezve (csökkenti a “The gap between received sequence IDs…” / “Poor connection” diszkonnekteket)
@@ -42,6 +48,8 @@ A mellékelt log (`output.txt`) alapján több tipikus hiba okozta a szerver ind
 - `RiptideSteamTransport/LobbyManager.cs`
 - `Packets/Handlers/PacketHandler.cs`
 - `Packets/State/BuildingStatePacket.cs`
+- `StateManagement/Observers/StateObserver.cs`
+- `Main.cs`
 
 ## Telepítés / használat
 
