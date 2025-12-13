@@ -588,7 +588,7 @@ namespace KCM.StateManagement.Sync
 
             List<Guid> guids = new List<Guid>();
             List<Vector3> positions = new List<Vector3>();
-            const int maxVillagersPerSnapshot = 200;
+            const int maxVillagersPerSnapshot = 50;
 
             for (int i = 0; i < Villager.villagers.Count && guids.Count < maxVillagersPerSnapshot; i++)
             {

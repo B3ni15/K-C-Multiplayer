@@ -153,7 +153,7 @@ namespace KCM
 
             try
             {
-                FieldInfo loadTickDelayField = instance.GetType().GetField("loadTickDelay", BindingFlags.Instance | BindingFlags.NonPublic);
+                FieldInfo loadTickDelayField = instance.GetType().GetField("loadTickDelay", BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
                 if (loadTickDelayField != null)
                 {
                     loadTickDelayField.SetValue(instance, ticks);
@@ -164,8 +164,9 @@ namespace KCM
                 if (loadTickDelayProp != null && loadTickDelayProp.CanWrite && loadTickDelayProp.PropertyType == typeof(int))
                     loadTickDelayProp.SetValue(instance, ticks, null);
             }
-            catch
+            catch (Exception e)
             {
+                helper?.Log("SetLoadTickDelay failed for " + instance.GetType().Name + ": " + e.Message);
             }
         }
 
@@ -176,7 +177,7 @@ namespace KCM
 
             try
             {
-                FieldInfo loadTickDelayField = instance.GetType().GetField("loadTickDelay", BindingFlags.Instance | BindingFlags.NonPublic);
+                FieldInfo loadTickDelayField = instance.GetType().GetField("loadTickDelay", BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
                 if (loadTickDelayField != null)
                 {
                     object v = loadTickDelayField.GetValue(instance);
@@ -247,10 +248,17 @@ namespace KCM
                 try { Player.inst.irrigation.UpdateIrrigation(); } catch (Exception e) { helper?.Log(e.ToString()); }
                 try { Player.inst.CalcMaxResources(null, -1); } catch (Exception e) { helper?.Log(e.ToString()); }
 
+                helper?.Log("Setting loadTickDelay for game systems");
                 SetLoadTickDelay(Player.inst, 1);
                 SetLoadTickDelay(UnitSystem.inst, 1);
                 SetLoadTickDelay(JobSystem.inst, 1);
                 SetLoadTickDelay(VillagerSystem.inst, 1);
+
+                helper?.Log(
+                    "loadTickDelay after set: Player=" + GetLoadTickDelayOrMinusOne(Player.inst) +
+                    " Unit=" + GetLoadTickDelayOrMinusOne(UnitSystem.inst) +
+                    " Job=" + GetLoadTickDelayOrMinusOne(JobSystem.inst) +
+                    " Villager=" + GetLoadTickDelayOrMinusOne(VillagerSystem.inst));
             }
             catch (Exception e)
             {
@@ -487,6 +495,18 @@ namespace KCM
                                     GetLoadTickDelayOrMinusOne(UnitSystem.inst) + "/" +
                                     GetLoadTickDelayOrMinusOne(JobSystem.inst) + "/" +
                                     GetLoadTickDelayOrMinusOne(VillagerSystem.inst));
+
+                                // Try to fix stalled systems by resetting loadTickDelay
+                                if (GetLoadTickDelayOrMinusOne(VillagerSystem.inst) == -1 ||
+                                    GetLoadTickDelayOrMinusOne(UnitSystem.inst) == -1 ||
+                                    GetLoadTickDelayOrMinusOne(JobSystem.inst) == -1)
+                                {
+                                    Main.helper.Log("VillagerStallDetect: Attempting to fix stalled systems");
+                                    SetLoadTickDelay(Player.inst, 1);
+                                    SetLoadTickDelay(UnitSystem.inst, 1);
+                                    SetLoadTickDelay(JobSystem.inst, 1);
+                                    SetLoadTickDelay(VillagerSystem.inst, 1);
+                                }
                             }
                         }
                     }
