@@ -1,0 +1,23 @@
+# Logs / local debug output
+output*.txt
+*.log
+
+# OS junk
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Editor / IDE
+.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+*.VC.db
+*.VC.VC.opendb
+
+# Build artifacts (C#/Unity tooling)
+**/bin/
+**/obj/
+**/*.mdb
+**/*.pdb
