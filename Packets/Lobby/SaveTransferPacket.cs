@@ -108,8 +108,15 @@ namespace KCM.Packets.Lobby
 
                 LoadSave.Load();
 
-
-                LoadSaveLoadHook.saveContainer.Unpack(null);
+                try
+                {
+                    Main.SetMultiplayerSaveLoadInProgress(true);
+                    LoadSaveLoadHook.saveContainer.Unpack(null);
+                }
+                finally
+                {
+                    Main.SetMultiplayerSaveLoadInProgress(false);
+                }
                 Broadcast.OnLoadedEvent.Broadcast(new OnLoadedEvent());
 
                 try

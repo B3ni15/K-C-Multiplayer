@@ -57,6 +57,17 @@ namespace KCM
 
         private static readonly Dictionary<int, long> lastTeamIdLookupLogMs = new Dictionary<int, long>();
         private static int resetInProgress = 0;
+        private static int multiplayerSaveLoadInProgress = 0;
+
+        public static bool IsMultiplayerSaveLoadInProgress
+        {
+            get { return Volatile.Read(ref multiplayerSaveLoadInProgress) != 0; }
+        }
+
+        public static void SetMultiplayerSaveLoadInProgress(bool inProgress)
+        {
+            Interlocked.Exchange(ref multiplayerSaveLoadInProgress, inProgress ? 1 : 0);
+        }
 
         public static void ResetMultiplayerState(string reason = null)
         {
@@ -82,6 +93,7 @@ namespace KCM
                 try { LoadSaveLoadAtPathHook.saveData = new byte[0]; } catch { }
 
                 try { LobbyManager.loadingSave = false; } catch { }
+                try { SetMultiplayerSaveLoadInProgress(false); } catch { }
 
                 try
                 {
@@ -1294,20 +1306,18 @@ namespace KCM
                     {
                         BinaryFormatter bf = new BinaryFormatter();
                         bf.Binder = new MultiplayerSaveDeserializationBinder();
-                        Stream file = new FileStream(path, FileMode.Open);
+                        Stream file = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+                        MultiplayerSaveContainer loadData = null;
                         try
                         {
                             object deserialized = bf.Deserialize(file);
-                            MultiplayerSaveContainer loadData = deserialized as MultiplayerSaveContainer;
+                            loadData = deserialized as MultiplayerSaveContainer;
                             if (loadData == null)
                             {
                                 Main.helper.Log("Selected save is not a MultiplayerSaveContainer; falling back to vanilla load.");
+                                saveData = new byte[0];
                                 return true;
                             }
-
-                            saveData = File.ReadAllBytes(path);
-                            loadData.Unpack(null);
-                            Broadcast.OnLoadedEvent.Broadcast(new OnLoadedEvent());
                         }
                         catch (Exception e)
                         {
@@ -1326,6 +1336,29 @@ namespace KCM
                                 file.Dispose();
                             }
                         }
+
+                        try
+                        {
+                            saveData = File.ReadAllBytes(path);
+                        }
+                        catch (Exception e)
+                        {
+                            saveData = new byte[0];
+                            Main.helper.Log("Failed reading save bytes for transfer; clients will not be able to load this save.");
+                            Main.helper.Log(e.ToString());
+                        }
+
+                        try
+                        {
+                            Main.SetMultiplayerSaveLoadInProgress(true);
+                            loadData.Unpack(null);
+                        }
+                        finally
+                        {
+                            Main.SetMultiplayerSaveLoadInProgress(false);
+                        }
+
+                        Broadcast.OnLoadedEvent.Broadcast(new OnLoadedEvent());
                     }
 
                     return false;
@@ -1524,7 +1557,7 @@ namespace KCM
         {
             public static bool Prefix(Building.BuildingSaveData structureData, Player p, ref Building __result)
             {
-                if (KCClient.client.IsConnected)
+                if (KCClient.client.IsConnected && Main.IsMultiplayerSaveLoadInProgress)
                 {
 
                     Building Building = GameState.inst.GetPlaceableByUniqueName(structureData.uniqueName);
@@ -1560,19 +1593,6 @@ namespace KCM
                         {
                             p.keep = keep;
                             Main.helper.Log(p.keep.ToString());
-                        }
-
-                        try
-                        {
-                            World.inst.PlaceFromLoad(building);
-                            structureData.UnpackStage2(building);
-                            building.SetVisibleForFog(false);
-                        }
-                        catch (Exception e)
-                        {
-                            Main.helper.Log("Error placing building into world during load");
-                            Main.helper.Log(e.Message);
-                            Main.helper.Log(e.StackTrace);
                         }
                         __result = building;
                     }
