@@ -25,6 +25,7 @@ namespace KCM.Packets.Lobby
 
             try
             {
+                int desiredSpeed = 1;
                 if (!LobbyManager.loadingSave)
                 {
                     SpeedControlUI.inst.SetSpeed(0);
@@ -39,12 +40,13 @@ namespace KCM.Packets.Lobby
                         Main.helper.Log(ex.ToString());
                     }
 
-                    SpeedControlUI.inst.SetSpeed(0);
+                    SpeedControlUI.inst.SetSpeed(desiredSpeed);
                 }
                 else
                 {
                     LobbyManager.loadingSave = false;
                     GameState.inst.SetNewMode(GameState.inst.playingMode);
+                    SpeedControlUI.inst.SetSpeed(desiredSpeed);
                 }
             }
             catch (Exception ex)

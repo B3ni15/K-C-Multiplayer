@@ -15,6 +15,14 @@ namespace KCM.Packets.Handlers
 {
     public class PacketHandler
     {
+        [ThreadStatic]
+        private static bool isHandlingPacket;
+
+        public static bool IsHandlingPacket
+        {
+            get { return isHandlingPacket; }
+        }
+
         public static Dictionary<ushort, PacketRef> Packets = new Dictionary<ushort, PacketRef>();
         public class PacketRef
         {
@@ -183,6 +191,7 @@ namespace KCM.Packets.Handlers
                 {
                     try
                     {
+                        isHandlingPacket = true;
                         packet.HandlePacketClient();
                     }
                     catch (Exception ex)
@@ -204,6 +213,10 @@ namespace KCM.Packets.Handlers
                             Main.helper.Log("----------------------- Inner stacktrace -----------------------");
                             Main.helper.Log(ex.InnerException.StackTrace);
                         }
+                    }
+                    finally
+                    {
+                        isHandlingPacket = false;
                     }
                 }
 

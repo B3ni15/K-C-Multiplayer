@@ -58,6 +58,7 @@ namespace KCM
         private static readonly Dictionary<int, long> lastTeamIdLookupLogMs = new Dictionary<int, long>();
         private static int resetInProgress = 0;
         private static int multiplayerSaveLoadInProgress = 0;
+        private static int suppressVillagerTeleportPackets = 0;
 
         public static bool IsMultiplayerSaveLoadInProgress
         {
@@ -67,6 +68,16 @@ namespace KCM
         public static void SetMultiplayerSaveLoadInProgress(bool inProgress)
         {
             Interlocked.Exchange(ref multiplayerSaveLoadInProgress, inProgress ? 1 : 0);
+        }
+
+        private static bool ShouldSuppressVillagerTeleportPackets
+        {
+            get { return Volatile.Read(ref suppressVillagerTeleportPackets) != 0; }
+        }
+
+        private static void SetSuppressVillagerTeleportPackets(bool suppress)
+        {
+            Interlocked.Exchange(ref suppressVillagerTeleportPackets, suppress ? 1 : 0);
         }
 
         public static void ResetMultiplayerState(string reason = null)
@@ -171,10 +182,51 @@ namespace KCM
                 try { Player.inst.irrigation.UpdateIrrigation(); } catch (Exception e) { helper?.Log(e.ToString()); }
                 try { Player.inst.CalcMaxResources(null, -1); } catch (Exception e) { helper?.Log(e.ToString()); }
 
+                try { if (UnitSystem.inst != null) UnitSystem.inst.enabled = true; } catch (Exception e) { helper?.Log(e.ToString()); }
+                try { if (JobSystem.inst != null) JobSystem.inst.enabled = true; } catch (Exception e) { helper?.Log(e.ToString()); }
+                try { if (VillagerSystem.inst != null) VillagerSystem.inst.enabled = true; } catch (Exception e) { helper?.Log(e.ToString()); }
+
                 SetLoadTickDelay(Player.inst, 1);
                 SetLoadTickDelay(UnitSystem.inst, 1);
                 SetLoadTickDelay(JobSystem.inst, 1);
                 SetLoadTickDelay(VillagerSystem.inst, 1);
+
+                try
+                {
+                    // A nudge helps recover from cases where villagers have jobs but never begin moving.
+                    SetSuppressVillagerTeleportPackets(true);
+                    foreach (var kcPlayer in kCPlayers.Values)
+                    {
+                        if (kcPlayer == null || kcPlayer.inst == null)
+                            continue;
+
+                        var workers = kcPlayer.inst.Workers;
+                        for (int i = 0; i < workers.Count; i++)
+                        {
+                            Villager v = workers.data[i];
+                            if (v == null)
+                                continue;
+
+                            try
+                            {
+                                Vector3 pos = v.transform != null ? v.transform.position : Vector3.zero;
+                                v.TeleportTo(pos);
+                            }
+                            catch
+                            {
+                            }
+                        }
+                    }
+                }
+                catch (Exception e)
+                {
+                    helper?.Log("Post-load villager nudge failed");
+                    helper?.Log(e.ToString());
+                }
+                finally
+                {
+                    SetSuppressVillagerTeleportPackets(false);
+                }
             }
             catch (Exception e)
             {
@@ -434,6 +486,26 @@ namespace KCM
 
                 if ((MenuState)newState == MenuState.Menu && (KCClient.client.IsConnected || KCServer.IsRunning))
                     ResetMultiplayerState("Returned to main menu");
+
+                if ((MenuState)newState == (MenuState)200 && KCClient.client.IsConnected)
+                {
+                    try
+                    {
+                        RunPostLoadRebuild("Entered playing mode");
+                    }
+                    catch
+                    {
+                    }
+
+                    try
+                    {
+                        if (SpeedControlUI.inst != null)
+                            SpeedControlUI.inst.SetSpeed(1);
+                    }
+                    catch
+                    {
+                    }
+                }
             }
         }
 
@@ -1126,13 +1198,7 @@ namespace KCM
                 if (KCClient.client.IsConnected)
                 {
                     bool calledFromPacket = false;
-                    try
-                    {
-                        calledFromPacket = new StackFrame(3).GetMethod().Name.Contains("HandlePacket");
-                    }
-                    catch
-                    {
-                    }
+                    try { calledFromPacket = PacketHandler.IsHandlingPacket; } catch { }
 
                     if (!calledFromPacket)
                     {
@@ -1149,14 +1215,6 @@ namespace KCM
                 if (KCClient.client.IsConnected)
                 {
                     if (!__state)
-                        return;
-
-                    /*Main.helper.Log($"set speed Called by 0: {new StackFrame(0).GetMethod()} {new StackFrame(0).GetMethod().Name.Contains("HandlePacket")}");
-                     Main.helper.Log($"set speed Called by 1: {new StackFrame(1).GetMethod()} {new StackFrame(1).GetMethod().Name.Contains("HandlePacket")}");
-                     Main.helper.Log($"set speed Called by 2: {new StackFrame(2).GetMethod()} {new StackFrame(2).GetMethod().Name.Contains("HandlePacket")}");
-                     Main.helper.Log($"set speed Called by 3: {new StackFrame(3).GetMethod()} {new StackFrame(3).GetMethod().Name.Contains("HandlePacket")}");*/
-
-                    if (new StackFrame(3).GetMethod().Name.Contains("HandlePacket"))
                         return;
 
                     Main.helper.Log("SpeedControlUI.SetSpeed (local): " + idx);
@@ -1274,7 +1332,12 @@ namespace KCM
             {
                 if (KCClient.client.IsConnected)
                 {
-                    if (new StackFrame(3).GetMethod().Name.Contains("HandlePacket"))
+                    if (ShouldSuppressVillagerTeleportPackets)
+                        return;
+
+                    bool calledFromPacket = false;
+                    try { calledFromPacket = PacketHandler.IsHandlingPacket; } catch { }
+                    if (calledFromPacket)
                         return;
 
                     new VillagerTeleportTo()

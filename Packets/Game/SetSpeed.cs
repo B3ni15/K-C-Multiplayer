@@ -22,7 +22,7 @@ namespace KCM.Packets.Game
 
         public override void HandlePacketServer()
         {
-            //throw new NotImplementedException();
+            // Server relay is handled automatically by PacketHandler unless [NoServerRelay] is used.
         }
     }
 }
