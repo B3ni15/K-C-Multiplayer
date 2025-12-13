@@ -1,0 +1,311 @@
+﻿2024-04-17T18:31:45:SENDING PLACE KEEP RANDOMLY FOR Shadowfita ON LANDMASS: 0
+2024-04-17T18:31:45:SENDING PLACE KEEP RANDOMLY FOR MUFFINMAN ON LANDMASS: 2
+2024-04-17T18:31:45:GameState (MainMenuMode)
+2024-04-17T18:31:45:True
+2024-04-17T18:31:45:Menu set to: 200
+2024-04-17T18:31:45:Exception has been thrown by the target of an invocation.
+2024-04-17T18:31:45:System.Reflection.TargetInvocationException: Exception has been thrown by the target of an invocation. ---> System.NullReferenceException: Object reference not set to an instance of an object
+  at MainMenuMode.StartGame () [0x000ae] in <64d48a4605b74315afc90e0d3d75aed0>:0 
+  at (wrapper managed-to-native) System.Reflection.MonoMethod.InternalInvoke(System.Reflection.MonoMethod,object,object[],System.Exception&)
+  at System.Reflection.MonoMethod.Invoke (System.Object obj, System.Reflection.BindingFlags invokeAttr, System.Reflection.Binder binder, System.Object[] parameters, System.Globalization.CultureInfo culture) [0x00032] in <eae584ce26bc40229c1b1aa476bfa589>:0 
+   --- End of inner exception stack trace ---
+  at System.Reflection.MonoMethod.Invoke (System.Object obj, System.Reflection.BindingFlags invokeAttr, System.Reflection.Binder binder, System.Object[] parameters, System.Globalization.CultureInfo culture) [0x00048] in <eae584ce26bc40229c1b1aa476bfa589>:0 
+  at System.Reflection.MethodBase.Invoke (System.Object obj, System.Object[] parameters) [0x00000] in <eae584ce26bc40229c1b1aa476bfa589>:0 
+  at KCM.Packets.Lobby.StartGame.Start () [0x00058] in <9248c2b646c04c27b08155cb9b937ba4>:0 
+2024-04-17T18:31:45:Last 9 methods in call tree: Update -> HandleMessages -> Handle -> OnMessageReceived -> HandlePacket -> HandlePacketClient -> SendMessage -> SendMessage -> OnPlayerPlacement_Patch1
+2024-04-17T18:31:45:1
+2024-04-17T18:31:45:2
+2024-04-17T18:31:45:3
+2024-04-17T18:31:45:4
+2024-04-17T18:31:45:5
+2024-04-17T18:31:45:6
+2024-04-17T18:31:45:7
+2024-04-17T18:31:45:8
+2024-04-17T18:31:45:9
+2024-04-17T18:31:45:10
+2024-04-17T18:31:45:11
+2024-04-17T18:31:45:12
+2024-04-17T18:31:45:13
+2024-04-17T18:31:45:14
+2024-04-17T18:31:45:Called by: HandlePacketClient
+2024-04-17T18:31:45:1 Shadowfita - Sending building place packet for keep
+2024-04-17T18:31:45:Observer created for Building with 15 fields, 0 properties, and 0 non-primitive list variables
+2024-04-17T18:31:59:Overridden complete build
+2024-04-17T18:32:17:Received place building packet for keep from MUFFINMAN(2)
+2024-04-17T18:32:17:Building init
+2024-04-17T18:32:17:Building unpack
+2024-04-17T18:32:17:Client Player (2 MUFFINMAN) (Player)
+2024-04-17T18:32:17:False
+2024-04-17T18:32:17:2
+2024-04-17T18:32:17:Player add Building unpacked
+2024-04-17T18:32:17:1
+2024-04-17T18:32:17:2
+2024-04-17T18:32:17:3
+2024-04-17T18:32:17:4
+2024-04-17T18:32:17:5
+2024-04-17T18:32:17:6
+2024-04-17T18:32:17:7
+2024-04-17T18:32:17:8
+2024-04-17T18:32:17:9
+2024-04-17T18:32:17:10
+2024-04-17T18:32:17:11
+2024-04-17T18:32:17:12
+2024-04-17T18:32:17:13
+2024-04-17T18:32:17:14
+2024-04-17T18:32:17:Set keep True
+2024-04-17T18:32:17:Place from load
+2024-04-17T18:32:17:unpack stage 2
+2024-04-17T18:32:17:Landmass owner take ownership
+2024-04-17T18:32:17:2 (team 22) banner: -1 Placed building Keep(Clone) at (24.0, 0.0, 91.0)
+2024-04-17T18:32:17:Received add villager packet from MUFFINMAN(2)
+2024-04-17T18:32:17:Teleporting villager to (26.8, 0.0, 91.2)
+2024-04-17T18:32:17:Received add villager packet from MUFFINMAN(2)
+2024-04-17T18:32:17:Teleporting villager to (26.8, 0.0, 91.6)
+2024-04-17T18:32:17:Received add villager packet from MUFFINMAN(2)
+2024-04-17T18:32:17:Teleporting villager to (26.4, 0.0, 91.6)
+2024-04-17T18:32:17:Received add villager packet from MUFFINMAN(2)
+2024-04-17T18:32:17:Teleporting villager to (26.4, 0.0, 91.2)
+2024-04-17T18:32:17:Received add villager packet from MUFFINMAN(2)
+2024-04-17T18:32:17:Teleporting villager to (24.6, 0.0, 92.2)
+2024-04-17T18:32:28:Received place building packet for road from MUFFINMAN(2)
+2024-04-17T18:32:28:Building init
+2024-04-17T18:32:28:Error handling packet 71 WorldPlace from 2
+2024-04-17T18:32:28:----------------------- Main exception -----------------------
+2024-04-17T18:32:28:System.ArgumentNullException: Value cannot be null.
+Parameter name: source
+  at (wrapper managed-to-native) UnityEngine.Material.CreateWithMaterial(UnityEngine.Material,UnityEngine.Material)
+  at UnityEngine.Material..ctor (UnityEngine.Material source) [0x00008] in <85d1d3e7744a4a47b5f51883bf40bba2>:0 
+  at (wrapper dynamic-method) Building.Init_Patch0(object)
+  at KCM.Packets.Game.GameWorld.WorldPlace.PlaceBuilding () [0x0018d] in <9248c2b646c04c27b08155cb9b937ba4>:0 
+  at KCM.Packets.Game.GameWorld.WorldPlace.HandlePacketClient () [0x00019] in <9248c2b646c04c27b08155cb9b937ba4>:0 
+  at KCM.Packets.Handlers.PacketHandler.HandlePacket (System.Object sender, Riptide.MessageReceivedEventArgs messageReceived) [0x00023] in <9248c2b646c04c27b08155cb9b937ba4>:0 
+2024-04-17T18:32:28:----------------------- Main message -----------------------
+2024-04-17T18:32:28:Value cannot be null.
+Parameter name: source
+2024-04-17T18:32:28:----------------------- Main stacktrace -----------------------
+2024-04-17T18:32:28:  at (wrapper managed-to-native) UnityEngine.Material.CreateWithMaterial(UnityEngine.Material,UnityEngine.Material)
+  at UnityEngine.Material..ctor (UnityEngine.Material source) [0x00008] in <85d1d3e7744a4a47b5f51883bf40bba2>:0 
+  at (wrapper dynamic-method) Building.Init_Patch0(object)
+  at KCM.Packets.Game.GameWorld.WorldPlace.PlaceBuilding () [0x0018d] in <9248c2b646c04c27b08155cb9b937ba4>:0 
+  at KCM.Packets.Game.GameWorld.WorldPlace.HandlePacketClient () [0x00019] in <9248c2b646c04c27b08155cb9b937ba4>:0 
+  at KCM.Packets.Handlers.PacketHandler.HandlePacket (System.Object sender, Riptide.MessageReceivedEventArgs messageReceived) [0x00023] in <9248c2b646c04c27b08155cb9b937ba4>:0 
+2024-04-17T18:32:28:Received place building packet for road from MUFFINMAN(2)
+2024-04-17T18:32:28:Building init
+2024-04-17T18:32:28:Error handling packet 71 WorldPlace from 2
+2024-04-17T18:32:28:----------------------- Main exception -----------------------
+2024-04-17T18:32:28:System.ArgumentNullException: Value cannot be null.
+Parameter name: source
+  at (wrapper managed-to-native) UnityEngine.Material.CreateWithMaterial(UnityEngine.Material,UnityEngine.Material)
+  at UnityEngine.Material..ctor (UnityEngine.Material source) [0x00008] in <85d1d3e7744a4a47b5f51883bf40bba2>:0 
+  at (wrapper dynamic-method) Building.Init_Patch0(object)
+  at KCM.Packets.Game.GameWorld.WorldPlace.PlaceBuilding () [0x0018d] in <9248c2b646c04c27b08155cb9b937ba4>:0 
+  at KCM.Packets.Game.GameWorld.WorldPlace.HandlePacketClient () [0x00019] in <9248c2b646c04c27b08155cb9b937ba4>:0 
+  at KCM.Packets.Handlers.PacketHandler.HandlePacket (System.Object sender, Riptide.MessageReceivedEventArgs messageReceived) [0x00023] in <9248c2b646c04c27b08155cb9b937ba4>:0 
+2024-04-17T18:32:28:----------------------- Main message -----------------------
+2024-04-17T18:32:28:Value cannot be null.
+Parameter name: source
+2024-04-17T18:32:28:----------------------- Main stacktrace -----------------------
+2024-04-17T18:32:28:  at (wrapper managed-to-native) UnityEngine.Material.CreateWithMaterial(UnityEngine.Material,UnityEngine.Material)
+  at UnityEngine.Material..ctor (UnityEngine.Material source) [0x00008] in <85d1d3e7744a4a47b5f51883bf40bba2>:0 
+  at (wrapper dynamic-method) Building.Init_Patch0(object)
+  at KCM.Packets.Game.GameWorld.WorldPlace.PlaceBuilding () [0x0018d] in <9248c2b646c04c27b08155cb9b937ba4>:0 
+  at KCM.Packets.Game.GameWorld.WorldPlace.HandlePacketClient () [0x00019] in <9248c2b646c04c27b08155cb9b937ba4>:0 
+  at KCM.Packets.Handlers.PacketHandler.HandlePacket (System.Object sender, Riptide.MessageReceivedEventArgs messageReceived) [0x00023] in <9248c2b646c04c27b08155cb9b937ba4>:0 
+2024-04-17T18:32:28:Building not found.
+2024-04-17T18:32:28:Building not found.
+2024-04-17T18:32:29:Received place building packet for road from MUFFINMAN(2)
+2024-04-17T18:32:29:Building init
+2024-04-17T18:32:29:Error handling packet 71 WorldPlace from 2
+2024-04-17T18:32:29:----------------------- Main exception -----------------------
+2024-04-17T18:32:29:System.ArgumentNullException: Value cannot be null.
+Parameter name: source
+  at (wrapper managed-to-native) UnityEngine.Material.CreateWithMaterial(UnityEngine.Material,UnityEngine.Material)
+  at UnityEngine.Material..ctor (UnityEngine.Material source) [0x00008] in <85d1d3e7744a4a47b5f51883bf40bba2>:0 
+  at (wrapper dynamic-method) Building.Init_Patch0(object)
+  at KCM.Packets.Game.GameWorld.WorldPlace.PlaceBuilding () [0x0018d] in <9248c2b646c04c27b08155cb9b937ba4>:0 
+  at KCM.Packets.Game.GameWorld.WorldPlace.HandlePacketClient () [0x00019] in <9248c2b646c04c27b08155cb9b937ba4>:0 
+  at KCM.Packets.Handlers.PacketHandler.HandlePacket (System.Object sender, Riptide.MessageReceivedEventArgs messageReceived) [0x00023] in <9248c2b646c04c27b08155cb9b937ba4>:0 
+2024-04-17T18:32:29:----------------------- Main message -----------------------
+2024-04-17T18:32:29:Value cannot be null.
+Parameter name: source
+2024-04-17T18:32:29:----------------------- Main stacktrace -----------------------
+2024-04-17T18:32:29:  at (wrapper managed-to-native) UnityEngine.Material.CreateWithMaterial(UnityEngine.Material,UnityEngine.Material)
+  at UnityEngine.Material..ctor (UnityEngine.Material source) [0x00008] in <85d1d3e7744a4a47b5f51883bf40bba2>:0 
+  at (wrapper dynamic-method) Building.Init_Patch0(object)
+  at KCM.Packets.Game.GameWorld.WorldPlace.PlaceBuilding () [0x0018d] in <9248c2b646c04c27b08155cb9b937ba4>:0 
+  at KCM.Packets.Game.GameWorld.WorldPlace.HandlePacketClient () [0x00019] in <9248c2b646c04c27b08155cb9b937ba4>:0 
+  at KCM.Packets.Handlers.PacketHandler.HandlePacket (System.Object sender, Riptide.MessageReceivedEventArgs messageReceived) [0x00023] in <9248c2b646c04c27b08155cb9b937ba4>:0 
+2024-04-17T18:32:29:Building not found.
+2024-04-17T18:32:29:Received place building packet for road from MUFFINMAN(2)
+2024-04-17T18:32:29:Building init
+2024-04-17T18:32:29:Error handling packet 71 WorldPlace from 2
+2024-04-17T18:32:29:----------------------- Main exception -----------------------
+2024-04-17T18:32:29:System.ArgumentNullException: Value cannot be null.
+Parameter name: source
+  at (wrapper managed-to-native) UnityEngine.Material.CreateWithMaterial(UnityEngine.Material,UnityEngine.Material)
+  at UnityEngine.Material..ctor (UnityEngine.Material source) [0x00008] in <85d1d3e7744a4a47b5f51883bf40bba2>:0 
+  at (wrapper dynamic-method) Building.Init_Patch0(object)
+  at KCM.Packets.Game.GameWorld.WorldPlace.PlaceBuilding () [0x0018d] in <9248c2b646c04c27b08155cb9b937ba4>:0 
+  at KCM.Packets.Game.GameWorld.WorldPlace.HandlePacketClient () [0x00019] in <9248c2b646c04c27b08155cb9b937ba4>:0 
+  at KCM.Packets.Handlers.PacketHandler.HandlePacket (System.Object sender, Riptide.MessageReceivedEventArgs messageReceived) [0x00023] in <9248c2b646c04c27b08155cb9b937ba4>:0 
+2024-04-17T18:32:29:----------------------- Main message -----------------------
+2024-04-17T18:32:29:Value cannot be null.
+Parameter name: source
+2024-04-17T18:32:29:----------------------- Main stacktrace -----------------------
+2024-04-17T18:32:29:  at (wrapper managed-to-native) UnityEngine.Material.CreateWithMaterial(UnityEngine.Material,UnityEngine.Material)
+  at UnityEngine.Material..ctor (UnityEngine.Material source) [0x00008] in <85d1d3e7744a4a47b5f51883bf40bba2>:0 
+  at (wrapper dynamic-method) Building.Init_Patch0(object)
+  at KCM.Packets.Game.GameWorld.WorldPlace.PlaceBuilding () [0x0018d] in <9248c2b646c04c27b08155cb9b937ba4>:0 
+  at KCM.Packets.Game.GameWorld.WorldPlace.HandlePacketClient () [0x00019] in <9248c2b646c04c27b08155cb9b937ba4>:0 
+  at KCM.Packets.Handlers.PacketHandler.HandlePacket (System.Object sender, Riptide.MessageReceivedEventArgs messageReceived) [0x00023] in <9248c2b646c04c27b08155cb9b937ba4>:0 
+2024-04-17T18:32:30:Building not found.
+2024-04-17T18:32:30:Received place building packet for road from MUFFINMAN(2)
+2024-04-17T18:32:30:Building init
+2024-04-17T18:32:30:Error handling packet 71 WorldPlace from 2
+2024-04-17T18:32:30:----------------------- Main exception -----------------------
+2024-04-17T18:32:30:System.ArgumentNullException: Value cannot be null.
+Parameter name: source
+  at (wrapper managed-to-native) UnityEngine.Material.CreateWithMaterial(UnityEngine.Material,UnityEngine.Material)
+  at UnityEngine.Material..ctor (UnityEngine.Material source) [0x00008] in <85d1d3e7744a4a47b5f51883bf40bba2>:0 
+  at (wrapper dynamic-method) Building.Init_Patch0(object)
+  at KCM.Packets.Game.GameWorld.WorldPlace.PlaceBuilding () [0x0018d] in <9248c2b646c04c27b08155cb9b937ba4>:0 
+  at KCM.Packets.Game.GameWorld.WorldPlace.HandlePacketClient () [0x00019] in <9248c2b646c04c27b08155cb9b937ba4>:0 
+  at KCM.Packets.Handlers.PacketHandler.HandlePacket (System.Object sender, Riptide.MessageReceivedEventArgs messageReceived) [0x00023] in <9248c2b646c04c27b08155cb9b937ba4>:0 
+2024-04-17T18:32:30:----------------------- Main message -----------------------
+2024-04-17T18:32:30:Value cannot be null.
+Parameter name: source
+2024-04-17T18:32:30:----------------------- Main stacktrace -----------------------
+2024-04-17T18:32:30:  at (wrapper managed-to-native) UnityEngine.Material.CreateWithMaterial(UnityEngine.Material,UnityEngine.Material)
+  at UnityEngine.Material..ctor (UnityEngine.Material source) [0x00008] in <85d1d3e7744a4a47b5f51883bf40bba2>:0 
+  at (wrapper dynamic-method) Building.Init_Patch0(object)
+  at KCM.Packets.Game.GameWorld.WorldPlace.PlaceBuilding () [0x0018d] in <9248c2b646c04c27b08155cb9b937ba4>:0 
+  at KCM.Packets.Game.GameWorld.WorldPlace.HandlePacketClient () [0x00019] in <9248c2b646c04c27b08155cb9b937ba4>:0 
+  at KCM.Packets.Handlers.PacketHandler.HandlePacket (System.Object sender, Riptide.MessageReceivedEventArgs messageReceived) [0x00023] in <9248c2b646c04c27b08155cb9b937ba4>:0 
+2024-04-17T18:32:30:Overridden complete build
+2024-04-17T18:32:30:Building not found.
+2024-04-17T18:32:31:Received place building packet for road from MUFFINMAN(2)
+2024-04-17T18:32:31:Building init
+2024-04-17T18:32:31:Error handling packet 71 WorldPlace from 2
+2024-04-17T18:32:31:----------------------- Main exception -----------------------
+2024-04-17T18:32:31:System.ArgumentNullException: Value cannot be null.
+Parameter name: source
+  at (wrapper managed-to-native) UnityEngine.Material.CreateWithMaterial(UnityEngine.Material,UnityEngine.Material)
+  at UnityEngine.Material..ctor (UnityEngine.Material source) [0x00008] in <85d1d3e7744a4a47b5f51883bf40bba2>:0 
+  at (wrapper dynamic-method) Building.Init_Patch0(object)
+  at KCM.Packets.Game.GameWorld.WorldPlace.PlaceBuilding () [0x0018d] in <9248c2b646c04c27b08155cb9b937ba4>:0 
+  at KCM.Packets.Game.GameWorld.WorldPlace.HandlePacketClient () [0x00019] in <9248c2b646c04c27b08155cb9b937ba4>:0 
+  at KCM.Packets.Handlers.PacketHandler.HandlePacket (System.Object sender, Riptide.MessageReceivedEventArgs messageReceived) [0x00023] in <9248c2b646c04c27b08155cb9b937ba4>:0 
+2024-04-17T18:32:31:----------------------- Main message -----------------------
+2024-04-17T18:32:31:Value cannot be null.
+Parameter name: source
+2024-04-17T18:32:31:----------------------- Main stacktrace -----------------------
+2024-04-17T18:32:31:  at (wrapper managed-to-native) UnityEngine.Material.CreateWithMaterial(UnityEngine.Material,UnityEngine.Material)
+  at UnityEngine.Material..ctor (UnityEngine.Material source) [0x00008] in <85d1d3e7744a4a47b5f51883bf40bba2>:0 
+  at (wrapper dynamic-method) Building.Init_Patch0(object)
+  at KCM.Packets.Game.GameWorld.WorldPlace.PlaceBuilding () [0x0018d] in <9248c2b646c04c27b08155cb9b937ba4>:0 
+  at KCM.Packets.Game.GameWorld.WorldPlace.HandlePacketClient () [0x00019] in <9248c2b646c04c27b08155cb9b937ba4>:0 
+  at KCM.Packets.Handlers.PacketHandler.HandlePacket (System.Object sender, Riptide.MessageReceivedEventArgs messageReceived) [0x00023] in <9248c2b646c04c27b08155cb9b937ba4>:0 
+2024-04-17T18:32:32:Building not found.
+2024-04-17T18:32:32:Building not found.
+2024-04-17T18:32:33:Building not found.
+2024-04-17T18:32:33:Building not found.
+2024-04-17T18:32:33:Building not found.
+2024-04-17T18:32:33:Building not found.
+2024-04-17T18:32:34:Building not found.
+2024-04-17T18:32:34:Building not found.
+2024-04-17T18:32:34:Building not found.
+2024-04-17T18:32:34:Building not found.
+2024-04-17T18:32:34:Building not found.
+2024-04-17T18:32:34:Building not found.
+2024-04-17T18:32:35:Building not found.
+2024-04-17T18:32:35:Building not found.
+2024-04-17T18:32:35:Building not found.
+2024-04-17T18:32:35:Building not found.
+2024-04-17T18:32:35:Building not found.
+2024-04-17T18:32:36:Building not found.
+2024-04-17T18:32:36:Building not found.
+2024-04-17T18:32:36:Building not found.
+2024-04-17T18:32:36:Building not found.
+2024-04-17T18:32:36:Building not found.
+2024-04-17T18:32:37:Building not found.
+2024-04-17T18:32:37:Building not found.
+2024-04-17T18:32:37:Received place building packet for smallhouse from MUFFINMAN(2)
+2024-04-17T18:32:37:Building init
+2024-04-17T18:32:37:Error handling packet 71 WorldPlace from 2
+2024-04-17T18:32:37:----------------------- Main exception -----------------------
+2024-04-17T18:32:37:System.ArgumentNullException: Value cannot be null.
+Parameter name: source
+  at (wrapper managed-to-native) UnityEngine.Material.CreateWithMaterial(UnityEngine.Material,UnityEngine.Material)
+  at UnityEngine.Material..ctor (UnityEngine.Material source) [0x00008] in <85d1d3e7744a4a47b5f51883bf40bba2>:0 
+  at (wrapper dynamic-method) Building.Init_Patch0(object)
+  at KCM.Packets.Game.GameWorld.WorldPlace.PlaceBuilding () [0x0018d] in <9248c2b646c04c27b08155cb9b937ba4>:0 
+  at KCM.Packets.Game.GameWorld.WorldPlace.HandlePacketClient () [0x00019] in <9248c2b646c04c27b08155cb9b937ba4>:0 
+  at KCM.Packets.Handlers.PacketHandler.HandlePacket (System.Object sender, Riptide.MessageReceivedEventArgs messageReceived) [0x00023] in <9248c2b646c04c27b08155cb9b937ba4>:0 
+2024-04-17T18:32:37:----------------------- Main message -----------------------
+2024-04-17T18:32:37:Value cannot be null.
+Parameter name: source
+2024-04-17T18:32:37:----------------------- Main stacktrace -----------------------
+2024-04-17T18:32:37:  at (wrapper managed-to-native) UnityEngine.Material.CreateWithMaterial(UnityEngine.Material,UnityEngine.Material)
+  at UnityEngine.Material..ctor (UnityEngine.Material source) [0x00008] in <85d1d3e7744a4a47b5f51883bf40bba2>:0 
+  at (wrapper dynamic-method) Building.Init_Patch0(object)
+  at KCM.Packets.Game.GameWorld.WorldPlace.PlaceBuilding () [0x0018d] in <9248c2b646c04c27b08155cb9b937ba4>:0 
+  at KCM.Packets.Game.GameWorld.WorldPlace.HandlePacketClient () [0x00019] in <9248c2b646c04c27b08155cb9b937ba4>:0 
+  at KCM.Packets.Handlers.PacketHandler.HandlePacket (System.Object sender, Riptide.MessageReceivedEventArgs messageReceived) [0x00023] in <9248c2b646c04c27b08155cb9b937ba4>:0 
+2024-04-17T18:32:37:Building not found.
+2024-04-17T18:32:37:Building not found.
+2024-04-17T18:32:37:Building not found.
+2024-04-17T18:32:37:Building not found.
+2024-04-17T18:32:38:Building not found.
+2024-04-17T18:32:38:Building not found.
+2024-04-17T18:32:38:Building not found.
+2024-04-17T18:32:39:Building not found.
+2024-04-17T18:32:39:Building not found.
+2024-04-17T18:32:39:Building not found.
+2024-04-17T18:32:40:Building not found.
+2024-04-17T18:32:40:Building not found.
+2024-04-17T18:32:40:Building not found.
+2024-04-17T18:32:41:Building not found.
+2024-04-17T18:32:41:Building not found.
+2024-04-17T18:32:42:Building not found.
+2024-04-17T18:32:42:Building not found.
+2024-04-17T18:32:42:Building not found.
+2024-04-17T18:32:43:Building not found.
+2024-04-17T18:32:43:Building not found.
+2024-04-17T18:32:43:Building not found.
+2024-04-17T18:32:44:Building not found.
+2024-04-17T18:32:44:Building not found.
+2024-04-17T18:32:44:Building not found.
+2024-04-17T18:32:45:Building not found.
+2024-04-17T18:32:45:Building not found.
+2024-04-17T18:32:45:Building not found.
+2024-04-17T18:32:46:Building not found.
+2024-04-17T18:32:46:Building not found.
+2024-04-17T18:32:46:Building not found.
+2024-04-17T18:32:46:Building not found.
+2024-04-17T18:32:47:Building not found.
+2024-04-17T18:32:47:Building not found.
+2024-04-17T18:32:47:Building not found.
+2024-04-17T18:32:48:Building not found.
+2024-04-17T18:32:48:Building not found.
+2024-04-17T18:32:48:Building not found.
+2024-04-17T18:32:49:Building not found.
+2024-04-17T18:32:49:Building not found.
+2024-04-17T18:32:49:Building not found.
+2024-04-17T18:32:50:Building not found.
+2024-04-17T18:32:50:Building not found.
+2024-04-17T18:32:50:Building not found.
+2024-04-17T18:32:51:Building not found.
+2024-04-17T18:32:51:Building not found.
+2024-04-17T18:32:51:Building not found.
+2024-04-17T18:32:52:Building not found.
+2024-04-17T18:32:52:Building not found.
+2024-04-17T18:32:52:Building not found.
+2024-04-17T18:32:52:Building not found.
+2024-04-17T18:32:53:Building not found.
+2024-04-17T18:32:53:Building not found.
+2024-04-17T18:32:53:Building not found.
+2024-04-17T18:32:54:Building not found.
+2024-04-17T18:32:54:Building not found.
+2024-04-17T18:32:54:Building not found.
+2024-04-17T18:32:55:Building not found.
+2024-04-17T18:32:55:Building not found.

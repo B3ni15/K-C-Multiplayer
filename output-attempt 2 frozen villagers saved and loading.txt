@@ -1,0 +1,3422 @@
+﻿2024-04-17T18:33:50:Preload run in client
+2024-04-17T18:33:50:server?
+2024-04-17T18:33:50:Preload run in server
+2024-04-17T18:33:50:Preload start in main
+2024-04-17T18:33:50:C:/Program Files (x86)/Steam/steamapps/common/Kingdoms and Castles/KingdomsAndCastles_Data\mods\KCM
+2024-04-17T18:33:50:Methods in namespace: 143
+2024-04-17T18:33:51:Found 1 static Player.inst references in TryUpgradeKeeps
+2024-04-17T18:33:51:Found 2 static Player.inst references in TotalPlayerResources
+2024-04-17T18:33:51:Found 2 static Player.inst references in AnyBuildingsOnPlayerLandMasses
+2024-04-17T18:33:51:Found 1 static Player.inst references in DoesAnyBuildingHaveUniqueNameOnPlayerLandMass
+2024-04-17T18:33:51:Found 1 static Player.inst references in BuildersJobSatisfied
+2024-04-17T18:33:51:Found 2 static Player.inst references in PlayerOwnerWorkersCount
+2024-04-17T18:33:51:Found 1 static Player.inst references in CountResources
+2024-04-17T18:33:52:Found 3 static Player.inst references in Update
+2024-04-17T18:33:53:Found 1 static Player.inst references in UpdatePersonArrival
+2024-04-17T18:33:53:Found 1 static Player.inst references in PersonArrivalForLandMass
+2024-04-17T18:33:53:Found 1 static Player.inst references in GetMaxInfectionsAttemptsPerBurst
+2024-04-17T18:33:53:Found 4 static Player.inst references in PlagueStart
+2024-04-17T18:33:54:Found 1 static Player.inst references in PersonEatFood
+2024-04-17T18:33:55:Found 1 static Player.inst references in OnNewYear
+2024-04-17T18:33:55:Found 2 static Player.inst references in ReportOldPlagueVillager
+2024-04-17T18:33:55:Found 1 static Player.inst references in AllBuildingsOfTypeStaffed
+2024-04-17T18:33:55:Methods in namespace: 103
+2024-04-17T18:33:55:Found 1 static building Player.inst references in GetCost
+2024-04-17T18:33:55:Found 1 static building Player.inst references in Init
+2024-04-17T18:33:55:Found 1 static building Player.inst references in Shutdown
+2024-04-17T18:33:55:Found 2 static building Player.inst references in TryRemoveFromDamagedList
+2024-04-17T18:33:56:Found 1 static building Player.inst references in IsPlayerBuilding
+2024-04-17T18:33:57:Found 1 static building Player.inst references in UpdateConstruction
+2024-04-17T18:33:57:Found 1 static building Player.inst references in ShowOverlay
+2024-04-17T18:33:57:Found 1 static building Player.inst references in UpdateIntegrityOverlayMaterial
+2024-04-17T18:33:57:Found 2 static building Player.inst references in CompleteBuild
+2024-04-17T18:33:57:Found 1 static building Player.inst references in TryAddToDamagedList
+2024-04-17T18:33:57:Found 2 static building Player.inst references in TakeDamageInternal
+2024-04-17T18:33:57:Found 1 static building Player.inst references in GruesomeVillagerDeath
+2024-04-17T18:33:57:Found 2 static building Player.inst references in TakeProjectileDamage
+2024-04-17T18:33:58:Found 1 static Player.inst references in TryUpgradeKeeps
+2024-04-17T18:33:58:Found 2 static Player.inst references in TotalPlayerResources
+2024-04-17T18:33:58:Found 2 static Player.inst references in AnyBuildingsOnPlayerLandMasses
+2024-04-17T18:33:58:Found 1 static Player.inst references in DoesAnyBuildingHaveUniqueNameOnPlayerLandMass
+2024-04-17T18:33:58:Found 1 static Player.inst references in BuildersJobSatisfied
+2024-04-17T18:33:58:Found 2 static Player.inst references in PlayerOwnerWorkersCount
+2024-04-17T18:33:59:Found 1 static Player.inst references in CountResources
+2024-04-17T18:33:59:Found 3 static Player.inst references in Update
+2024-04-17T18:34:00:Found 1 static Player.inst references in UpdatePersonArrival
+2024-04-17T18:34:00:Found 1 static Player.inst references in PersonArrivalForLandMass
+2024-04-17T18:34:00:Found 1 static Player.inst references in GetMaxInfectionsAttemptsPerBurst
+2024-04-17T18:34:00:Found 4 static Player.inst references in PlagueStart
+2024-04-17T18:34:01:Found 1 static Player.inst references in PersonEatFood
+2024-04-17T18:34:02:Found 1 static Player.inst references in OnNewYear
+2024-04-17T18:34:02:Found 2 static Player.inst references in ReportOldPlagueVillager
+2024-04-17T18:34:02:Found 1 static Player.inst references in AllBuildingsOfTypeStaffed
+2024-04-17T18:34:02:Preload run in main
+2024-04-17T18:34:02:Preload end in main
+2024-04-17T18:34:02:Hello?
+2024-04-17T18:34:02:Preload run in serverbrowser
+2024-04-17T18:34:02:assets/workspace/modalui.prefab, assets/workspace/serverbrowser.prefab, assets/workspace/serverchatentry.prefab, assets/workspace/serverchatsystementry.prefab, assets/workspace/serverentryitem.prefab, assets/workspace/serverlobby.prefab, assets/workspace/serverlobbyplayerentry.prefab
+2024-04-17T18:34:02:Loaded assets
+2024-04-17T18:34:05:Menu set to: Menu
+2024-04-17T18:34:07:SceneLoaded run in main
+2024-04-17T18:34:07:Shadowfita
+2024-04-17T18:34:07:Steam awake
+2024-04-17T18:34:07:Loading Packet Handlers...
+2024-04-17T18:34:07:Loaded 0 server handlers
+2024-04-17T18:34:07:Loading packets...
+2024-04-17T18:34:07:- Registered Packet: 80 KCM.Packets.ShowModal
+2024-04-17T18:34:07:- Registered Packet: 87 KCM.Packets.State.BuildingStatePacket
+2024-04-17T18:34:07:- Registered Packet: 25 KCM.Packets.Network.ClientConnected
+2024-04-17T18:34:07:- Registered Packet: 81 KCM.Packets.Network.ServerHandshake
+2024-04-17T18:34:07:- Registered Packet: 28 KCM.Packets.Lobby.ChatMessage
+2024-04-17T18:34:07:- Registered Packet: 27 KCM.Packets.Lobby.ChatSystemMessage
+2024-04-17T18:34:07:- Registered Packet: 32 KCM.Packets.Lobby.KingdomName
+2024-04-17T18:34:07:- Registered Packet: 31 KCM.Packets.Lobby.PlayerBanner
+2024-04-17T18:34:07:- Registered Packet: 26 KCM.Packets.Lobby.PlayerList
+2024-04-17T18:34:07:- Registered Packet: 30 KCM.Packets.Lobby.PlayerReady
+2024-04-17T18:34:07:SaveTransferPacket
+2024-04-17T18:34:07:chunkId
+chunkSize
+clientId
+player
+saveDataChunk
+saveDataIndex
+saveSize
+totalChunks
+2024-04-17T18:34:07:- Registered Packet: 85 KCM.Packets.Lobby.SaveTransferPacket
+2024-04-17T18:34:07:- Registered Packet: 29 KCM.Packets.Lobby.ServerSettings
+2024-04-17T18:34:07:- Registered Packet: 33 KCM.Packets.Lobby.StartGame
+2024-04-17T18:34:07:- Registered Packet: 34 KCM.Packets.Lobby.WorldSeed
+2024-04-17T18:34:07:- Registered Packet: 91 KCM.Packets.Game.PlaceKeepRandomly
+2024-04-17T18:34:07:- Registered Packet: 76 KCM.Packets.Game.SetSpeed
+2024-04-17T18:34:07:- Registered Packet: 71 KCM.Packets.Game.GameWorld.WorldPlace
+2024-04-17T18:34:07:- Registered Packet: 79 KCM.Packets.Game.GameWeather.ChangeWeather
+2024-04-17T18:34:07:- Registered Packet: 90 KCM.Packets.Game.GameVillager.VillagerTeleportTo
+2024-04-17T18:34:07:- Registered Packet: 72 KCM.Packets.Game.GameTrees.FellTree
+2024-04-17T18:34:07:- Registered Packet: 74 KCM.Packets.Game.GameTrees.GrowTree
+2024-04-17T18:34:07:- Registered Packet: 73 KCM.Packets.Game.GameTrees.ShakeTree
+2024-04-17T18:34:07:- Registered Packet: 88 KCM.Packets.Game.GamePlayer.AddVillagerPacket
+2024-04-17T18:34:07:- Registered Packet: 89 KCM.Packets.Game.GamePlayer.SetupInitialWorkersPacket
+2024-04-17T18:34:07:- Registered Packet: 77 KCM.Packets.Game.GameBuilding.CompleteBuild
+2024-04-17T18:34:07:- Registered Packet: 75 KCM.Packets.Game.GameBuilding.UpdateConstruction
+2024-04-17T18:34:07:- Registered Packet: 84 KCM.Packets.Game.Dragon.SpawnBabyDragonPacket
+2024-04-17T18:34:07:- Registered Packet: 83 KCM.Packets.Game.Dragon.SpawnMamaDragonPacket
+2024-04-17T18:34:07:- Registered Packet: 82 KCM.Packets.Game.Dragon.SpawnSiegeDragonPacket
+2024-04-17T18:34:07:Loaded 29 packets
+2024-04-17T18:34:07:[
+  {
+    "GridMin": 83,
+    "GridMax": 83,
+    "DesiredTiles": 2940
+  },
+  {
+    "GridMin": 100,
+    "GridMax": 100,
+    "DesiredTiles": 5430
+  },
+  {
+    "GridMin": 125,
+    "GridMax": 125,
+    "DesiredTiles": 9400
+  }
+]
+2024-04-17T18:34:07:Serverbrowser scene loaded
+2024-04-17T18:34:07:False
+2024-04-17T18:34:12:True
+2024-04-17T18:34:12:Menu set to: ServerBrowser
+2024-04-17T18:34:13:False
+2024-04-17T18:34:13:(SERVER): Started on port 0.
+2024-04-17T18:34:13:Listening on port 7777. Max 2 clients.
+2024-04-17T18:34:13:ServerLobby awake called
+2024-04-17T18:34:13:Content (UnityEngine.RectTransform)
+2024-04-17T18:34:13:Content (UnityEngine.RectTransform)
+2024-04-17T18:34:13:TextMeshPro - InputField (TMPro.TMP_InputField)
+2024-04-17T18:34:13:SendMessage (UnityEngine.UI.Button)
+2024-04-17T18:34:13:TextMeshPro - InputField (TMPro.TMP_InputField)
+2024-04-17T18:34:13:TextMeshPro - InputField (TMPro.TMP_InputField)
+2024-04-17T18:34:13:Toggle (UnityEngine.UI.Toggle)
+2024-04-17T18:34:13:TextMeshPro - InputField (TMPro.TMP_InputField)
+2024-04-17T18:34:13:Dropdown (TMPro.TMP_Dropdown)
+2024-04-17T18:34:13:SeedInput (TMPro.TMP_InputField)
+2024-04-17T18:34:13:SendMessage (UnityEngine.UI.Button)
+2024-04-17T18:34:13:Dropdown (TMPro.TMP_Dropdown)
+2024-04-17T18:34:13:Dropdown (TMPro.TMP_Dropdown)
+2024-04-17T18:34:13:Dropdown (TMPro.TMP_Dropdown)
+2024-04-17T18:34:13:Loading save parent
+2024-04-17T18:34:13:Loading save progress bar mask
+2024-04-17T18:34:13:Loading save progress bar text
+2024-04-17T18:34:13:Loading save progress text
+2024-04-17T18:34:13:True
+2024-04-17T18:34:13:Menu set to: ServerLobby
+2024-04-17T18:34:13:About to call connect
+2024-04-17T18:34:13:Trying to connect to: 127.0.0.1
+2024-04-17T18:34:13:(CLIENT): Connecting to 1630183341...
+2024-04-17T18:34:13:ServerLobby start called
+2024-04-17T18:34:14:(CLIENT): Connected successfully!
+2024-04-17T18:34:14:(SERVER): Client 1 (1652576239) connected successfully!
+2024-04-17T18:34:14:Client connected
+2024-04-17T18:34:14:Client ID is: 1
+2024-04-17T18:34:14:ListTypeVariables: HappinessInfo has 17 fields and 0 properties
+2024-04-17T18:34:14:ListTypeVariables: IntegrityInfo has 1 fields and 0 properties
+2024-04-17T18:34:14:Observer created for Player with 8 fields, 0 properties, and 2 non-primitive list variables
+2024-04-17T18:34:14:True
+2024-04-17T18:34:14:Menu set to: ServerLobby
+2024-04-17T18:34:14:Sending client connected. Client ID is: 1
+2024-04-17T18:34:14:False
+2024-04-17T18:34:14:Menu set to: NameAndBanner
+2024-04-17T18:34:14:name set: Dragonstone
+2024-04-17T18:34:14:Server Player Connected: Shadowfita Id: 1 SteamID: 76561198327621045
+2024-04-17T18:34:14:Client Player Connected: Shadowfita Id: 1 SteamID: 76561198327621045
+2024-04-17T18:34:14:{"documentId":"76561198327621045","data":{"Name":"Shadowfita's Server","PlayerId":"76561198327621045","Host":"Shadowfita","PlayerCount":1,"MaxPlayers":2,"Difficulty":"Paxlon","Heartbeat":"2024-04-17T08:34:14Z","Port":7777,"Locked":false}}
+2024-04-17T18:34:14:ServerLobbyPlayerEntry(Clone) (UnityEngine.GameObject)
+2024-04-17T18:34:15:Player 1 (1) has set banner to 4
+2024-04-17T18:34:15:True
+2024-04-17T18:34:15:Menu set to: ServerLobby
+2024-04-17T18:34:15:----------------------- Main exception -----------------------
+2024-04-17T18:34:15:System.NullReferenceException: Object reference not set to an instance of an object
+  at KCM.ServerLobby.PlayerEntryScript.SetValues () [0x00082] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+2024-04-17T18:34:15:----------------------- Main message -----------------------
+2024-04-17T18:34:15:Object reference not set to an instance of an object
+2024-04-17T18:34:15:----------------------- Main stacktrace -----------------------
+2024-04-17T18:34:15:  at KCM.ServerLobby.PlayerEntryScript.SetValues () [0x00082] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+2024-04-17T18:34:17:new world button
+2024-04-17T18:34:19:new world button
+2024-04-17T18:34:21:new world button
+2024-04-17T18:34:26:{"data":{"Name":"Shadowfita's Server","Host":"Shadowfita","PlayerCount":1,"MaxPlayers":2,"Difficulty":"Paxlon","Heartbeat":"2024-04-17T08:34:26Z","Locked":false}}
+2024-04-17T18:34:43:{"data":{"Name":"Shadowfita's Server","Host":"Shadowfita","PlayerCount":1,"MaxPlayers":2,"Difficulty":"Paxlon","Heartbeat":"2024-04-17T08:34:43Z","Locked":false}}
+2024-04-17T18:35:01:{"data":{"Name":"Shadowfita's Server","Host":"Shadowfita","PlayerCount":1,"MaxPlayers":1,"Difficulty":"Paxlon","Heartbeat":"2024-04-17T08:35:01Z","Locked":false}}
+2024-04-17T18:35:11:(SERVER): Client 2 (1253564756) connected successfully!
+2024-04-17T18:35:11:Client connected
+2024-04-17T18:35:11:Client ID is: 2
+2024-04-17T18:35:11:(CLIENT): Client 2 connected.
+2024-04-17T18:35:18:{"data":{"Name":"Shadowfita's Server","Host":"Shadowfita","PlayerCount":2,"MaxPlayers":2,"Difficulty":"Sommern","Heartbeat":"2024-04-17T08:35:18Z","Locked":false}}
+2024-04-17T18:35:19:Error handling packet 31 PlayerBanner from 2
+2024-04-17T18:35:19:----------------------- Main exception -----------------------
+2024-04-17T18:35:19:System.NullReferenceException: Object reference not set to an instance of an object
+  at KCM.Packets.Lobby.PlayerBanner.HandlePacketClient () [0x0000d] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Handlers.PacketHandler.HandlePacket (System.Object sender, Riptide.MessageReceivedEventArgs messageReceived) [0x00023] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+2024-04-17T18:35:19:----------------------- Main message -----------------------
+2024-04-17T18:35:19:Object reference not set to an instance of an object
+2024-04-17T18:35:19:----------------------- Main stacktrace -----------------------
+2024-04-17T18:35:19:  at KCM.Packets.Lobby.PlayerBanner.HandlePacketClient () [0x0000d] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Handlers.PacketHandler.HandlePacket (System.Object sender, Riptide.MessageReceivedEventArgs messageReceived) [0x00023] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+2024-04-17T18:35:28:Error handling packet 31 PlayerBanner from 2
+2024-04-17T18:35:28:----------------------- Main exception -----------------------
+2024-04-17T18:35:28:System.NullReferenceException: Object reference not set to an instance of an object
+  at KCM.Packets.Lobby.PlayerBanner.HandlePacketClient () [0x0000d] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Handlers.PacketHandler.HandlePacket (System.Object sender, Riptide.MessageReceivedEventArgs messageReceived) [0x00023] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+2024-04-17T18:35:28:----------------------- Main message -----------------------
+2024-04-17T18:35:28:Object reference not set to an instance of an object
+2024-04-17T18:35:28:----------------------- Main stacktrace -----------------------
+2024-04-17T18:35:28:  at KCM.Packets.Lobby.PlayerBanner.HandlePacketClient () [0x0000d] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Handlers.PacketHandler.HandlePacket (System.Object sender, Riptide.MessageReceivedEventArgs messageReceived) [0x00023] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+2024-04-17T18:35:32:(CLIENT): Disconnected from server: Disconnected.
+2024-04-17T18:35:32:Client disconnected event start
+2024-04-17T18:35:32:Client disconnected event end
+2024-04-17T18:35:32:clear players
+2024-04-17T18:35:32:end clear players
+2024-04-17T18:35:32:(SERVER): Server stopped.
+2024-04-17T18:35:32:True
+2024-04-17T18:35:32:Menu set to: ServerBrowser
+2024-04-17T18:35:33:True
+2024-04-17T18:35:33:Menu set to: ServerBrowser
+2024-04-17T18:35:34:False
+2024-04-17T18:35:34:(SERVER): Started on port 0.
+2024-04-17T18:35:34:Listening on port 7777. Max 2 clients.
+2024-04-17T18:35:34:True
+2024-04-17T18:35:34:Menu set to: ServerLobby
+2024-04-17T18:35:34:About to call connect
+2024-04-17T18:35:34:Trying to connect to: 127.0.0.1
+2024-04-17T18:35:34:(CLIENT): Connecting to 601249711...
+2024-04-17T18:35:35:(CLIENT): Connected successfully!
+2024-04-17T18:35:35:(SERVER): Client 1 (1242383309) connected successfully!
+2024-04-17T18:35:35:Client connected
+2024-04-17T18:35:35:Client ID is: 1
+2024-04-17T18:35:35:True
+2024-04-17T18:35:35:Menu set to: ServerLobby
+2024-04-17T18:35:35:Sending client connected. Client ID is: 1
+2024-04-17T18:35:35:False
+2024-04-17T18:35:35:Menu set to: NameAndBanner
+2024-04-17T18:35:35:name set: Windor
+2024-04-17T18:35:35:Received kingdom name packet
+2024-04-17T18:35:35:Received kingdom name packet
+2024-04-17T18:35:35:Server Player Connected: Shadowfita Id: 1 SteamID: 76561198327621045
+2024-04-17T18:35:35:Received kingdom name packet
+2024-04-17T18:35:35:Player Shadowfita has joined with their kingdom Windor
+2024-04-17T18:35:35:Received kingdom name packet
+2024-04-17T18:35:35:Player Shadowfita has joined with their kingdom Windor
+2024-04-17T18:35:35:Client Player Connected: Shadowfita Id: 1 SteamID: 76561198327621045
+2024-04-17T18:35:35:ServerLobbyPlayerEntry(Clone) (UnityEngine.GameObject)
+2024-04-17T18:35:35:{"documentId":"76561198327621045","data":{"Name":"Shadowfita's Server","PlayerId":"76561198327621045","Host":"Shadowfita","PlayerCount":1,"MaxPlayers":2,"Difficulty":"Sommern","Heartbeat":"2024-04-17T08:35:35Z","Port":7777,"Locked":false}}
+2024-04-17T18:35:36:Player 1 (1) has set banner to 3
+2024-04-17T18:35:36:Register error
+2024-04-17T18:35:36:Task Exception: System.AggregateException: One or more errors occurred. ---> System.Net.WebException: The remote server returned an error: (409) Conflict.
+  at System.Net.HttpWebRequest.EndGetResponse (System.IAsyncResult asyncResult) [0x00058] in <ef151b6abb5d474cb2c1cb8906a8b5a4>:0 
+  at System.Net.HttpWebRequest.GetResponse () [0x0000e] in <ef151b6abb5d474cb2c1cb8906a8b5a4>:0 
+  at KCM.ServerBrowser+<>c__DisplayClass20_0.<LobbyHeartbeat>b__2 () [0x00137] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at System.Threading.Tasks.Task`1[TResult].InnerInvoke () [0x0000f] in <eae584ce26bc40229c1b1aa476bfa589>:0 
+  at System.Threading.Tasks.Task.Execute () [0x00010] in <eae584ce26bc40229c1b1aa476bfa589>:0 
+   --- End of inner exception stack trace ---
+---> (Inner Exception #0) System.Net.WebException: The remote server returned an error: (409) Conflict.
+  at System.Net.HttpWebRequest.EndGetResponse (System.IAsyncResult asyncResult) [0x00058] in <ef151b6abb5d474cb2c1cb8906a8b5a4>:0 
+  at System.Net.HttpWebRequest.GetResponse () [0x0000e] in <ef151b6abb5d474cb2c1cb8906a8b5a4>:0 
+  at KCM.ServerBrowser+<>c__DisplayClass20_0.<LobbyHeartbeat>b__2 () [0x00137] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at System.Threading.Tasks.Task`1[TResult].InnerInvoke () [0x0000f] in <eae584ce26bc40229c1b1aa476bfa589>:0 
+  at System.Threading.Tasks.Task.Execute () [0x00010] in <eae584ce26bc40229c1b1aa476bfa589>:0 <---
+
+2024-04-17T18:35:36:Task InnerException: System.Net.WebException: The remote server returned an error: (409) Conflict.
+  at System.Net.HttpWebRequest.EndGetResponse (System.IAsyncResult asyncResult) [0x00058] in <ef151b6abb5d474cb2c1cb8906a8b5a4>:0 
+  at System.Net.HttpWebRequest.GetResponse () [0x0000e] in <ef151b6abb5d474cb2c1cb8906a8b5a4>:0 
+  at KCM.ServerBrowser+<>c__DisplayClass20_0.<LobbyHeartbeat>b__2 () [0x00137] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at System.Threading.Tasks.Task`1[TResult].InnerInvoke () [0x0000f] in <eae584ce26bc40229c1b1aa476bfa589>:0 
+  at System.Threading.Tasks.Task.Execute () [0x00010] in <eae584ce26bc40229c1b1aa476bfa589>:0 
+2024-04-17T18:35:36:True
+2024-04-17T18:35:36:Menu set to: ServerLobby
+2024-04-17T18:35:36:----------------------- Main exception -----------------------
+2024-04-17T18:35:36:System.NullReferenceException: Object reference not set to an instance of an object
+  at KCM.ServerLobby.PlayerEntryScript.SetValues () [0x00082] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+2024-04-17T18:35:36:----------------------- Main message -----------------------
+2024-04-17T18:35:36:Object reference not set to an instance of an object
+2024-04-17T18:35:36:----------------------- Main stacktrace -----------------------
+2024-04-17T18:35:36:  at KCM.ServerLobby.PlayerEntryScript.SetValues () [0x00082] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+2024-04-17T18:35:51:(SERVER): Client 2 (3201909669) connected successfully!
+2024-04-17T18:35:51:Client connected
+2024-04-17T18:35:51:Client ID is: 2
+2024-04-17T18:35:51:(CLIENT): Client 2 connected.
+2024-04-17T18:35:52:Server Player Connected: MUFFINMAN Id: 2 SteamID: 76561198306540024
+2024-04-17T18:35:52:Client Player Connected: MUFFINMAN Id: 2 SteamID: 76561198306540024
+2024-04-17T18:35:52:Awake run on player instance while server is running
+2024-04-17T18:35:52:ServerLobbyPlayerEntry(Clone) (UnityEngine.GameObject)
+2024-04-17T18:35:52:----------------------- Main exception -----------------------
+2024-04-17T18:35:52:System.NullReferenceException: Object reference not set to an instance of an object
+  at KCM.ServerLobby.PlayerEntryScript.SetValues () [0x00082] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+2024-04-17T18:35:52:----------------------- Main message -----------------------
+2024-04-17T18:35:52:Object reference not set to an instance of an object
+2024-04-17T18:35:52:----------------------- Main stacktrace -----------------------
+2024-04-17T18:35:52:  at KCM.ServerLobby.PlayerEntryScript.SetValues () [0x00082] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+2024-04-17T18:35:56:Player 2 (2) has set banner to 1
+2024-04-17T18:36:14:new world button
+2024-04-17T18:36:34:SENDING PLACE KEEP RANDOMLY FOR Shadowfita ON LANDMASS: 1
+2024-04-17T18:36:34:LANDMASS: 1 IS ALREADY TAKEN
+2024-04-17T18:36:34:SENDING PLACE KEEP RANDOMLY FOR MUFFINMAN ON LANDMASS: 3
+2024-04-17T18:36:34:GameState (MainMenuMode)
+2024-04-17T18:36:34:True
+2024-04-17T18:36:34:Menu set to: 200
+2024-04-17T18:36:34:Exception has been thrown by the target of an invocation.
+2024-04-17T18:36:34:System.Reflection.TargetInvocationException: Exception has been thrown by the target of an invocation. ---> System.NullReferenceException: Object reference not set to an instance of an object
+  at MainMenuMode.StartGame () [0x000ae] in <64d48a4605b74315afc90e0d3d75aed0>:0 
+  at (wrapper managed-to-native) System.Reflection.MonoMethod.InternalInvoke(System.Reflection.MonoMethod,object,object[],System.Exception&)
+  at System.Reflection.MonoMethod.Invoke (System.Object obj, System.Reflection.BindingFlags invokeAttr, System.Reflection.Binder binder, System.Object[] parameters, System.Globalization.CultureInfo culture) [0x00032] in <eae584ce26bc40229c1b1aa476bfa589>:0 
+   --- End of inner exception stack trace ---
+  at System.Reflection.MonoMethod.Invoke (System.Object obj, System.Reflection.BindingFlags invokeAttr, System.Reflection.Binder binder, System.Object[] parameters, System.Globalization.CultureInfo culture) [0x00048] in <eae584ce26bc40229c1b1aa476bfa589>:0 
+  at System.Reflection.MethodBase.Invoke (System.Object obj, System.Object[] parameters) [0x00000] in <eae584ce26bc40229c1b1aa476bfa589>:0 
+  at KCM.Packets.Lobby.StartGame.Start () [0x00058] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+2024-04-17T18:36:34:Error placing keep randomly: Object reference not set to an instance of an object
+2024-04-17T18:36:34:Received add villager packet from MUFFINMAN(2)
+2024-04-17T18:36:34:Teleporting villager to (103.2, 0.0, 84.2)
+2024-04-17T18:36:34:Received add villager packet from MUFFINMAN(2)
+2024-04-17T18:36:34:Teleporting villager to (103.6, 0.0, 84.2)
+2024-04-17T18:36:34:Received add villager packet from MUFFINMAN(2)
+2024-04-17T18:36:34:Teleporting villager to (103.6, 0.0, 84.6)
+2024-04-17T18:36:34:Received add villager packet from MUFFINMAN(2)
+2024-04-17T18:36:34:Teleporting villager to (103.2, 0.0, 84.6)
+2024-04-17T18:36:34:Received add villager packet from MUFFINMAN(2)
+2024-04-17T18:36:34:Teleporting villager to (104.2, 0.0, 86.4)
+2024-04-17T18:36:34:Received place building packet for keep from MUFFINMAN(2)
+2024-04-17T18:36:34:Building init
+2024-04-17T18:36:34:Building unpack
+2024-04-17T18:36:34:Client Player (2 MUFFINMAN) (Player)
+2024-04-17T18:36:34:False
+2024-04-17T18:36:34:3
+2024-04-17T18:36:34:Player add Building unpacked
+2024-04-17T18:36:34:1
+2024-04-17T18:36:34:2
+2024-04-17T18:36:34:3
+2024-04-17T18:36:34:4
+2024-04-17T18:36:34:5
+2024-04-17T18:36:34:6
+2024-04-17T18:36:34:7
+2024-04-17T18:36:34:8
+2024-04-17T18:36:34:9
+2024-04-17T18:36:34:10
+2024-04-17T18:36:34:11
+2024-04-17T18:36:34:Error in add building hook
+2024-04-17T18:36:34:Object reference not set to an instance of an object
+2024-04-17T18:36:34:  at KCM.Main+PlayerAddBuildingHook.Prefix (Player __instance, Building b) [0x001ae] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+2024-04-17T18:36:34:Error handling packet 71 WorldPlace from 2
+2024-04-17T18:36:34:----------------------- Main exception -----------------------
+2024-04-17T18:36:34:System.NullReferenceException: Object reference not set to an instance of an object
+  at (wrapper dynamic-method) Player.AddBuilding_Patch3(object,Building)
+  at KCM.Packets.Game.GameWorld.WorldPlace.PlaceBuilding () [0x00247] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Game.GameWorld.WorldPlace.HandlePacketClient () [0x00019] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Handlers.PacketHandler.HandlePacket (System.Object sender, Riptide.MessageReceivedEventArgs messageReceived) [0x00023] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+2024-04-17T18:36:34:----------------------- Main message -----------------------
+2024-04-17T18:36:34:Object reference not set to an instance of an object
+2024-04-17T18:36:34:----------------------- Main stacktrace -----------------------
+2024-04-17T18:36:34:  at (wrapper dynamic-method) Player.AddBuilding_Patch3(object,Building)
+  at KCM.Packets.Game.GameWorld.WorldPlace.PlaceBuilding () [0x00247] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Game.GameWorld.WorldPlace.HandlePacketClient () [0x00019] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Handlers.PacketHandler.HandlePacket (System.Object sender, Riptide.MessageReceivedEventArgs messageReceived) [0x00023] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+2024-04-17T18:36:54:Received place building packet for road from MUFFINMAN(2)
+2024-04-17T18:36:54:Building init
+2024-04-17T18:36:54:Building unpack
+2024-04-17T18:36:54:Client Player (2 MUFFINMAN) (Player)
+2024-04-17T18:36:54:False
+2024-04-17T18:36:54:3
+2024-04-17T18:36:54:Player add Building unpacked
+2024-04-17T18:36:54:1
+2024-04-17T18:36:54:2
+2024-04-17T18:36:54:3
+2024-04-17T18:36:54:4
+2024-04-17T18:36:54:5
+2024-04-17T18:36:54:6
+2024-04-17T18:36:54:7
+2024-04-17T18:36:54:8
+2024-04-17T18:36:54:9
+2024-04-17T18:36:54:10
+2024-04-17T18:36:54:11
+2024-04-17T18:36:54:Error in add building hook
+2024-04-17T18:36:54:Object reference not set to an instance of an object
+2024-04-17T18:36:54:  at KCM.Main+PlayerAddBuildingHook.Prefix (Player __instance, Building b) [0x001ae] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+2024-04-17T18:36:54:Error handling packet 71 WorldPlace from 2
+2024-04-17T18:36:54:----------------------- Main exception -----------------------
+2024-04-17T18:36:54:System.NullReferenceException: Object reference not set to an instance of an object
+  at (wrapper dynamic-method) Player.AddBuilding_Patch3(object,Building)
+  at KCM.Packets.Game.GameWorld.WorldPlace.PlaceBuilding () [0x00247] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Game.GameWorld.WorldPlace.HandlePacketClient () [0x00019] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Handlers.PacketHandler.HandlePacket (System.Object sender, Riptide.MessageReceivedEventArgs messageReceived) [0x00023] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+2024-04-17T18:36:54:----------------------- Main message -----------------------
+2024-04-17T18:36:54:Object reference not set to an instance of an object
+2024-04-17T18:36:54:----------------------- Main stacktrace -----------------------
+2024-04-17T18:36:54:  at (wrapper dynamic-method) Player.AddBuilding_Patch3(object,Building)
+  at KCM.Packets.Game.GameWorld.WorldPlace.PlaceBuilding () [0x00247] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Game.GameWorld.WorldPlace.HandlePacketClient () [0x00019] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Handlers.PacketHandler.HandlePacket (System.Object sender, Riptide.MessageReceivedEventArgs messageReceived) [0x00023] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+2024-04-17T18:36:54:Received place building packet for road from MUFFINMAN(2)
+2024-04-17T18:36:54:Building init
+2024-04-17T18:36:54:Building unpack
+2024-04-17T18:36:54:Client Player (2 MUFFINMAN) (Player)
+2024-04-17T18:36:54:False
+2024-04-17T18:36:54:3
+2024-04-17T18:36:54:Player add Building unpacked
+2024-04-17T18:36:54:1
+2024-04-17T18:36:54:2
+2024-04-17T18:36:54:3
+2024-04-17T18:36:54:4
+2024-04-17T18:36:54:5
+2024-04-17T18:36:54:6
+2024-04-17T18:36:54:7
+2024-04-17T18:36:54:8
+2024-04-17T18:36:54:9
+2024-04-17T18:36:54:10
+2024-04-17T18:36:54:11
+2024-04-17T18:36:54:Error in add building hook
+2024-04-17T18:36:54:Object reference not set to an instance of an object
+2024-04-17T18:36:54:  at KCM.Main+PlayerAddBuildingHook.Prefix (Player __instance, Building b) [0x001ae] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+2024-04-17T18:36:54:Error handling packet 71 WorldPlace from 2
+2024-04-17T18:36:54:----------------------- Main exception -----------------------
+2024-04-17T18:36:54:System.NullReferenceException: Object reference not set to an instance of an object
+  at (wrapper dynamic-method) Player.AddBuilding_Patch3(object,Building)
+  at KCM.Packets.Game.GameWorld.WorldPlace.PlaceBuilding () [0x00247] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Game.GameWorld.WorldPlace.HandlePacketClient () [0x00019] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Handlers.PacketHandler.HandlePacket (System.Object sender, Riptide.MessageReceivedEventArgs messageReceived) [0x00023] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+2024-04-17T18:36:54:----------------------- Main message -----------------------
+2024-04-17T18:36:54:Object reference not set to an instance of an object
+2024-04-17T18:36:54:----------------------- Main stacktrace -----------------------
+2024-04-17T18:36:54:  at (wrapper dynamic-method) Player.AddBuilding_Patch3(object,Building)
+  at KCM.Packets.Game.GameWorld.WorldPlace.PlaceBuilding () [0x00247] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Game.GameWorld.WorldPlace.HandlePacketClient () [0x00019] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Handlers.PacketHandler.HandlePacket (System.Object sender, Riptide.MessageReceivedEventArgs messageReceived) [0x00023] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+2024-04-17T18:36:54:Received place building packet for road from MUFFINMAN(2)
+2024-04-17T18:36:54:Building init
+2024-04-17T18:36:54:Building unpack
+2024-04-17T18:36:54:Client Player (2 MUFFINMAN) (Player)
+2024-04-17T18:36:54:False
+2024-04-17T18:36:54:3
+2024-04-17T18:36:54:Player add Building unpacked
+2024-04-17T18:36:54:1
+2024-04-17T18:36:54:2
+2024-04-17T18:36:54:3
+2024-04-17T18:36:54:4
+2024-04-17T18:36:54:5
+2024-04-17T18:36:54:6
+2024-04-17T18:36:54:7
+2024-04-17T18:36:54:8
+2024-04-17T18:36:54:9
+2024-04-17T18:36:54:10
+2024-04-17T18:36:54:11
+2024-04-17T18:36:54:Error in add building hook
+2024-04-17T18:36:54:Object reference not set to an instance of an object
+2024-04-17T18:36:54:  at KCM.Main+PlayerAddBuildingHook.Prefix (Player __instance, Building b) [0x001ae] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+2024-04-17T18:36:54:Error handling packet 71 WorldPlace from 2
+2024-04-17T18:36:54:----------------------- Main exception -----------------------
+2024-04-17T18:36:54:System.NullReferenceException: Object reference not set to an instance of an object
+  at (wrapper dynamic-method) Player.AddBuilding_Patch3(object,Building)
+  at KCM.Packets.Game.GameWorld.WorldPlace.PlaceBuilding () [0x00247] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Game.GameWorld.WorldPlace.HandlePacketClient () [0x00019] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Handlers.PacketHandler.HandlePacket (System.Object sender, Riptide.MessageReceivedEventArgs messageReceived) [0x00023] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+2024-04-17T18:36:54:----------------------- Main message -----------------------
+2024-04-17T18:36:54:Object reference not set to an instance of an object
+2024-04-17T18:36:54:----------------------- Main stacktrace -----------------------
+2024-04-17T18:36:54:  at (wrapper dynamic-method) Player.AddBuilding_Patch3(object,Building)
+  at KCM.Packets.Game.GameWorld.WorldPlace.PlaceBuilding () [0x00247] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Game.GameWorld.WorldPlace.HandlePacketClient () [0x00019] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Handlers.PacketHandler.HandlePacket (System.Object sender, Riptide.MessageReceivedEventArgs messageReceived) [0x00023] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+2024-04-17T18:36:54:Received place building packet for road from MUFFINMAN(2)
+2024-04-17T18:36:54:Building init
+2024-04-17T18:36:54:Building unpack
+2024-04-17T18:36:54:Client Player (2 MUFFINMAN) (Player)
+2024-04-17T18:36:54:False
+2024-04-17T18:36:54:3
+2024-04-17T18:36:54:Player add Building unpacked
+2024-04-17T18:36:54:1
+2024-04-17T18:36:54:2
+2024-04-17T18:36:54:3
+2024-04-17T18:36:54:4
+2024-04-17T18:36:54:5
+2024-04-17T18:36:54:6
+2024-04-17T18:36:54:7
+2024-04-17T18:36:54:8
+2024-04-17T18:36:54:9
+2024-04-17T18:36:54:10
+2024-04-17T18:36:54:11
+2024-04-17T18:36:54:Error in add building hook
+2024-04-17T18:36:54:Object reference not set to an instance of an object
+2024-04-17T18:36:54:  at KCM.Main+PlayerAddBuildingHook.Prefix (Player __instance, Building b) [0x001ae] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+2024-04-17T18:36:54:Error handling packet 71 WorldPlace from 2
+2024-04-17T18:36:54:----------------------- Main exception -----------------------
+2024-04-17T18:36:54:System.NullReferenceException: Object reference not set to an instance of an object
+  at (wrapper dynamic-method) Player.AddBuilding_Patch3(object,Building)
+  at KCM.Packets.Game.GameWorld.WorldPlace.PlaceBuilding () [0x00247] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Game.GameWorld.WorldPlace.HandlePacketClient () [0x00019] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Handlers.PacketHandler.HandlePacket (System.Object sender, Riptide.MessageReceivedEventArgs messageReceived) [0x00023] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+2024-04-17T18:36:54:----------------------- Main message -----------------------
+2024-04-17T18:36:54:Object reference not set to an instance of an object
+2024-04-17T18:36:54:----------------------- Main stacktrace -----------------------
+2024-04-17T18:36:54:  at (wrapper dynamic-method) Player.AddBuilding_Patch3(object,Building)
+  at KCM.Packets.Game.GameWorld.WorldPlace.PlaceBuilding () [0x00247] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Game.GameWorld.WorldPlace.HandlePacketClient () [0x00019] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Handlers.PacketHandler.HandlePacket (System.Object sender, Riptide.MessageReceivedEventArgs messageReceived) [0x00023] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+2024-04-17T18:36:54:Received place building packet for road from MUFFINMAN(2)
+2024-04-17T18:36:54:Building init
+2024-04-17T18:36:54:Building unpack
+2024-04-17T18:36:54:Client Player (2 MUFFINMAN) (Player)
+2024-04-17T18:36:54:False
+2024-04-17T18:36:54:3
+2024-04-17T18:36:54:Player add Building unpacked
+2024-04-17T18:36:54:1
+2024-04-17T18:36:54:2
+2024-04-17T18:36:54:3
+2024-04-17T18:36:54:4
+2024-04-17T18:36:54:5
+2024-04-17T18:36:54:6
+2024-04-17T18:36:54:7
+2024-04-17T18:36:54:8
+2024-04-17T18:36:54:9
+2024-04-17T18:36:54:10
+2024-04-17T18:36:54:11
+2024-04-17T18:36:54:Error in add building hook
+2024-04-17T18:36:54:Object reference not set to an instance of an object
+2024-04-17T18:36:54:  at KCM.Main+PlayerAddBuildingHook.Prefix (Player __instance, Building b) [0x001ae] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+2024-04-17T18:36:54:Error handling packet 71 WorldPlace from 2
+2024-04-17T18:36:54:----------------------- Main exception -----------------------
+2024-04-17T18:36:54:System.NullReferenceException: Object reference not set to an instance of an object
+  at (wrapper dynamic-method) Player.AddBuilding_Patch3(object,Building)
+  at KCM.Packets.Game.GameWorld.WorldPlace.PlaceBuilding () [0x00247] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Game.GameWorld.WorldPlace.HandlePacketClient () [0x00019] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Handlers.PacketHandler.HandlePacket (System.Object sender, Riptide.MessageReceivedEventArgs messageReceived) [0x00023] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+2024-04-17T18:36:54:----------------------- Main message -----------------------
+2024-04-17T18:36:54:Object reference not set to an instance of an object
+2024-04-17T18:36:54:----------------------- Main stacktrace -----------------------
+2024-04-17T18:36:54:  at (wrapper dynamic-method) Player.AddBuilding_Patch3(object,Building)
+  at KCM.Packets.Game.GameWorld.WorldPlace.PlaceBuilding () [0x00247] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Game.GameWorld.WorldPlace.HandlePacketClient () [0x00019] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Handlers.PacketHandler.HandlePacket (System.Object sender, Riptide.MessageReceivedEventArgs messageReceived) [0x00023] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+2024-04-17T18:37:14:Received place building packet for smallhouse from MUFFINMAN(2)
+2024-04-17T18:37:14:Building init
+2024-04-17T18:37:14:Building unpack
+2024-04-17T18:37:14:Client Player (2 MUFFINMAN) (Player)
+2024-04-17T18:37:14:False
+2024-04-17T18:37:14:3
+2024-04-17T18:37:14:Player add Building unpacked
+2024-04-17T18:37:14:1
+2024-04-17T18:37:14:2
+2024-04-17T18:37:14:3
+2024-04-17T18:37:14:4
+2024-04-17T18:37:14:Error in add building hook
+2024-04-17T18:37:14:Index was outside the bounds of the array.
+2024-04-17T18:37:14:  at KCM.Main+PlayerAddBuildingHook.Prefix (Player __instance, Building b) [0x000b2] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+2024-04-17T18:37:14:Error handling packet 71 WorldPlace from 2
+2024-04-17T18:37:14:----------------------- Main exception -----------------------
+2024-04-17T18:37:14:System.IndexOutOfRangeException: Index was outside the bounds of the array.
+  at (wrapper dynamic-method) Player.AddBuilding_Patch3(object,Building)
+  at KCM.Packets.Game.GameWorld.WorldPlace.PlaceBuilding () [0x00247] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Game.GameWorld.WorldPlace.HandlePacketClient () [0x00019] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Handlers.PacketHandler.HandlePacket (System.Object sender, Riptide.MessageReceivedEventArgs messageReceived) [0x00023] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+2024-04-17T18:37:14:----------------------- Main message -----------------------
+2024-04-17T18:37:14:Index was outside the bounds of the array.
+2024-04-17T18:37:14:----------------------- Main stacktrace -----------------------
+2024-04-17T18:37:14:  at (wrapper dynamic-method) Player.AddBuilding_Patch3(object,Building)
+  at KCM.Packets.Game.GameWorld.WorldPlace.PlaceBuilding () [0x00247] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Game.GameWorld.WorldPlace.HandlePacketClient () [0x00019] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Handlers.PacketHandler.HandlePacket (System.Object sender, Riptide.MessageReceivedEventArgs messageReceived) [0x00023] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+2024-04-17T18:37:18:1
+2024-04-17T18:37:18:2
+2024-04-17T18:37:18:3
+2024-04-17T18:37:18:4
+2024-04-17T18:37:18:5
+2024-04-17T18:37:18:6
+2024-04-17T18:37:18:7
+2024-04-17T18:37:18:8
+2024-04-17T18:37:18:9
+2024-04-17T18:37:18:10
+2024-04-17T18:37:18:11
+2024-04-17T18:37:18:12
+2024-04-17T18:37:18:13
+2024-04-17T18:37:18:14
+2024-04-17T18:37:18:Called by: AcceptCursorObjPlacement
+2024-04-17T18:37:18:1 Shadowfita - Sending building place packet for keep
+2024-04-17T18:37:18:Last 8 methods in call tree: Start -> Update -> UpdateForKeyboard -> AcceptCursorObjPlacement -> AcceptPlacement -> SendMessage -> SendMessage -> OnPlayerPlacement_Patch1
+2024-04-17T18:37:18:Observer created for Building with 15 fields, 0 properties, and 0 non-primitive list variables
+2024-04-17T18:37:32:Overridden complete build
+2024-04-17T18:37:37:Received place building packet for smallhouse from MUFFINMAN(2)
+2024-04-17T18:37:37:Building init
+2024-04-17T18:37:37:Building unpack
+2024-04-17T18:37:37:Client Player (2 MUFFINMAN) (Player)
+2024-04-17T18:37:37:False
+2024-04-17T18:37:37:3
+2024-04-17T18:37:37:Player add Building unpacked
+2024-04-17T18:37:37:1
+2024-04-17T18:37:37:2
+2024-04-17T18:37:37:3
+2024-04-17T18:37:37:4
+2024-04-17T18:37:37:Error in add building hook
+2024-04-17T18:37:37:Index was outside the bounds of the array.
+2024-04-17T18:37:37:  at KCM.Main+PlayerAddBuildingHook.Prefix (Player __instance, Building b) [0x000b2] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+2024-04-17T18:37:37:Error handling packet 71 WorldPlace from 2
+2024-04-17T18:37:37:----------------------- Main exception -----------------------
+2024-04-17T18:37:37:System.IndexOutOfRangeException: Index was outside the bounds of the array.
+  at (wrapper dynamic-method) Player.AddBuilding_Patch3(object,Building)
+  at KCM.Packets.Game.GameWorld.WorldPlace.PlaceBuilding () [0x00247] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Game.GameWorld.WorldPlace.HandlePacketClient () [0x00019] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Handlers.PacketHandler.HandlePacket (System.Object sender, Riptide.MessageReceivedEventArgs messageReceived) [0x00023] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+2024-04-17T18:37:37:----------------------- Main message -----------------------
+2024-04-17T18:37:37:Index was outside the bounds of the array.
+2024-04-17T18:37:37:----------------------- Main stacktrace -----------------------
+2024-04-17T18:37:37:  at (wrapper dynamic-method) Player.AddBuilding_Patch3(object,Building)
+  at KCM.Packets.Game.GameWorld.WorldPlace.PlaceBuilding () [0x00247] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Game.GameWorld.WorldPlace.HandlePacketClient () [0x00019] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Handlers.PacketHandler.HandlePacket (System.Object sender, Riptide.MessageReceivedEventArgs messageReceived) [0x00023] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+2024-04-17T18:37:38:Received place building packet for smallhouse from MUFFINMAN(2)
+2024-04-17T18:37:38:Building init
+2024-04-17T18:37:38:Building unpack
+2024-04-17T18:37:38:Client Player (2 MUFFINMAN) (Player)
+2024-04-17T18:37:38:False
+2024-04-17T18:37:38:3
+2024-04-17T18:37:38:Player add Building unpacked
+2024-04-17T18:37:38:1
+2024-04-17T18:37:38:2
+2024-04-17T18:37:38:3
+2024-04-17T18:37:38:4
+2024-04-17T18:37:38:Error in add building hook
+2024-04-17T18:37:38:Index was outside the bounds of the array.
+2024-04-17T18:37:38:  at KCM.Main+PlayerAddBuildingHook.Prefix (Player __instance, Building b) [0x000b2] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+2024-04-17T18:37:38:Error handling packet 71 WorldPlace from 2
+2024-04-17T18:37:38:----------------------- Main exception -----------------------
+2024-04-17T18:37:38:System.IndexOutOfRangeException: Index was outside the bounds of the array.
+  at (wrapper dynamic-method) Player.AddBuilding_Patch3(object,Building)
+  at KCM.Packets.Game.GameWorld.WorldPlace.PlaceBuilding () [0x00247] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Game.GameWorld.WorldPlace.HandlePacketClient () [0x00019] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Handlers.PacketHandler.HandlePacket (System.Object sender, Riptide.MessageReceivedEventArgs messageReceived) [0x00023] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+2024-04-17T18:37:38:----------------------- Main message -----------------------
+2024-04-17T18:37:38:Index was outside the bounds of the array.
+2024-04-17T18:37:38:----------------------- Main stacktrace -----------------------
+2024-04-17T18:37:38:  at (wrapper dynamic-method) Player.AddBuilding_Patch3(object,Building)
+  at KCM.Packets.Game.GameWorld.WorldPlace.PlaceBuilding () [0x00247] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Game.GameWorld.WorldPlace.HandlePacketClient () [0x00019] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Handlers.PacketHandler.HandlePacket (System.Object sender, Riptide.MessageReceivedEventArgs messageReceived) [0x00023] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+2024-04-17T18:37:58:Received place building packet for road from MUFFINMAN(2)
+2024-04-17T18:37:58:Building init
+2024-04-17T18:37:58:Building unpack
+2024-04-17T18:37:58:Client Player (2 MUFFINMAN) (Player)
+2024-04-17T18:37:58:False
+2024-04-17T18:37:58:3
+2024-04-17T18:37:58:Player add Building unpacked
+2024-04-17T18:37:58:1
+2024-04-17T18:37:58:2
+2024-04-17T18:37:58:3
+2024-04-17T18:37:58:4
+2024-04-17T18:37:58:5
+2024-04-17T18:37:58:6
+2024-04-17T18:37:58:7
+2024-04-17T18:37:58:8
+2024-04-17T18:37:58:9
+2024-04-17T18:37:58:10
+2024-04-17T18:37:58:11
+2024-04-17T18:37:58:Error in add building hook
+2024-04-17T18:37:58:Object reference not set to an instance of an object
+2024-04-17T18:37:58:  at KCM.Main+PlayerAddBuildingHook.Prefix (Player __instance, Building b) [0x001ae] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+2024-04-17T18:37:58:Error handling packet 71 WorldPlace from 2
+2024-04-17T18:37:58:----------------------- Main exception -----------------------
+2024-04-17T18:37:58:System.NullReferenceException: Object reference not set to an instance of an object
+  at (wrapper dynamic-method) Player.AddBuilding_Patch3(object,Building)
+  at KCM.Packets.Game.GameWorld.WorldPlace.PlaceBuilding () [0x00247] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Game.GameWorld.WorldPlace.HandlePacketClient () [0x00019] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Handlers.PacketHandler.HandlePacket (System.Object sender, Riptide.MessageReceivedEventArgs messageReceived) [0x00023] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+2024-04-17T18:37:58:----------------------- Main message -----------------------
+2024-04-17T18:37:58:Object reference not set to an instance of an object
+2024-04-17T18:37:58:----------------------- Main stacktrace -----------------------
+2024-04-17T18:37:58:  at (wrapper dynamic-method) Player.AddBuilding_Patch3(object,Building)
+  at KCM.Packets.Game.GameWorld.WorldPlace.PlaceBuilding () [0x00247] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Game.GameWorld.WorldPlace.HandlePacketClient () [0x00019] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Handlers.PacketHandler.HandlePacket (System.Object sender, Riptide.MessageReceivedEventArgs messageReceived) [0x00023] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+2024-04-17T18:38:00:1
+2024-04-17T18:38:00:2
+2024-04-17T18:38:00:3
+2024-04-17T18:38:00:4
+2024-04-17T18:38:00:5
+2024-04-17T18:38:00:6
+2024-04-17T18:38:00:7
+2024-04-17T18:38:00:8
+2024-04-17T18:38:00:9
+2024-04-17T18:38:00:10
+2024-04-17T18:38:00:11
+2024-04-17T18:38:00:12
+2024-04-17T18:38:00:13
+2024-04-17T18:38:00:14
+2024-04-17T18:38:00:Called by: AcceptCursorObjPlacement
+2024-04-17T18:38:00:1 Shadowfita - Sending building place packet for road
+2024-04-17T18:38:00:1
+2024-04-17T18:38:00:2
+2024-04-17T18:38:00:3
+2024-04-17T18:38:00:4
+2024-04-17T18:38:00:5
+2024-04-17T18:38:00:6
+2024-04-17T18:38:00:7
+2024-04-17T18:38:00:8
+2024-04-17T18:38:00:9
+2024-04-17T18:38:00:10
+2024-04-17T18:38:00:11
+2024-04-17T18:38:00:12
+2024-04-17T18:38:00:13
+2024-04-17T18:38:00:14
+2024-04-17T18:38:00:Called by: AcceptCursorObjPlacement
+2024-04-17T18:38:00:1 Shadowfita - Sending building place packet for road
+2024-04-17T18:38:00:1
+2024-04-17T18:38:00:2
+2024-04-17T18:38:00:3
+2024-04-17T18:38:00:4
+2024-04-17T18:38:00:5
+2024-04-17T18:38:00:6
+2024-04-17T18:38:00:7
+2024-04-17T18:38:00:8
+2024-04-17T18:38:00:9
+2024-04-17T18:38:00:10
+2024-04-17T18:38:00:11
+2024-04-17T18:38:00:12
+2024-04-17T18:38:00:13
+2024-04-17T18:38:00:14
+2024-04-17T18:38:00:Called by: AcceptCursorObjPlacement
+2024-04-17T18:38:00:1 Shadowfita - Sending building place packet for road
+2024-04-17T18:38:00:Observer created for Building with 15 fields, 0 properties, and 0 non-primitive list variables
+2024-04-17T18:38:00:Observer created for Building with 15 fields, 0 properties, and 0 non-primitive list variables
+2024-04-17T18:38:00:Observer created for Building with 15 fields, 0 properties, and 0 non-primitive list variables
+2024-04-17T18:38:02:Overridden complete build
+2024-04-17T18:38:03:Overridden complete build
+2024-04-17T18:38:03:1
+2024-04-17T18:38:03:2
+2024-04-17T18:38:03:3
+2024-04-17T18:38:03:4
+2024-04-17T18:38:03:5
+2024-04-17T18:38:03:6
+2024-04-17T18:38:03:7
+2024-04-17T18:38:03:8
+2024-04-17T18:38:03:9
+2024-04-17T18:38:03:10
+2024-04-17T18:38:03:11
+2024-04-17T18:38:03:12
+2024-04-17T18:38:03:13
+2024-04-17T18:38:03:14
+2024-04-17T18:38:03:Called by: AcceptCursorObjPlacement
+2024-04-17T18:38:03:1 Shadowfita - Sending building place packet for smallhouse
+2024-04-17T18:38:03:Observer created for Building with 15 fields, 0 properties, and 0 non-primitive list variables
+2024-04-17T18:38:04:1
+2024-04-17T18:38:04:2
+2024-04-17T18:38:04:3
+2024-04-17T18:38:04:4
+2024-04-17T18:38:04:5
+2024-04-17T18:38:04:6
+2024-04-17T18:38:04:7
+2024-04-17T18:38:04:8
+2024-04-17T18:38:04:9
+2024-04-17T18:38:04:10
+2024-04-17T18:38:04:11
+2024-04-17T18:38:04:12
+2024-04-17T18:38:04:13
+2024-04-17T18:38:04:14
+2024-04-17T18:38:04:Called by: AcceptCursorObjPlacement
+2024-04-17T18:38:04:1 Shadowfita - Sending building place packet for smallhouse
+2024-04-17T18:38:04:Observer created for Building with 15 fields, 0 properties, and 0 non-primitive list variables
+2024-04-17T18:38:04:Overridden complete build
+2024-04-17T18:38:04:1
+2024-04-17T18:38:04:2
+2024-04-17T18:38:04:3
+2024-04-17T18:38:04:4
+2024-04-17T18:38:04:5
+2024-04-17T18:38:04:6
+2024-04-17T18:38:04:7
+2024-04-17T18:38:04:8
+2024-04-17T18:38:04:9
+2024-04-17T18:38:04:10
+2024-04-17T18:38:04:11
+2024-04-17T18:38:04:12
+2024-04-17T18:38:04:13
+2024-04-17T18:38:04:14
+2024-04-17T18:38:04:Called by: AcceptCursorObjPlacement
+2024-04-17T18:38:04:1 Shadowfita - Sending building place packet for smallhouse
+2024-04-17T18:38:04:Observer created for Building with 15 fields, 0 properties, and 0 non-primitive list variables
+2024-04-17T18:38:11:Overridden complete build
+2024-04-17T18:38:14:Received add villager packet from MUFFINMAN(2)
+2024-04-17T18:38:14:Teleporting villager to (101.0, 0.0, 86.0)
+2024-04-17T18:38:14:Received add villager packet from MUFFINMAN(2)
+2024-04-17T18:38:14:Teleporting villager to (101.0, 0.0, 86.0)
+2024-04-17T18:38:14:Overridden complete build
+2024-04-17T18:38:23:Overridden complete build
+2024-04-17T18:38:28:Received place building packet for road from MUFFINMAN(2)
+2024-04-17T18:38:28:Building init
+2024-04-17T18:38:28:Building unpack
+2024-04-17T18:38:28:Client Player (2 MUFFINMAN) (Player)
+2024-04-17T18:38:28:False
+2024-04-17T18:38:28:3
+2024-04-17T18:38:28:Player add Building unpacked
+2024-04-17T18:38:28:1
+2024-04-17T18:38:28:2
+2024-04-17T18:38:28:3
+2024-04-17T18:38:28:4
+2024-04-17T18:38:28:5
+2024-04-17T18:38:28:6
+2024-04-17T18:38:28:7
+2024-04-17T18:38:28:8
+2024-04-17T18:38:28:9
+2024-04-17T18:38:28:10
+2024-04-17T18:38:28:11
+2024-04-17T18:38:28:Error in add building hook
+2024-04-17T18:38:28:Object reference not set to an instance of an object
+2024-04-17T18:38:28:  at KCM.Main+PlayerAddBuildingHook.Prefix (Player __instance, Building b) [0x001ae] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+2024-04-17T18:38:28:Error handling packet 71 WorldPlace from 2
+2024-04-17T18:38:28:----------------------- Main exception -----------------------
+2024-04-17T18:38:28:System.NullReferenceException: Object reference not set to an instance of an object
+  at (wrapper dynamic-method) Player.AddBuilding_Patch3(object,Building)
+  at KCM.Packets.Game.GameWorld.WorldPlace.PlaceBuilding () [0x00247] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Game.GameWorld.WorldPlace.HandlePacketClient () [0x00019] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Handlers.PacketHandler.HandlePacket (System.Object sender, Riptide.MessageReceivedEventArgs messageReceived) [0x00023] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+2024-04-17T18:38:28:----------------------- Main message -----------------------
+2024-04-17T18:38:28:Object reference not set to an instance of an object
+2024-04-17T18:38:28:----------------------- Main stacktrace -----------------------
+2024-04-17T18:38:28:  at (wrapper dynamic-method) Player.AddBuilding_Patch3(object,Building)
+  at KCM.Packets.Game.GameWorld.WorldPlace.PlaceBuilding () [0x00247] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Game.GameWorld.WorldPlace.HandlePacketClient () [0x00019] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Handlers.PacketHandler.HandlePacket (System.Object sender, Riptide.MessageReceivedEventArgs messageReceived) [0x00023] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+2024-04-17T18:38:28:Received place building packet for road from MUFFINMAN(2)
+2024-04-17T18:38:28:Building init
+2024-04-17T18:38:28:Building unpack
+2024-04-17T18:38:28:Client Player (2 MUFFINMAN) (Player)
+2024-04-17T18:38:28:False
+2024-04-17T18:38:28:3
+2024-04-17T18:38:28:Player add Building unpacked
+2024-04-17T18:38:28:1
+2024-04-17T18:38:28:2
+2024-04-17T18:38:28:3
+2024-04-17T18:38:28:4
+2024-04-17T18:38:28:5
+2024-04-17T18:38:28:6
+2024-04-17T18:38:28:7
+2024-04-17T18:38:28:8
+2024-04-17T18:38:28:9
+2024-04-17T18:38:28:10
+2024-04-17T18:38:28:11
+2024-04-17T18:38:28:Error in add building hook
+2024-04-17T18:38:28:Object reference not set to an instance of an object
+2024-04-17T18:38:28:  at KCM.Main+PlayerAddBuildingHook.Prefix (Player __instance, Building b) [0x001ae] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+2024-04-17T18:38:28:Error handling packet 71 WorldPlace from 2
+2024-04-17T18:38:28:----------------------- Main exception -----------------------
+2024-04-17T18:38:28:System.NullReferenceException: Object reference not set to an instance of an object
+  at (wrapper dynamic-method) Player.AddBuilding_Patch3(object,Building)
+  at KCM.Packets.Game.GameWorld.WorldPlace.PlaceBuilding () [0x00247] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Game.GameWorld.WorldPlace.HandlePacketClient () [0x00019] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Handlers.PacketHandler.HandlePacket (System.Object sender, Riptide.MessageReceivedEventArgs messageReceived) [0x00023] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+2024-04-17T18:38:28:----------------------- Main message -----------------------
+2024-04-17T18:38:28:Object reference not set to an instance of an object
+2024-04-17T18:38:28:----------------------- Main stacktrace -----------------------
+2024-04-17T18:38:28:  at (wrapper dynamic-method) Player.AddBuilding_Patch3(object,Building)
+  at KCM.Packets.Game.GameWorld.WorldPlace.PlaceBuilding () [0x00247] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Game.GameWorld.WorldPlace.HandlePacketClient () [0x00019] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Handlers.PacketHandler.HandlePacket (System.Object sender, Riptide.MessageReceivedEventArgs messageReceived) [0x00023] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+2024-04-17T18:38:28:Received place building packet for road from MUFFINMAN(2)
+2024-04-17T18:38:28:Building init
+2024-04-17T18:38:28:Building unpack
+2024-04-17T18:38:28:Client Player (2 MUFFINMAN) (Player)
+2024-04-17T18:38:28:False
+2024-04-17T18:38:28:3
+2024-04-17T18:38:28:Player add Building unpacked
+2024-04-17T18:38:28:1
+2024-04-17T18:38:28:2
+2024-04-17T18:38:28:3
+2024-04-17T18:38:28:4
+2024-04-17T18:38:28:5
+2024-04-17T18:38:28:6
+2024-04-17T18:38:28:7
+2024-04-17T18:38:28:8
+2024-04-17T18:38:28:9
+2024-04-17T18:38:28:10
+2024-04-17T18:38:28:11
+2024-04-17T18:38:28:Error in add building hook
+2024-04-17T18:38:28:Object reference not set to an instance of an object
+2024-04-17T18:38:28:  at KCM.Main+PlayerAddBuildingHook.Prefix (Player __instance, Building b) [0x001ae] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+2024-04-17T18:38:28:Error handling packet 71 WorldPlace from 2
+2024-04-17T18:38:28:----------------------- Main exception -----------------------
+2024-04-17T18:38:28:System.NullReferenceException: Object reference not set to an instance of an object
+  at (wrapper dynamic-method) Player.AddBuilding_Patch3(object,Building)
+  at KCM.Packets.Game.GameWorld.WorldPlace.PlaceBuilding () [0x00247] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Game.GameWorld.WorldPlace.HandlePacketClient () [0x00019] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Handlers.PacketHandler.HandlePacket (System.Object sender, Riptide.MessageReceivedEventArgs messageReceived) [0x00023] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+2024-04-17T18:38:28:----------------------- Main message -----------------------
+2024-04-17T18:38:28:Object reference not set to an instance of an object
+2024-04-17T18:38:28:----------------------- Main stacktrace -----------------------
+2024-04-17T18:38:28:  at (wrapper dynamic-method) Player.AddBuilding_Patch3(object,Building)
+  at KCM.Packets.Game.GameWorld.WorldPlace.PlaceBuilding () [0x00247] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Game.GameWorld.WorldPlace.HandlePacketClient () [0x00019] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Handlers.PacketHandler.HandlePacket (System.Object sender, Riptide.MessageReceivedEventArgs messageReceived) [0x00023] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+2024-04-17T18:38:28:Received place building packet for road from MUFFINMAN(2)
+2024-04-17T18:38:28:Building init
+2024-04-17T18:38:28:Building unpack
+2024-04-17T18:38:28:Client Player (2 MUFFINMAN) (Player)
+2024-04-17T18:38:28:False
+2024-04-17T18:38:28:3
+2024-04-17T18:38:28:Player add Building unpacked
+2024-04-17T18:38:28:1
+2024-04-17T18:38:28:2
+2024-04-17T18:38:28:3
+2024-04-17T18:38:28:4
+2024-04-17T18:38:28:5
+2024-04-17T18:38:28:6
+2024-04-17T18:38:28:7
+2024-04-17T18:38:28:8
+2024-04-17T18:38:28:9
+2024-04-17T18:38:28:10
+2024-04-17T18:38:28:11
+2024-04-17T18:38:28:Error in add building hook
+2024-04-17T18:38:28:Object reference not set to an instance of an object
+2024-04-17T18:38:28:  at KCM.Main+PlayerAddBuildingHook.Prefix (Player __instance, Building b) [0x001ae] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+2024-04-17T18:38:28:Error handling packet 71 WorldPlace from 2
+2024-04-17T18:38:28:----------------------- Main exception -----------------------
+2024-04-17T18:38:28:System.NullReferenceException: Object reference not set to an instance of an object
+  at (wrapper dynamic-method) Player.AddBuilding_Patch3(object,Building)
+  at KCM.Packets.Game.GameWorld.WorldPlace.PlaceBuilding () [0x00247] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Game.GameWorld.WorldPlace.HandlePacketClient () [0x00019] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Handlers.PacketHandler.HandlePacket (System.Object sender, Riptide.MessageReceivedEventArgs messageReceived) [0x00023] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+2024-04-17T18:38:28:----------------------- Main message -----------------------
+2024-04-17T18:38:28:Object reference not set to an instance of an object
+2024-04-17T18:38:28:----------------------- Main stacktrace -----------------------
+2024-04-17T18:38:28:  at (wrapper dynamic-method) Player.AddBuilding_Patch3(object,Building)
+  at KCM.Packets.Game.GameWorld.WorldPlace.PlaceBuilding () [0x00247] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Game.GameWorld.WorldPlace.HandlePacketClient () [0x00019] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Handlers.PacketHandler.HandlePacket (System.Object sender, Riptide.MessageReceivedEventArgs messageReceived) [0x00023] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+2024-04-17T18:38:28:Received place building packet for road from MUFFINMAN(2)
+2024-04-17T18:38:28:Building init
+2024-04-17T18:38:28:Building unpack
+2024-04-17T18:38:28:Client Player (2 MUFFINMAN) (Player)
+2024-04-17T18:38:28:False
+2024-04-17T18:38:28:3
+2024-04-17T18:38:28:Player add Building unpacked
+2024-04-17T18:38:28:1
+2024-04-17T18:38:28:2
+2024-04-17T18:38:28:3
+2024-04-17T18:38:28:4
+2024-04-17T18:38:28:5
+2024-04-17T18:38:28:6
+2024-04-17T18:38:28:7
+2024-04-17T18:38:28:8
+2024-04-17T18:38:28:9
+2024-04-17T18:38:28:10
+2024-04-17T18:38:28:11
+2024-04-17T18:38:28:Error in add building hook
+2024-04-17T18:38:28:Object reference not set to an instance of an object
+2024-04-17T18:38:28:  at KCM.Main+PlayerAddBuildingHook.Prefix (Player __instance, Building b) [0x001ae] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+2024-04-17T18:38:28:Error handling packet 71 WorldPlace from 2
+2024-04-17T18:38:28:----------------------- Main exception -----------------------
+2024-04-17T18:38:28:System.NullReferenceException: Object reference not set to an instance of an object
+  at (wrapper dynamic-method) Player.AddBuilding_Patch3(object,Building)
+  at KCM.Packets.Game.GameWorld.WorldPlace.PlaceBuilding () [0x00247] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Game.GameWorld.WorldPlace.HandlePacketClient () [0x00019] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Handlers.PacketHandler.HandlePacket (System.Object sender, Riptide.MessageReceivedEventArgs messageReceived) [0x00023] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+2024-04-17T18:38:28:----------------------- Main message -----------------------
+2024-04-17T18:38:28:Object reference not set to an instance of an object
+2024-04-17T18:38:28:----------------------- Main stacktrace -----------------------
+2024-04-17T18:38:28:  at (wrapper dynamic-method) Player.AddBuilding_Patch3(object,Building)
+  at KCM.Packets.Game.GameWorld.WorldPlace.PlaceBuilding () [0x00247] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Game.GameWorld.WorldPlace.HandlePacketClient () [0x00019] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Handlers.PacketHandler.HandlePacket (System.Object sender, Riptide.MessageReceivedEventArgs messageReceived) [0x00023] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+2024-04-17T18:38:28:Received place building packet for road from MUFFINMAN(2)
+2024-04-17T18:38:28:Building init
+2024-04-17T18:38:28:Building unpack
+2024-04-17T18:38:28:Client Player (2 MUFFINMAN) (Player)
+2024-04-17T18:38:28:False
+2024-04-17T18:38:28:3
+2024-04-17T18:38:28:Player add Building unpacked
+2024-04-17T18:38:28:1
+2024-04-17T18:38:28:2
+2024-04-17T18:38:28:3
+2024-04-17T18:38:28:4
+2024-04-17T18:38:28:5
+2024-04-17T18:38:28:6
+2024-04-17T18:38:28:7
+2024-04-17T18:38:28:8
+2024-04-17T18:38:28:9
+2024-04-17T18:38:28:10
+2024-04-17T18:38:28:11
+2024-04-17T18:38:28:Error in add building hook
+2024-04-17T18:38:28:Object reference not set to an instance of an object
+2024-04-17T18:38:28:  at KCM.Main+PlayerAddBuildingHook.Prefix (Player __instance, Building b) [0x001ae] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+2024-04-17T18:38:28:Error handling packet 71 WorldPlace from 2
+2024-04-17T18:38:28:----------------------- Main exception -----------------------
+2024-04-17T18:38:28:System.NullReferenceException: Object reference not set to an instance of an object
+  at (wrapper dynamic-method) Player.AddBuilding_Patch3(object,Building)
+  at KCM.Packets.Game.GameWorld.WorldPlace.PlaceBuilding () [0x00247] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Game.GameWorld.WorldPlace.HandlePacketClient () [0x00019] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Handlers.PacketHandler.HandlePacket (System.Object sender, Riptide.MessageReceivedEventArgs messageReceived) [0x00023] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+2024-04-17T18:38:28:----------------------- Main message -----------------------
+2024-04-17T18:38:28:Object reference not set to an instance of an object
+2024-04-17T18:38:28:----------------------- Main stacktrace -----------------------
+2024-04-17T18:38:28:  at (wrapper dynamic-method) Player.AddBuilding_Patch3(object,Building)
+  at KCM.Packets.Game.GameWorld.WorldPlace.PlaceBuilding () [0x00247] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Game.GameWorld.WorldPlace.HandlePacketClient () [0x00019] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Handlers.PacketHandler.HandlePacket (System.Object sender, Riptide.MessageReceivedEventArgs messageReceived) [0x00023] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+2024-04-17T18:38:29:Received place building packet for road from MUFFINMAN(2)
+2024-04-17T18:38:29:Building init
+2024-04-17T18:38:29:Building unpack
+2024-04-17T18:38:29:Client Player (2 MUFFINMAN) (Player)
+2024-04-17T18:38:29:False
+2024-04-17T18:38:29:3
+2024-04-17T18:38:29:Player add Building unpacked
+2024-04-17T18:38:29:1
+2024-04-17T18:38:29:2
+2024-04-17T18:38:29:3
+2024-04-17T18:38:29:4
+2024-04-17T18:38:29:5
+2024-04-17T18:38:29:6
+2024-04-17T18:38:29:7
+2024-04-17T18:38:29:8
+2024-04-17T18:38:29:9
+2024-04-17T18:38:29:10
+2024-04-17T18:38:29:11
+2024-04-17T18:38:29:Error in add building hook
+2024-04-17T18:38:29:Object reference not set to an instance of an object
+2024-04-17T18:38:29:  at KCM.Main+PlayerAddBuildingHook.Prefix (Player __instance, Building b) [0x001ae] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+2024-04-17T18:38:29:Error handling packet 71 WorldPlace from 2
+2024-04-17T18:38:29:----------------------- Main exception -----------------------
+2024-04-17T18:38:29:System.NullReferenceException: Object reference not set to an instance of an object
+  at (wrapper dynamic-method) Player.AddBuilding_Patch3(object,Building)
+  at KCM.Packets.Game.GameWorld.WorldPlace.PlaceBuilding () [0x00247] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Game.GameWorld.WorldPlace.HandlePacketClient () [0x00019] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Handlers.PacketHandler.HandlePacket (System.Object sender, Riptide.MessageReceivedEventArgs messageReceived) [0x00023] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+2024-04-17T18:38:29:----------------------- Main message -----------------------
+2024-04-17T18:38:29:Object reference not set to an instance of an object
+2024-04-17T18:38:29:----------------------- Main stacktrace -----------------------
+2024-04-17T18:38:29:  at (wrapper dynamic-method) Player.AddBuilding_Patch3(object,Building)
+  at KCM.Packets.Game.GameWorld.WorldPlace.PlaceBuilding () [0x00247] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Game.GameWorld.WorldPlace.HandlePacketClient () [0x00019] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Handlers.PacketHandler.HandlePacket (System.Object sender, Riptide.MessageReceivedEventArgs messageReceived) [0x00023] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+2024-04-17T18:38:32:Get save dir
+2024-04-17T18:38:32:Get save dir
+2024-04-17T18:38:32:Saving data for 2 (2) players.
+2024-04-17T18:38:32:Attempting to pack data for: Shadowfita(76561198327621045)
+2024-04-17T18:38:32:Player (Player) Player
+2024-04-17T18:38:32:Running patched player pack method
+2024-04-17T18:38:32:Saving banner system
+2024-04-17T18:38:32:Saving player creativeMode
+2024-04-17T18:38:32:Saving player upgrades
+2024-04-17T18:38:32:Saving player bannerIdx
+2024-04-17T18:38:32:Saving player WorkersArray
+2024-04-17T18:38:32:Saving player HomelessData
+2024-04-17T18:38:32:Saving player structures
+2024-04-17T18:38:32:Saving town happiness
+2024-04-17T18:38:32:Saving town happiness infos
+2024-04-17T18:38:32:Saving town integrity infos
+2024-04-17T18:38:32:Saving town landmass owner
+2024-04-17T18:38:32:Saving town bDidFirstFire
+2024-04-17T18:38:32:Saving town tax rates
+2024-04-17T18:38:32:Saving difficulty
+2024-04-17T18:38:32:Saving CurrYear
+2024-04-17T18:38:32:Saving timeAtFailHappiness
+2024-04-17T18:38:32:Saving happinessMods
+2024-04-17T18:38:32:Saving currConsumption
+2024-04-17T18:38:32:Saving lastConsumption
+2024-04-17T18:38:32:Saving currProduction
+2024-04-17T18:38:32:Saving lastProduction
+2024-04-17T18:38:32:Saving landMassNames
+2024-04-17T18:38:32:Saving JobPriorityOrder
+2024-04-17T18:38:32:Saving JobFilledAvailable
+2024-04-17T18:38:32:Saving CanUseTools
+2024-04-17T18:38:32:Saving usedCheats
+2024-04-17T18:38:32:Saving nameForOldAgeDeath
+2024-04-17T18:38:32:Saving deathsThisYear
+2024-04-17T18:38:32:Saving poorHealthGracePeriod
+2024-04-17T18:38:32:Saving dockOpenings
+2024-04-17T18:38:32:Saving tourism
+2024-04-17T18:38:32:False
+2024-04-17T18:38:32:Attempting to pack data for: MUFFINMAN(76561198306540024)
+2024-04-17T18:38:32:Client Player (2 MUFFINMAN) (Player) Client Player (2 MUFFINMAN)
+2024-04-17T18:38:32:Running patched player pack method
+2024-04-17T18:38:32:Saving banner system
+2024-04-17T18:38:32:Saving player creativeMode
+2024-04-17T18:38:32:Saving player upgrades
+2024-04-17T18:38:32:Saving player bannerIdx
+2024-04-17T18:38:32:Saving player WorkersArray
+2024-04-17T18:38:32:Saving player HomelessData
+2024-04-17T18:38:32:Saving player structures
+2024-04-17T18:38:32:Saving town happiness
+2024-04-17T18:38:32:Saving town happiness infos
+2024-04-17T18:38:32:Saving town integrity infos
+2024-04-17T18:38:32:Saving town landmass owner
+2024-04-17T18:38:32:Saving town bDidFirstFire
+2024-04-17T18:38:32:Saving difficulty
+2024-04-17T18:38:32:Saving CurrYear
+2024-04-17T18:38:32:Saving timeAtFailHappiness
+2024-04-17T18:38:32:Saving happinessMods
+2024-04-17T18:38:32:Saving currConsumption
+2024-04-17T18:38:32:Saving lastConsumption
+2024-04-17T18:38:32:Saving currProduction
+2024-04-17T18:38:32:Saving lastProduction
+2024-04-17T18:38:32:Saving landMassNames
+2024-04-17T18:38:32:Saving JobPriorityOrder
+2024-04-17T18:38:32:Saving JobFilledAvailable
+2024-04-17T18:38:32:Saving CanUseTools
+2024-04-17T18:38:32:Saving usedCheats
+2024-04-17T18:38:32:Saving nameForOldAgeDeath
+2024-04-17T18:38:32:Saving deathsThisYear
+2024-04-17T18:38:32:Saving poorHealthGracePeriod
+2024-04-17T18:38:32:Saving dockOpenings
+2024-04-17T18:38:32:Saving tourism
+2024-04-17T18:38:32:False
+2024-04-17T18:38:36:Received place building packet for orchard from MUFFINMAN(2)
+2024-04-17T18:38:36:Building init
+2024-04-17T18:38:36:Building unpack
+2024-04-17T18:38:36:Client Player (2 MUFFINMAN) (Player)
+2024-04-17T18:38:36:False
+2024-04-17T18:38:36:3
+2024-04-17T18:38:36:Player add Building unpacked
+2024-04-17T18:38:36:1
+2024-04-17T18:38:36:2
+2024-04-17T18:38:36:3
+2024-04-17T18:38:36:4
+2024-04-17T18:38:36:5
+2024-04-17T18:38:36:6
+2024-04-17T18:38:36:7
+2024-04-17T18:38:36:8
+2024-04-17T18:38:36:9
+2024-04-17T18:38:36:10
+2024-04-17T18:38:36:11
+2024-04-17T18:38:36:Error in add building hook
+2024-04-17T18:38:36:Object reference not set to an instance of an object
+2024-04-17T18:38:36:  at KCM.Main+PlayerAddBuildingHook.Prefix (Player __instance, Building b) [0x001ae] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+2024-04-17T18:38:36:Error handling packet 71 WorldPlace from 2
+2024-04-17T18:38:36:----------------------- Main exception -----------------------
+2024-04-17T18:38:36:System.NullReferenceException: Object reference not set to an instance of an object
+  at (wrapper dynamic-method) Player.AddBuilding_Patch3(object,Building)
+  at KCM.Packets.Game.GameWorld.WorldPlace.PlaceBuilding () [0x00247] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Game.GameWorld.WorldPlace.HandlePacketClient () [0x00019] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Handlers.PacketHandler.HandlePacket (System.Object sender, Riptide.MessageReceivedEventArgs messageReceived) [0x00023] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+2024-04-17T18:38:36:----------------------- Main message -----------------------
+2024-04-17T18:38:36:Object reference not set to an instance of an object
+2024-04-17T18:38:36:----------------------- Main stacktrace -----------------------
+2024-04-17T18:38:36:  at (wrapper dynamic-method) Player.AddBuilding_Patch3(object,Building)
+  at KCM.Packets.Game.GameWorld.WorldPlace.PlaceBuilding () [0x00247] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Game.GameWorld.WorldPlace.HandlePacketClient () [0x00019] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Handlers.PacketHandler.HandlePacket (System.Object sender, Riptide.MessageReceivedEventArgs messageReceived) [0x00023] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+2024-04-17T18:38:42:Received add villager packet from MUFFINMAN(2)
+2024-04-17T18:38:42:Teleporting villager to (101.0, 0.0, 86.0)
+2024-04-17T18:38:42:Received add villager packet from MUFFINMAN(2)
+2024-04-17T18:38:42:Teleporting villager to (101.0, 0.0, 86.0)
+2024-04-17T18:38:42:Received add villager packet from MUFFINMAN(2)
+2024-04-17T18:38:42:Teleporting villager to (101.0, 0.0, 86.0)
+2024-04-17T18:38:42:Received add villager packet from MUFFINMAN(2)
+2024-04-17T18:38:42:Teleporting villager to (101.0, 0.0, 85.0)
+2024-04-17T18:38:44:Received place building packet for road from MUFFINMAN(2)
+2024-04-17T18:38:44:Building init
+2024-04-17T18:38:44:Building unpack
+2024-04-17T18:38:44:Client Player (2 MUFFINMAN) (Player)
+2024-04-17T18:38:44:False
+2024-04-17T18:38:44:3
+2024-04-17T18:38:44:Player add Building unpacked
+2024-04-17T18:38:44:1
+2024-04-17T18:38:44:2
+2024-04-17T18:38:44:3
+2024-04-17T18:38:44:4
+2024-04-17T18:38:44:5
+2024-04-17T18:38:44:6
+2024-04-17T18:38:44:7
+2024-04-17T18:38:44:8
+2024-04-17T18:38:44:9
+2024-04-17T18:38:44:10
+2024-04-17T18:38:44:11
+2024-04-17T18:38:44:Error in add building hook
+2024-04-17T18:38:44:Object reference not set to an instance of an object
+2024-04-17T18:38:44:  at KCM.Main+PlayerAddBuildingHook.Prefix (Player __instance, Building b) [0x001ae] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+2024-04-17T18:38:44:Error handling packet 71 WorldPlace from 2
+2024-04-17T18:38:44:----------------------- Main exception -----------------------
+2024-04-17T18:38:44:System.NullReferenceException: Object reference not set to an instance of an object
+  at (wrapper dynamic-method) Player.AddBuilding_Patch3(object,Building)
+  at KCM.Packets.Game.GameWorld.WorldPlace.PlaceBuilding () [0x00247] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Game.GameWorld.WorldPlace.HandlePacketClient () [0x00019] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Handlers.PacketHandler.HandlePacket (System.Object sender, Riptide.MessageReceivedEventArgs messageReceived) [0x00023] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+2024-04-17T18:38:44:----------------------- Main message -----------------------
+2024-04-17T18:38:44:Object reference not set to an instance of an object
+2024-04-17T18:38:44:----------------------- Main stacktrace -----------------------
+2024-04-17T18:38:44:  at (wrapper dynamic-method) Player.AddBuilding_Patch3(object,Building)
+  at KCM.Packets.Game.GameWorld.WorldPlace.PlaceBuilding () [0x00247] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Game.GameWorld.WorldPlace.HandlePacketClient () [0x00019] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Handlers.PacketHandler.HandlePacket (System.Object sender, Riptide.MessageReceivedEventArgs messageReceived) [0x00023] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+2024-04-17T18:38:45:Received place building packet for road from MUFFINMAN(2)
+2024-04-17T18:38:45:Building init
+2024-04-17T18:38:45:Building unpack
+2024-04-17T18:38:45:Client Player (2 MUFFINMAN) (Player)
+2024-04-17T18:38:45:False
+2024-04-17T18:38:45:3
+2024-04-17T18:38:45:Player add Building unpacked
+2024-04-17T18:38:45:1
+2024-04-17T18:38:45:2
+2024-04-17T18:38:45:3
+2024-04-17T18:38:45:4
+2024-04-17T18:38:45:5
+2024-04-17T18:38:45:6
+2024-04-17T18:38:45:7
+2024-04-17T18:38:45:8
+2024-04-17T18:38:45:9
+2024-04-17T18:38:45:10
+2024-04-17T18:38:45:11
+2024-04-17T18:38:45:Error in add building hook
+2024-04-17T18:38:45:Object reference not set to an instance of an object
+2024-04-17T18:38:45:  at KCM.Main+PlayerAddBuildingHook.Prefix (Player __instance, Building b) [0x001ae] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+2024-04-17T18:38:45:Error handling packet 71 WorldPlace from 2
+2024-04-17T18:38:45:----------------------- Main exception -----------------------
+2024-04-17T18:38:45:System.NullReferenceException: Object reference not set to an instance of an object
+  at (wrapper dynamic-method) Player.AddBuilding_Patch3(object,Building)
+  at KCM.Packets.Game.GameWorld.WorldPlace.PlaceBuilding () [0x00247] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Game.GameWorld.WorldPlace.HandlePacketClient () [0x00019] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Handlers.PacketHandler.HandlePacket (System.Object sender, Riptide.MessageReceivedEventArgs messageReceived) [0x00023] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+2024-04-17T18:38:45:----------------------- Main message -----------------------
+2024-04-17T18:38:45:Object reference not set to an instance of an object
+2024-04-17T18:38:45:----------------------- Main stacktrace -----------------------
+2024-04-17T18:38:45:  at (wrapper dynamic-method) Player.AddBuilding_Patch3(object,Building)
+  at KCM.Packets.Game.GameWorld.WorldPlace.PlaceBuilding () [0x00247] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Game.GameWorld.WorldPlace.HandlePacketClient () [0x00019] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Handlers.PacketHandler.HandlePacket (System.Object sender, Riptide.MessageReceivedEventArgs messageReceived) [0x00023] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+2024-04-17T18:38:45:Received place building packet for road from MUFFINMAN(2)
+2024-04-17T18:38:45:Building init
+2024-04-17T18:38:45:Building unpack
+2024-04-17T18:38:45:Client Player (2 MUFFINMAN) (Player)
+2024-04-17T18:38:45:False
+2024-04-17T18:38:45:3
+2024-04-17T18:38:45:Player add Building unpacked
+2024-04-17T18:38:45:1
+2024-04-17T18:38:45:2
+2024-04-17T18:38:45:3
+2024-04-17T18:38:45:4
+2024-04-17T18:38:45:5
+2024-04-17T18:38:45:6
+2024-04-17T18:38:45:7
+2024-04-17T18:38:45:8
+2024-04-17T18:38:45:9
+2024-04-17T18:38:45:10
+2024-04-17T18:38:45:11
+2024-04-17T18:38:45:Error in add building hook
+2024-04-17T18:38:45:Object reference not set to an instance of an object
+2024-04-17T18:38:45:  at KCM.Main+PlayerAddBuildingHook.Prefix (Player __instance, Building b) [0x001ae] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+2024-04-17T18:38:45:Error handling packet 71 WorldPlace from 2
+2024-04-17T18:38:45:----------------------- Main exception -----------------------
+2024-04-17T18:38:45:System.NullReferenceException: Object reference not set to an instance of an object
+  at (wrapper dynamic-method) Player.AddBuilding_Patch3(object,Building)
+  at KCM.Packets.Game.GameWorld.WorldPlace.PlaceBuilding () [0x00247] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Game.GameWorld.WorldPlace.HandlePacketClient () [0x00019] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Handlers.PacketHandler.HandlePacket (System.Object sender, Riptide.MessageReceivedEventArgs messageReceived) [0x00023] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+2024-04-17T18:38:45:----------------------- Main message -----------------------
+2024-04-17T18:38:45:Object reference not set to an instance of an object
+2024-04-17T18:38:45:----------------------- Main stacktrace -----------------------
+2024-04-17T18:38:45:  at (wrapper dynamic-method) Player.AddBuilding_Patch3(object,Building)
+  at KCM.Packets.Game.GameWorld.WorldPlace.PlaceBuilding () [0x00247] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Game.GameWorld.WorldPlace.HandlePacketClient () [0x00019] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Handlers.PacketHandler.HandlePacket (System.Object sender, Riptide.MessageReceivedEventArgs messageReceived) [0x00023] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+2024-04-17T18:38:53:1
+2024-04-17T18:38:53:2
+2024-04-17T18:38:53:3
+2024-04-17T18:38:53:4
+2024-04-17T18:38:53:5
+2024-04-17T18:38:53:6
+2024-04-17T18:38:53:7
+2024-04-17T18:38:53:8
+2024-04-17T18:38:53:9
+2024-04-17T18:38:53:10
+2024-04-17T18:38:53:11
+2024-04-17T18:38:53:12
+2024-04-17T18:38:53:13
+2024-04-17T18:38:53:14
+2024-04-17T18:38:53:Called by: AcceptCursorObjPlacement
+2024-04-17T18:38:53:1 Shadowfita - Sending building place packet for road
+2024-04-17T18:38:53:1
+2024-04-17T18:38:53:2
+2024-04-17T18:38:53:3
+2024-04-17T18:38:53:4
+2024-04-17T18:38:53:5
+2024-04-17T18:38:53:6
+2024-04-17T18:38:53:7
+2024-04-17T18:38:53:8
+2024-04-17T18:38:53:9
+2024-04-17T18:38:53:10
+2024-04-17T18:38:53:11
+2024-04-17T18:38:53:12
+2024-04-17T18:38:53:13
+2024-04-17T18:38:53:14
+2024-04-17T18:38:53:Called by: AcceptCursorObjPlacement
+2024-04-17T18:38:53:1 Shadowfita - Sending building place packet for road
+2024-04-17T18:38:53:1
+2024-04-17T18:38:53:2
+2024-04-17T18:38:53:3
+2024-04-17T18:38:53:4
+2024-04-17T18:38:53:5
+2024-04-17T18:38:53:6
+2024-04-17T18:38:53:7
+2024-04-17T18:38:53:8
+2024-04-17T18:38:53:9
+2024-04-17T18:38:53:10
+2024-04-17T18:38:53:11
+2024-04-17T18:38:53:12
+2024-04-17T18:38:53:13
+2024-04-17T18:38:53:14
+2024-04-17T18:38:53:Called by: AcceptCursorObjPlacement
+2024-04-17T18:38:53:1 Shadowfita - Sending building place packet for road
+2024-04-17T18:38:53:Observer created for Building with 15 fields, 0 properties, and 0 non-primitive list variables
+2024-04-17T18:38:53:Observer created for Building with 15 fields, 0 properties, and 0 non-primitive list variables
+2024-04-17T18:38:53:Observer created for Building with 15 fields, 0 properties, and 0 non-primitive list variables
+2024-04-17T18:38:54:Get save dir
+2024-04-17T18:38:54:Get save dir
+2024-04-17T18:38:54:Saving data for 2 (2) players.
+2024-04-17T18:38:54:Attempting to pack data for: Shadowfita(76561198327621045)
+2024-04-17T18:38:54:Player (Player) Player
+2024-04-17T18:38:54:Running patched player pack method
+2024-04-17T18:38:54:Saving banner system
+2024-04-17T18:38:54:Saving player creativeMode
+2024-04-17T18:38:54:Saving player upgrades
+2024-04-17T18:38:54:Saving player bannerIdx
+2024-04-17T18:38:54:Saving player WorkersArray
+2024-04-17T18:38:54:Saving player HomelessData
+2024-04-17T18:38:54:Saving player structures
+2024-04-17T18:38:54:Saving town happiness
+2024-04-17T18:38:54:Saving town happiness infos
+2024-04-17T18:38:54:Saving town integrity infos
+2024-04-17T18:38:54:Saving town landmass owner
+2024-04-17T18:38:54:Saving town bDidFirstFire
+2024-04-17T18:38:54:Saving town tax rates
+2024-04-17T18:38:54:Saving difficulty
+2024-04-17T18:38:54:Saving CurrYear
+2024-04-17T18:38:54:Saving timeAtFailHappiness
+2024-04-17T18:38:54:Saving happinessMods
+2024-04-17T18:38:54:Saving currConsumption
+2024-04-17T18:38:54:Saving lastConsumption
+2024-04-17T18:38:54:Saving currProduction
+2024-04-17T18:38:54:Saving lastProduction
+2024-04-17T18:38:54:Saving landMassNames
+2024-04-17T18:38:54:Saving JobPriorityOrder
+2024-04-17T18:38:54:Saving JobFilledAvailable
+2024-04-17T18:38:54:Saving CanUseTools
+2024-04-17T18:38:54:Saving usedCheats
+2024-04-17T18:38:54:Saving nameForOldAgeDeath
+2024-04-17T18:38:54:Saving deathsThisYear
+2024-04-17T18:38:54:Saving poorHealthGracePeriod
+2024-04-17T18:38:54:Saving dockOpenings
+2024-04-17T18:38:54:Saving tourism
+2024-04-17T18:38:54:False
+2024-04-17T18:38:54:Attempting to pack data for: MUFFINMAN(76561198306540024)
+2024-04-17T18:38:54:Client Player (2 MUFFINMAN) (Player) Client Player (2 MUFFINMAN)
+2024-04-17T18:38:54:Running patched player pack method
+2024-04-17T18:38:54:Saving banner system
+2024-04-17T18:38:54:Saving player creativeMode
+2024-04-17T18:38:54:Saving player upgrades
+2024-04-17T18:38:54:Saving player bannerIdx
+2024-04-17T18:38:54:Saving player WorkersArray
+2024-04-17T18:38:54:Saving player HomelessData
+2024-04-17T18:38:54:Saving player structures
+2024-04-17T18:38:54:Saving town happiness
+2024-04-17T18:38:54:Saving town happiness infos
+2024-04-17T18:38:54:Saving town integrity infos
+2024-04-17T18:38:54:Saving town landmass owner
+2024-04-17T18:38:54:Saving town bDidFirstFire
+2024-04-17T18:38:54:Saving difficulty
+2024-04-17T18:38:54:Saving CurrYear
+2024-04-17T18:38:54:Saving timeAtFailHappiness
+2024-04-17T18:38:54:Saving happinessMods
+2024-04-17T18:38:54:Saving currConsumption
+2024-04-17T18:38:54:Saving lastConsumption
+2024-04-17T18:38:54:Saving currProduction
+2024-04-17T18:38:54:Saving lastProduction
+2024-04-17T18:38:54:Saving landMassNames
+2024-04-17T18:38:54:Saving JobPriorityOrder
+2024-04-17T18:38:54:Saving JobFilledAvailable
+2024-04-17T18:38:54:Saving CanUseTools
+2024-04-17T18:38:54:Saving usedCheats
+2024-04-17T18:38:54:Saving nameForOldAgeDeath
+2024-04-17T18:38:54:Saving deathsThisYear
+2024-04-17T18:38:54:Saving poorHealthGracePeriod
+2024-04-17T18:38:54:Saving dockOpenings
+2024-04-17T18:38:54:Saving tourism
+2024-04-17T18:38:54:False
+2024-04-17T18:38:57:Overridden complete build
+2024-04-17T18:38:57:Overridden complete build
+2024-04-17T18:38:57:Overridden complete build
+2024-04-17T18:39:03:Received place building packet for smallhouse from MUFFINMAN(2)
+2024-04-17T18:39:03:Building init
+2024-04-17T18:39:03:Building unpack
+2024-04-17T18:39:03:Client Player (2 MUFFINMAN) (Player)
+2024-04-17T18:39:03:False
+2024-04-17T18:39:03:3
+2024-04-17T18:39:03:Player add Building unpacked
+2024-04-17T18:39:03:1
+2024-04-17T18:39:03:2
+2024-04-17T18:39:03:3
+2024-04-17T18:39:03:4
+2024-04-17T18:39:03:Error in add building hook
+2024-04-17T18:39:03:Index was outside the bounds of the array.
+2024-04-17T18:39:03:  at KCM.Main+PlayerAddBuildingHook.Prefix (Player __instance, Building b) [0x000b2] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+2024-04-17T18:39:03:Error handling packet 71 WorldPlace from 2
+2024-04-17T18:39:03:----------------------- Main exception -----------------------
+2024-04-17T18:39:03:System.IndexOutOfRangeException: Index was outside the bounds of the array.
+  at (wrapper dynamic-method) Player.AddBuilding_Patch3(object,Building)
+  at KCM.Packets.Game.GameWorld.WorldPlace.PlaceBuilding () [0x00247] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Game.GameWorld.WorldPlace.HandlePacketClient () [0x00019] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Handlers.PacketHandler.HandlePacket (System.Object sender, Riptide.MessageReceivedEventArgs messageReceived) [0x00023] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+2024-04-17T18:39:03:----------------------- Main message -----------------------
+2024-04-17T18:39:03:Index was outside the bounds of the array.
+2024-04-17T18:39:03:----------------------- Main stacktrace -----------------------
+2024-04-17T18:39:03:  at (wrapper dynamic-method) Player.AddBuilding_Patch3(object,Building)
+  at KCM.Packets.Game.GameWorld.WorldPlace.PlaceBuilding () [0x00247] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Game.GameWorld.WorldPlace.HandlePacketClient () [0x00019] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Handlers.PacketHandler.HandlePacket (System.Object sender, Riptide.MessageReceivedEventArgs messageReceived) [0x00023] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+2024-04-17T18:39:11:1
+2024-04-17T18:39:11:2
+2024-04-17T18:39:11:3
+2024-04-17T18:39:11:4
+2024-04-17T18:39:11:5
+2024-04-17T18:39:11:6
+2024-04-17T18:39:11:7
+2024-04-17T18:39:11:8
+2024-04-17T18:39:11:9
+2024-04-17T18:39:11:10
+2024-04-17T18:39:11:11
+2024-04-17T18:39:11:12
+2024-04-17T18:39:11:13
+2024-04-17T18:39:11:14
+2024-04-17T18:39:11:Called by: AcceptCursorObjPlacement
+2024-04-17T18:39:11:1 Shadowfita - Sending building place packet for farm
+2024-04-17T18:39:11:1
+2024-04-17T18:39:11:2
+2024-04-17T18:39:11:3
+2024-04-17T18:39:11:4
+2024-04-17T18:39:11:5
+2024-04-17T18:39:11:6
+2024-04-17T18:39:11:7
+2024-04-17T18:39:11:8
+2024-04-17T18:39:11:9
+2024-04-17T18:39:11:10
+2024-04-17T18:39:11:11
+2024-04-17T18:39:11:12
+2024-04-17T18:39:11:13
+2024-04-17T18:39:11:14
+2024-04-17T18:39:11:Called by: AcceptCursorObjPlacement
+2024-04-17T18:39:11:1 Shadowfita - Sending building place packet for farm
+2024-04-17T18:39:11:1
+2024-04-17T18:39:11:2
+2024-04-17T18:39:11:3
+2024-04-17T18:39:11:4
+2024-04-17T18:39:11:5
+2024-04-17T18:39:11:6
+2024-04-17T18:39:11:7
+2024-04-17T18:39:11:8
+2024-04-17T18:39:11:9
+2024-04-17T18:39:11:10
+2024-04-17T18:39:11:11
+2024-04-17T18:39:11:12
+2024-04-17T18:39:11:13
+2024-04-17T18:39:11:14
+2024-04-17T18:39:11:Called by: AcceptCursorObjPlacement
+2024-04-17T18:39:11:1 Shadowfita - Sending building place packet for farm
+2024-04-17T18:39:11:1
+2024-04-17T18:39:11:2
+2024-04-17T18:39:11:3
+2024-04-17T18:39:11:4
+2024-04-17T18:39:11:5
+2024-04-17T18:39:11:6
+2024-04-17T18:39:11:7
+2024-04-17T18:39:11:8
+2024-04-17T18:39:11:9
+2024-04-17T18:39:11:10
+2024-04-17T18:39:11:11
+2024-04-17T18:39:11:12
+2024-04-17T18:39:11:13
+2024-04-17T18:39:11:14
+2024-04-17T18:39:11:Called by: AcceptCursorObjPlacement
+2024-04-17T18:39:11:1 Shadowfita - Sending building place packet for farm
+2024-04-17T18:39:11:Observer created for Building with 15 fields, 0 properties, and 0 non-primitive list variables
+2024-04-17T18:39:11:Observer created for Building with 15 fields, 0 properties, and 0 non-primitive list variables
+2024-04-17T18:39:11:Observer created for Building with 15 fields, 0 properties, and 0 non-primitive list variables
+2024-04-17T18:39:11:Observer created for Building with 15 fields, 0 properties, and 0 non-primitive list variables
+2024-04-17T18:39:12:Received add villager packet from MUFFINMAN(2)
+2024-04-17T18:39:12:Teleporting villager to (101.0, 0.0, 85.0)
+2024-04-17T18:39:12:Received add villager packet from MUFFINMAN(2)
+2024-04-17T18:39:12:Teleporting villager to (101.0, 0.0, 85.0)
+2024-04-17T18:39:12:Received add villager packet from MUFFINMAN(2)
+2024-04-17T18:39:12:Teleporting villager to (101.0, 0.0, 85.0)
+2024-04-17T18:39:13:1
+2024-04-17T18:39:13:2
+2024-04-17T18:39:13:3
+2024-04-17T18:39:13:4
+2024-04-17T18:39:13:5
+2024-04-17T18:39:13:6
+2024-04-17T18:39:13:7
+2024-04-17T18:39:13:8
+2024-04-17T18:39:13:9
+2024-04-17T18:39:13:10
+2024-04-17T18:39:13:11
+2024-04-17T18:39:13:12
+2024-04-17T18:39:13:13
+2024-04-17T18:39:13:14
+2024-04-17T18:39:13:Called by: AcceptCursorObjPlacement
+2024-04-17T18:39:13:1 Shadowfita - Sending building place packet for farm
+2024-04-17T18:39:13:1
+2024-04-17T18:39:13:2
+2024-04-17T18:39:13:3
+2024-04-17T18:39:13:4
+2024-04-17T18:39:13:5
+2024-04-17T18:39:13:6
+2024-04-17T18:39:13:7
+2024-04-17T18:39:13:8
+2024-04-17T18:39:13:9
+2024-04-17T18:39:13:10
+2024-04-17T18:39:13:11
+2024-04-17T18:39:13:12
+2024-04-17T18:39:13:13
+2024-04-17T18:39:13:14
+2024-04-17T18:39:13:Called by: AcceptCursorObjPlacement
+2024-04-17T18:39:13:1 Shadowfita - Sending building place packet for farm
+2024-04-17T18:39:13:1
+2024-04-17T18:39:13:2
+2024-04-17T18:39:13:3
+2024-04-17T18:39:13:4
+2024-04-17T18:39:13:5
+2024-04-17T18:39:13:6
+2024-04-17T18:39:13:7
+2024-04-17T18:39:13:8
+2024-04-17T18:39:13:9
+2024-04-17T18:39:13:10
+2024-04-17T18:39:13:11
+2024-04-17T18:39:13:12
+2024-04-17T18:39:13:13
+2024-04-17T18:39:13:14
+2024-04-17T18:39:13:Called by: AcceptCursorObjPlacement
+2024-04-17T18:39:13:1 Shadowfita - Sending building place packet for farm
+2024-04-17T18:39:13:1
+2024-04-17T18:39:13:2
+2024-04-17T18:39:13:3
+2024-04-17T18:39:13:4
+2024-04-17T18:39:13:5
+2024-04-17T18:39:13:6
+2024-04-17T18:39:13:7
+2024-04-17T18:39:13:8
+2024-04-17T18:39:13:9
+2024-04-17T18:39:13:10
+2024-04-17T18:39:13:11
+2024-04-17T18:39:13:12
+2024-04-17T18:39:13:13
+2024-04-17T18:39:13:14
+2024-04-17T18:39:13:Called by: AcceptCursorObjPlacement
+2024-04-17T18:39:13:1 Shadowfita - Sending building place packet for farm
+2024-04-17T18:39:13:Observer created for Building with 15 fields, 0 properties, and 0 non-primitive list variables
+2024-04-17T18:39:13:Observer created for Building with 15 fields, 0 properties, and 0 non-primitive list variables
+2024-04-17T18:39:13:Observer created for Building with 15 fields, 0 properties, and 0 non-primitive list variables
+2024-04-17T18:39:13:Observer created for Building with 15 fields, 0 properties, and 0 non-primitive list variables
+2024-04-17T18:39:18:Received place building packet for quarry from MUFFINMAN(2)
+2024-04-17T18:39:18:Building init
+2024-04-17T18:39:18:Building unpack
+2024-04-17T18:39:18:Client Player (2 MUFFINMAN) (Player)
+2024-04-17T18:39:18:False
+2024-04-17T18:39:18:3
+2024-04-17T18:39:18:Player add Building unpacked
+2024-04-17T18:39:18:1
+2024-04-17T18:39:18:2
+2024-04-17T18:39:18:3
+2024-04-17T18:39:18:4
+2024-04-17T18:39:18:5
+2024-04-17T18:39:18:6
+2024-04-17T18:39:18:7
+2024-04-17T18:39:18:8
+2024-04-17T18:39:18:9
+2024-04-17T18:39:18:10
+2024-04-17T18:39:18:11
+2024-04-17T18:39:18:Error in add building hook
+2024-04-17T18:39:18:Object reference not set to an instance of an object
+2024-04-17T18:39:18:  at KCM.Main+PlayerAddBuildingHook.Prefix (Player __instance, Building b) [0x001ae] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+2024-04-17T18:39:18:Error handling packet 71 WorldPlace from 2
+2024-04-17T18:39:18:----------------------- Main exception -----------------------
+2024-04-17T18:39:18:System.NullReferenceException: Object reference not set to an instance of an object
+  at (wrapper dynamic-method) Player.AddBuilding_Patch3(object,Building)
+  at KCM.Packets.Game.GameWorld.WorldPlace.PlaceBuilding () [0x00247] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Game.GameWorld.WorldPlace.HandlePacketClient () [0x00019] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Handlers.PacketHandler.HandlePacket (System.Object sender, Riptide.MessageReceivedEventArgs messageReceived) [0x00023] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+2024-04-17T18:39:18:----------------------- Main message -----------------------
+2024-04-17T18:39:18:Object reference not set to an instance of an object
+2024-04-17T18:39:18:----------------------- Main stacktrace -----------------------
+2024-04-17T18:39:18:  at (wrapper dynamic-method) Player.AddBuilding_Patch3(object,Building)
+  at KCM.Packets.Game.GameWorld.WorldPlace.PlaceBuilding () [0x00247] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Game.GameWorld.WorldPlace.HandlePacketClient () [0x00019] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Handlers.PacketHandler.HandlePacket (System.Object sender, Riptide.MessageReceivedEventArgs messageReceived) [0x00023] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+2024-04-17T18:39:25:Overridden complete build
+2024-04-17T18:39:26:Overridden complete build
+2024-04-17T18:39:26:Overridden complete build
+2024-04-17T18:39:27:Overridden complete build
+2024-04-17T18:39:29:Overridden complete build
+2024-04-17T18:39:30:Overridden complete build
+2024-04-17T18:39:30:Overridden complete build
+2024-04-17T18:39:47:Overridden complete build
+2024-04-17T18:39:50:Received add villager packet from MUFFINMAN(2)
+2024-04-17T18:39:50:Teleporting villager to (101.0, 0.0, 85.0)
+2024-04-17T18:39:50:Received add villager packet from MUFFINMAN(2)
+2024-04-17T18:39:50:Teleporting villager to (101.0, 0.0, 88.0)
+2024-04-17T18:39:50:Received add villager packet from MUFFINMAN(2)
+2024-04-17T18:39:50:Teleporting villager to (101.0, 0.0, 88.0)
+2024-04-17T18:39:53:Get save dir
+2024-04-17T18:39:53:Get save dir
+2024-04-17T18:39:53:Saving data for 2 (2) players.
+2024-04-17T18:39:53:Attempting to pack data for: Shadowfita(76561198327621045)
+2024-04-17T18:39:53:Player (Player) Player
+2024-04-17T18:39:53:Running patched player pack method
+2024-04-17T18:39:53:Saving banner system
+2024-04-17T18:39:53:Saving player creativeMode
+2024-04-17T18:39:53:Saving player upgrades
+2024-04-17T18:39:53:Saving player bannerIdx
+2024-04-17T18:39:53:Saving player WorkersArray
+2024-04-17T18:39:53:Saving player HomelessData
+2024-04-17T18:39:53:Saving player structures
+2024-04-17T18:39:53:Saving town happiness
+2024-04-17T18:39:53:Saving town happiness infos
+2024-04-17T18:39:53:Saving town integrity infos
+2024-04-17T18:39:53:Saving town landmass owner
+2024-04-17T18:39:53:Saving town bDidFirstFire
+2024-04-17T18:39:53:Saving town tax rates
+2024-04-17T18:39:53:Saving difficulty
+2024-04-17T18:39:53:Saving CurrYear
+2024-04-17T18:39:53:Saving timeAtFailHappiness
+2024-04-17T18:39:53:Saving happinessMods
+2024-04-17T18:39:53:Saving currConsumption
+2024-04-17T18:39:53:Saving lastConsumption
+2024-04-17T18:39:53:Saving currProduction
+2024-04-17T18:39:53:Saving lastProduction
+2024-04-17T18:39:53:Saving landMassNames
+2024-04-17T18:39:53:Saving JobPriorityOrder
+2024-04-17T18:39:53:Saving JobFilledAvailable
+2024-04-17T18:39:53:Saving CanUseTools
+2024-04-17T18:39:53:Saving usedCheats
+2024-04-17T18:39:53:Saving nameForOldAgeDeath
+2024-04-17T18:39:53:Saving deathsThisYear
+2024-04-17T18:39:53:Saving poorHealthGracePeriod
+2024-04-17T18:39:53:Saving dockOpenings
+2024-04-17T18:39:53:Saving tourism
+2024-04-17T18:39:53:False
+2024-04-17T18:39:53:Attempting to pack data for: MUFFINMAN(76561198306540024)
+2024-04-17T18:39:53:Client Player (2 MUFFINMAN) (Player) Client Player (2 MUFFINMAN)
+2024-04-17T18:39:53:Running patched player pack method
+2024-04-17T18:39:53:Saving banner system
+2024-04-17T18:39:53:Saving player creativeMode
+2024-04-17T18:39:53:Saving player upgrades
+2024-04-17T18:39:53:Saving player bannerIdx
+2024-04-17T18:39:53:Saving player WorkersArray
+2024-04-17T18:39:53:Saving player HomelessData
+2024-04-17T18:39:53:Saving player structures
+2024-04-17T18:39:53:Saving town happiness
+2024-04-17T18:39:53:Saving town happiness infos
+2024-04-17T18:39:53:Saving town integrity infos
+2024-04-17T18:39:53:Saving town landmass owner
+2024-04-17T18:39:53:Saving town bDidFirstFire
+2024-04-17T18:39:53:Saving difficulty
+2024-04-17T18:39:53:Saving CurrYear
+2024-04-17T18:39:53:Saving timeAtFailHappiness
+2024-04-17T18:39:53:Saving happinessMods
+2024-04-17T18:39:53:Saving currConsumption
+2024-04-17T18:39:53:Saving lastConsumption
+2024-04-17T18:39:53:Saving currProduction
+2024-04-17T18:39:53:Saving lastProduction
+2024-04-17T18:39:53:Saving landMassNames
+2024-04-17T18:39:53:Saving JobPriorityOrder
+2024-04-17T18:39:53:Saving JobFilledAvailable
+2024-04-17T18:39:53:Saving CanUseTools
+2024-04-17T18:39:53:Saving usedCheats
+2024-04-17T18:39:53:Saving nameForOldAgeDeath
+2024-04-17T18:39:53:Saving deathsThisYear
+2024-04-17T18:39:53:Saving poorHealthGracePeriod
+2024-04-17T18:39:53:Saving dockOpenings
+2024-04-17T18:39:53:Saving tourism
+2024-04-17T18:39:53:False
+2024-04-17T18:40:11:Received place building packet for road from MUFFINMAN(2)
+2024-04-17T18:40:11:Building init
+2024-04-17T18:40:11:Building unpack
+2024-04-17T18:40:11:Client Player (2 MUFFINMAN) (Player)
+2024-04-17T18:40:11:False
+2024-04-17T18:40:11:3
+2024-04-17T18:40:11:Player add Building unpacked
+2024-04-17T18:40:11:1
+2024-04-17T18:40:11:2
+2024-04-17T18:40:11:3
+2024-04-17T18:40:11:4
+2024-04-17T18:40:11:5
+2024-04-17T18:40:11:6
+2024-04-17T18:40:11:7
+2024-04-17T18:40:11:8
+2024-04-17T18:40:11:9
+2024-04-17T18:40:11:10
+2024-04-17T18:40:11:11
+2024-04-17T18:40:11:Error in add building hook
+2024-04-17T18:40:11:Object reference not set to an instance of an object
+2024-04-17T18:40:11:  at KCM.Main+PlayerAddBuildingHook.Prefix (Player __instance, Building b) [0x001ae] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+2024-04-17T18:40:11:Error handling packet 71 WorldPlace from 2
+2024-04-17T18:40:11:----------------------- Main exception -----------------------
+2024-04-17T18:40:11:System.NullReferenceException: Object reference not set to an instance of an object
+  at (wrapper dynamic-method) Player.AddBuilding_Patch3(object,Building)
+  at KCM.Packets.Game.GameWorld.WorldPlace.PlaceBuilding () [0x00247] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Game.GameWorld.WorldPlace.HandlePacketClient () [0x00019] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Handlers.PacketHandler.HandlePacket (System.Object sender, Riptide.MessageReceivedEventArgs messageReceived) [0x00023] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+2024-04-17T18:40:11:----------------------- Main message -----------------------
+2024-04-17T18:40:11:Object reference not set to an instance of an object
+2024-04-17T18:40:11:----------------------- Main stacktrace -----------------------
+2024-04-17T18:40:11:  at (wrapper dynamic-method) Player.AddBuilding_Patch3(object,Building)
+  at KCM.Packets.Game.GameWorld.WorldPlace.PlaceBuilding () [0x00247] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Game.GameWorld.WorldPlace.HandlePacketClient () [0x00019] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Handlers.PacketHandler.HandlePacket (System.Object sender, Riptide.MessageReceivedEventArgs messageReceived) [0x00023] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+2024-04-17T18:40:11:Received place building packet for road from MUFFINMAN(2)
+2024-04-17T18:40:11:Building init
+2024-04-17T18:40:11:Building unpack
+2024-04-17T18:40:11:Client Player (2 MUFFINMAN) (Player)
+2024-04-17T18:40:11:False
+2024-04-17T18:40:11:3
+2024-04-17T18:40:11:Player add Building unpacked
+2024-04-17T18:40:11:1
+2024-04-17T18:40:11:2
+2024-04-17T18:40:11:3
+2024-04-17T18:40:11:4
+2024-04-17T18:40:11:5
+2024-04-17T18:40:11:6
+2024-04-17T18:40:11:7
+2024-04-17T18:40:11:8
+2024-04-17T18:40:11:9
+2024-04-17T18:40:11:10
+2024-04-17T18:40:11:11
+2024-04-17T18:40:11:Error in add building hook
+2024-04-17T18:40:11:Object reference not set to an instance of an object
+2024-04-17T18:40:11:  at KCM.Main+PlayerAddBuildingHook.Prefix (Player __instance, Building b) [0x001ae] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+2024-04-17T18:40:11:Error handling packet 71 WorldPlace from 2
+2024-04-17T18:40:11:----------------------- Main exception -----------------------
+2024-04-17T18:40:11:System.NullReferenceException: Object reference not set to an instance of an object
+  at (wrapper dynamic-method) Player.AddBuilding_Patch3(object,Building)
+  at KCM.Packets.Game.GameWorld.WorldPlace.PlaceBuilding () [0x00247] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Game.GameWorld.WorldPlace.HandlePacketClient () [0x00019] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Handlers.PacketHandler.HandlePacket (System.Object sender, Riptide.MessageReceivedEventArgs messageReceived) [0x00023] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+2024-04-17T18:40:11:----------------------- Main message -----------------------
+2024-04-17T18:40:11:Object reference not set to an instance of an object
+2024-04-17T18:40:11:----------------------- Main stacktrace -----------------------
+2024-04-17T18:40:11:  at (wrapper dynamic-method) Player.AddBuilding_Patch3(object,Building)
+  at KCM.Packets.Game.GameWorld.WorldPlace.PlaceBuilding () [0x00247] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Game.GameWorld.WorldPlace.HandlePacketClient () [0x00019] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Handlers.PacketHandler.HandlePacket (System.Object sender, Riptide.MessageReceivedEventArgs messageReceived) [0x00023] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+2024-04-17T18:40:11:Received place building packet for road from MUFFINMAN(2)
+2024-04-17T18:40:11:Building init
+2024-04-17T18:40:11:Building unpack
+2024-04-17T18:40:11:Client Player (2 MUFFINMAN) (Player)
+2024-04-17T18:40:11:False
+2024-04-17T18:40:11:3
+2024-04-17T18:40:11:Player add Building unpacked
+2024-04-17T18:40:11:1
+2024-04-17T18:40:11:2
+2024-04-17T18:40:11:3
+2024-04-17T18:40:11:4
+2024-04-17T18:40:11:5
+2024-04-17T18:40:11:6
+2024-04-17T18:40:11:7
+2024-04-17T18:40:11:8
+2024-04-17T18:40:11:9
+2024-04-17T18:40:11:10
+2024-04-17T18:40:11:11
+2024-04-17T18:40:11:Error in add building hook
+2024-04-17T18:40:11:Object reference not set to an instance of an object
+2024-04-17T18:40:11:  at KCM.Main+PlayerAddBuildingHook.Prefix (Player __instance, Building b) [0x001ae] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+2024-04-17T18:40:11:Error handling packet 71 WorldPlace from 2
+2024-04-17T18:40:11:----------------------- Main exception -----------------------
+2024-04-17T18:40:11:System.NullReferenceException: Object reference not set to an instance of an object
+  at (wrapper dynamic-method) Player.AddBuilding_Patch3(object,Building)
+  at KCM.Packets.Game.GameWorld.WorldPlace.PlaceBuilding () [0x00247] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Game.GameWorld.WorldPlace.HandlePacketClient () [0x00019] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Handlers.PacketHandler.HandlePacket (System.Object sender, Riptide.MessageReceivedEventArgs messageReceived) [0x00023] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+2024-04-17T18:40:11:----------------------- Main message -----------------------
+2024-04-17T18:40:11:Object reference not set to an instance of an object
+2024-04-17T18:40:11:----------------------- Main stacktrace -----------------------
+2024-04-17T18:40:11:  at (wrapper dynamic-method) Player.AddBuilding_Patch3(object,Building)
+  at KCM.Packets.Game.GameWorld.WorldPlace.PlaceBuilding () [0x00247] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Game.GameWorld.WorldPlace.HandlePacketClient () [0x00019] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Handlers.PacketHandler.HandlePacket (System.Object sender, Riptide.MessageReceivedEventArgs messageReceived) [0x00023] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+2024-04-17T18:40:11:Received place building packet for road from MUFFINMAN(2)
+2024-04-17T18:40:11:Building init
+2024-04-17T18:40:11:Building unpack
+2024-04-17T18:40:11:Client Player (2 MUFFINMAN) (Player)
+2024-04-17T18:40:11:False
+2024-04-17T18:40:11:3
+2024-04-17T18:40:11:Player add Building unpacked
+2024-04-17T18:40:11:1
+2024-04-17T18:40:11:2
+2024-04-17T18:40:11:3
+2024-04-17T18:40:11:4
+2024-04-17T18:40:11:5
+2024-04-17T18:40:11:6
+2024-04-17T18:40:11:7
+2024-04-17T18:40:11:8
+2024-04-17T18:40:11:9
+2024-04-17T18:40:11:10
+2024-04-17T18:40:11:11
+2024-04-17T18:40:11:Error in add building hook
+2024-04-17T18:40:11:Object reference not set to an instance of an object
+2024-04-17T18:40:11:  at KCM.Main+PlayerAddBuildingHook.Prefix (Player __instance, Building b) [0x001ae] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+2024-04-17T18:40:11:Error handling packet 71 WorldPlace from 2
+2024-04-17T18:40:11:----------------------- Main exception -----------------------
+2024-04-17T18:40:11:System.NullReferenceException: Object reference not set to an instance of an object
+  at (wrapper dynamic-method) Player.AddBuilding_Patch3(object,Building)
+  at KCM.Packets.Game.GameWorld.WorldPlace.PlaceBuilding () [0x00247] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Game.GameWorld.WorldPlace.HandlePacketClient () [0x00019] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Handlers.PacketHandler.HandlePacket (System.Object sender, Riptide.MessageReceivedEventArgs messageReceived) [0x00023] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+2024-04-17T18:40:11:----------------------- Main message -----------------------
+2024-04-17T18:40:11:Object reference not set to an instance of an object
+2024-04-17T18:40:11:----------------------- Main stacktrace -----------------------
+2024-04-17T18:40:11:  at (wrapper dynamic-method) Player.AddBuilding_Patch3(object,Building)
+  at KCM.Packets.Game.GameWorld.WorldPlace.PlaceBuilding () [0x00247] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Game.GameWorld.WorldPlace.HandlePacketClient () [0x00019] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Handlers.PacketHandler.HandlePacket (System.Object sender, Riptide.MessageReceivedEventArgs messageReceived) [0x00023] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+2024-04-17T18:40:11:Received place building packet for road from MUFFINMAN(2)
+2024-04-17T18:40:11:Building init
+2024-04-17T18:40:11:Building unpack
+2024-04-17T18:40:11:Client Player (2 MUFFINMAN) (Player)
+2024-04-17T18:40:11:False
+2024-04-17T18:40:11:3
+2024-04-17T18:40:11:Player add Building unpacked
+2024-04-17T18:40:11:1
+2024-04-17T18:40:11:2
+2024-04-17T18:40:11:3
+2024-04-17T18:40:11:4
+2024-04-17T18:40:11:5
+2024-04-17T18:40:11:6
+2024-04-17T18:40:11:7
+2024-04-17T18:40:11:8
+2024-04-17T18:40:11:9
+2024-04-17T18:40:11:10
+2024-04-17T18:40:11:11
+2024-04-17T18:40:11:Error in add building hook
+2024-04-17T18:40:11:Object reference not set to an instance of an object
+2024-04-17T18:40:11:  at KCM.Main+PlayerAddBuildingHook.Prefix (Player __instance, Building b) [0x001ae] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+2024-04-17T18:40:11:Error handling packet 71 WorldPlace from 2
+2024-04-17T18:40:11:----------------------- Main exception -----------------------
+2024-04-17T18:40:11:System.NullReferenceException: Object reference not set to an instance of an object
+  at (wrapper dynamic-method) Player.AddBuilding_Patch3(object,Building)
+  at KCM.Packets.Game.GameWorld.WorldPlace.PlaceBuilding () [0x00247] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Game.GameWorld.WorldPlace.HandlePacketClient () [0x00019] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Handlers.PacketHandler.HandlePacket (System.Object sender, Riptide.MessageReceivedEventArgs messageReceived) [0x00023] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+2024-04-17T18:40:11:----------------------- Main message -----------------------
+2024-04-17T18:40:11:Object reference not set to an instance of an object
+2024-04-17T18:40:11:----------------------- Main stacktrace -----------------------
+2024-04-17T18:40:11:  at (wrapper dynamic-method) Player.AddBuilding_Patch3(object,Building)
+  at KCM.Packets.Game.GameWorld.WorldPlace.PlaceBuilding () [0x00247] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Game.GameWorld.WorldPlace.HandlePacketClient () [0x00019] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Handlers.PacketHandler.HandlePacket (System.Object sender, Riptide.MessageReceivedEventArgs messageReceived) [0x00023] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+2024-04-17T18:40:16:Get save dir
+2024-04-17T18:40:16:Get save dir
+2024-04-17T18:40:16:Saving data for 2 (2) players.
+2024-04-17T18:40:16:Attempting to pack data for: Shadowfita(76561198327621045)
+2024-04-17T18:40:16:Player (Player) Player
+2024-04-17T18:40:16:Running patched player pack method
+2024-04-17T18:40:16:Saving banner system
+2024-04-17T18:40:16:Saving player creativeMode
+2024-04-17T18:40:16:Saving player upgrades
+2024-04-17T18:40:16:Saving player bannerIdx
+2024-04-17T18:40:16:Saving player WorkersArray
+2024-04-17T18:40:16:Saving player HomelessData
+2024-04-17T18:40:16:Saving player structures
+2024-04-17T18:40:16:Saving town happiness
+2024-04-17T18:40:16:Saving town happiness infos
+2024-04-17T18:40:16:Saving town integrity infos
+2024-04-17T18:40:16:Saving town landmass owner
+2024-04-17T18:40:16:Saving town bDidFirstFire
+2024-04-17T18:40:16:Saving town tax rates
+2024-04-17T18:40:16:Saving difficulty
+2024-04-17T18:40:16:Saving CurrYear
+2024-04-17T18:40:16:Saving timeAtFailHappiness
+2024-04-17T18:40:16:Saving happinessMods
+2024-04-17T18:40:16:Saving currConsumption
+2024-04-17T18:40:16:Saving lastConsumption
+2024-04-17T18:40:16:Saving currProduction
+2024-04-17T18:40:16:Saving lastProduction
+2024-04-17T18:40:16:Saving landMassNames
+2024-04-17T18:40:16:Saving JobPriorityOrder
+2024-04-17T18:40:16:Saving JobFilledAvailable
+2024-04-17T18:40:16:Saving CanUseTools
+2024-04-17T18:40:16:Saving usedCheats
+2024-04-17T18:40:16:Saving nameForOldAgeDeath
+2024-04-17T18:40:16:Saving deathsThisYear
+2024-04-17T18:40:16:Saving poorHealthGracePeriod
+2024-04-17T18:40:16:Saving dockOpenings
+2024-04-17T18:40:16:Saving tourism
+2024-04-17T18:40:16:False
+2024-04-17T18:40:16:Attempting to pack data for: MUFFINMAN(76561198306540024)
+2024-04-17T18:40:16:Client Player (2 MUFFINMAN) (Player) Client Player (2 MUFFINMAN)
+2024-04-17T18:40:16:Running patched player pack method
+2024-04-17T18:40:16:Saving banner system
+2024-04-17T18:40:16:Saving player creativeMode
+2024-04-17T18:40:16:Saving player upgrades
+2024-04-17T18:40:16:Saving player bannerIdx
+2024-04-17T18:40:16:Saving player WorkersArray
+2024-04-17T18:40:16:Saving player HomelessData
+2024-04-17T18:40:16:Saving player structures
+2024-04-17T18:40:16:Saving town happiness
+2024-04-17T18:40:16:Saving town happiness infos
+2024-04-17T18:40:16:Saving town integrity infos
+2024-04-17T18:40:16:Saving town landmass owner
+2024-04-17T18:40:16:Saving town bDidFirstFire
+2024-04-17T18:40:16:Saving difficulty
+2024-04-17T18:40:16:Saving CurrYear
+2024-04-17T18:40:16:Saving timeAtFailHappiness
+2024-04-17T18:40:16:Saving happinessMods
+2024-04-17T18:40:16:Saving currConsumption
+2024-04-17T18:40:16:Saving lastConsumption
+2024-04-17T18:40:16:Saving currProduction
+2024-04-17T18:40:16:Saving lastProduction
+2024-04-17T18:40:16:Saving landMassNames
+2024-04-17T18:40:16:Saving JobPriorityOrder
+2024-04-17T18:40:16:Saving JobFilledAvailable
+2024-04-17T18:40:16:Saving CanUseTools
+2024-04-17T18:40:16:Saving usedCheats
+2024-04-17T18:40:16:Saving nameForOldAgeDeath
+2024-04-17T18:40:16:Saving deathsThisYear
+2024-04-17T18:40:16:Saving poorHealthGracePeriod
+2024-04-17T18:40:16:Saving dockOpenings
+2024-04-17T18:40:16:Saving tourism
+2024-04-17T18:40:16:False
+2024-04-17T18:40:17:Received place building packet for farm from MUFFINMAN(2)
+2024-04-17T18:40:17:Building init
+2024-04-17T18:40:17:Building unpack
+2024-04-17T18:40:17:Client Player (2 MUFFINMAN) (Player)
+2024-04-17T18:40:17:False
+2024-04-17T18:40:17:3
+2024-04-17T18:40:17:Player add Building unpacked
+2024-04-17T18:40:17:1
+2024-04-17T18:40:17:2
+2024-04-17T18:40:17:3
+2024-04-17T18:40:17:4
+2024-04-17T18:40:17:5
+2024-04-17T18:40:17:6
+2024-04-17T18:40:17:7
+2024-04-17T18:40:17:8
+2024-04-17T18:40:17:9
+2024-04-17T18:40:17:10
+2024-04-17T18:40:17:11
+2024-04-17T18:40:17:Error in add building hook
+2024-04-17T18:40:17:Object reference not set to an instance of an object
+2024-04-17T18:40:17:  at KCM.Main+PlayerAddBuildingHook.Prefix (Player __instance, Building b) [0x001ae] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+2024-04-17T18:40:17:Error handling packet 71 WorldPlace from 2
+2024-04-17T18:40:17:----------------------- Main exception -----------------------
+2024-04-17T18:40:17:System.NullReferenceException: Object reference not set to an instance of an object
+  at (wrapper dynamic-method) Player.AddBuilding_Patch3(object,Building)
+  at KCM.Packets.Game.GameWorld.WorldPlace.PlaceBuilding () [0x00247] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Game.GameWorld.WorldPlace.HandlePacketClient () [0x00019] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Handlers.PacketHandler.HandlePacket (System.Object sender, Riptide.MessageReceivedEventArgs messageReceived) [0x00023] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+2024-04-17T18:40:17:----------------------- Main message -----------------------
+2024-04-17T18:40:17:Object reference not set to an instance of an object
+2024-04-17T18:40:17:----------------------- Main stacktrace -----------------------
+2024-04-17T18:40:17:  at (wrapper dynamic-method) Player.AddBuilding_Patch3(object,Building)
+  at KCM.Packets.Game.GameWorld.WorldPlace.PlaceBuilding () [0x00247] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Game.GameWorld.WorldPlace.HandlePacketClient () [0x00019] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Handlers.PacketHandler.HandlePacket (System.Object sender, Riptide.MessageReceivedEventArgs messageReceived) [0x00023] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+2024-04-17T18:40:17:Received place building packet for farm from MUFFINMAN(2)
+2024-04-17T18:40:17:Building init
+2024-04-17T18:40:17:Building unpack
+2024-04-17T18:40:17:Client Player (2 MUFFINMAN) (Player)
+2024-04-17T18:40:17:False
+2024-04-17T18:40:17:3
+2024-04-17T18:40:17:Player add Building unpacked
+2024-04-17T18:40:17:1
+2024-04-17T18:40:17:2
+2024-04-17T18:40:17:3
+2024-04-17T18:40:17:4
+2024-04-17T18:40:17:5
+2024-04-17T18:40:17:6
+2024-04-17T18:40:17:7
+2024-04-17T18:40:17:8
+2024-04-17T18:40:17:9
+2024-04-17T18:40:17:10
+2024-04-17T18:40:17:11
+2024-04-17T18:40:17:Error in add building hook
+2024-04-17T18:40:17:Object reference not set to an instance of an object
+2024-04-17T18:40:17:  at KCM.Main+PlayerAddBuildingHook.Prefix (Player __instance, Building b) [0x001ae] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+2024-04-17T18:40:17:Error handling packet 71 WorldPlace from 2
+2024-04-17T18:40:17:----------------------- Main exception -----------------------
+2024-04-17T18:40:17:System.NullReferenceException: Object reference not set to an instance of an object
+  at (wrapper dynamic-method) Player.AddBuilding_Patch3(object,Building)
+  at KCM.Packets.Game.GameWorld.WorldPlace.PlaceBuilding () [0x00247] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Game.GameWorld.WorldPlace.HandlePacketClient () [0x00019] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Handlers.PacketHandler.HandlePacket (System.Object sender, Riptide.MessageReceivedEventArgs messageReceived) [0x00023] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+2024-04-17T18:40:17:----------------------- Main message -----------------------
+2024-04-17T18:40:17:Object reference not set to an instance of an object
+2024-04-17T18:40:17:----------------------- Main stacktrace -----------------------
+2024-04-17T18:40:17:  at (wrapper dynamic-method) Player.AddBuilding_Patch3(object,Building)
+  at KCM.Packets.Game.GameWorld.WorldPlace.PlaceBuilding () [0x00247] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Game.GameWorld.WorldPlace.HandlePacketClient () [0x00019] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Handlers.PacketHandler.HandlePacket (System.Object sender, Riptide.MessageReceivedEventArgs messageReceived) [0x00023] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+2024-04-17T18:40:17:Received place building packet for farm from MUFFINMAN(2)
+2024-04-17T18:40:17:Building init
+2024-04-17T18:40:17:Building unpack
+2024-04-17T18:40:17:Client Player (2 MUFFINMAN) (Player)
+2024-04-17T18:40:17:False
+2024-04-17T18:40:17:3
+2024-04-17T18:40:17:Player add Building unpacked
+2024-04-17T18:40:17:1
+2024-04-17T18:40:17:2
+2024-04-17T18:40:17:3
+2024-04-17T18:40:17:4
+2024-04-17T18:40:17:5
+2024-04-17T18:40:17:6
+2024-04-17T18:40:17:7
+2024-04-17T18:40:17:8
+2024-04-17T18:40:17:9
+2024-04-17T18:40:17:10
+2024-04-17T18:40:17:11
+2024-04-17T18:40:17:Error in add building hook
+2024-04-17T18:40:17:Object reference not set to an instance of an object
+2024-04-17T18:40:17:  at KCM.Main+PlayerAddBuildingHook.Prefix (Player __instance, Building b) [0x001ae] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+2024-04-17T18:40:17:Error handling packet 71 WorldPlace from 2
+2024-04-17T18:40:17:----------------------- Main exception -----------------------
+2024-04-17T18:40:17:System.NullReferenceException: Object reference not set to an instance of an object
+  at (wrapper dynamic-method) Player.AddBuilding_Patch3(object,Building)
+  at KCM.Packets.Game.GameWorld.WorldPlace.PlaceBuilding () [0x00247] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Game.GameWorld.WorldPlace.HandlePacketClient () [0x00019] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Handlers.PacketHandler.HandlePacket (System.Object sender, Riptide.MessageReceivedEventArgs messageReceived) [0x00023] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+2024-04-17T18:40:17:----------------------- Main message -----------------------
+2024-04-17T18:40:17:Object reference not set to an instance of an object
+2024-04-17T18:40:17:----------------------- Main stacktrace -----------------------
+2024-04-17T18:40:17:  at (wrapper dynamic-method) Player.AddBuilding_Patch3(object,Building)
+  at KCM.Packets.Game.GameWorld.WorldPlace.PlaceBuilding () [0x00247] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Game.GameWorld.WorldPlace.HandlePacketClient () [0x00019] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Handlers.PacketHandler.HandlePacket (System.Object sender, Riptide.MessageReceivedEventArgs messageReceived) [0x00023] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+2024-04-17T18:40:17:Received place building packet for farm from MUFFINMAN(2)
+2024-04-17T18:40:17:Building init
+2024-04-17T18:40:17:Building unpack
+2024-04-17T18:40:17:Client Player (2 MUFFINMAN) (Player)
+2024-04-17T18:40:17:False
+2024-04-17T18:40:17:3
+2024-04-17T18:40:17:Player add Building unpacked
+2024-04-17T18:40:17:1
+2024-04-17T18:40:17:2
+2024-04-17T18:40:17:3
+2024-04-17T18:40:17:4
+2024-04-17T18:40:17:5
+2024-04-17T18:40:17:6
+2024-04-17T18:40:17:7
+2024-04-17T18:40:17:8
+2024-04-17T18:40:17:9
+2024-04-17T18:40:17:10
+2024-04-17T18:40:17:11
+2024-04-17T18:40:17:Error in add building hook
+2024-04-17T18:40:17:Object reference not set to an instance of an object
+2024-04-17T18:40:17:  at KCM.Main+PlayerAddBuildingHook.Prefix (Player __instance, Building b) [0x001ae] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+2024-04-17T18:40:17:Error handling packet 71 WorldPlace from 2
+2024-04-17T18:40:17:----------------------- Main exception -----------------------
+2024-04-17T18:40:17:System.NullReferenceException: Object reference not set to an instance of an object
+  at (wrapper dynamic-method) Player.AddBuilding_Patch3(object,Building)
+  at KCM.Packets.Game.GameWorld.WorldPlace.PlaceBuilding () [0x00247] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Game.GameWorld.WorldPlace.HandlePacketClient () [0x00019] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Handlers.PacketHandler.HandlePacket (System.Object sender, Riptide.MessageReceivedEventArgs messageReceived) [0x00023] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+2024-04-17T18:40:17:----------------------- Main message -----------------------
+2024-04-17T18:40:17:Object reference not set to an instance of an object
+2024-04-17T18:40:17:----------------------- Main stacktrace -----------------------
+2024-04-17T18:40:17:  at (wrapper dynamic-method) Player.AddBuilding_Patch3(object,Building)
+  at KCM.Packets.Game.GameWorld.WorldPlace.PlaceBuilding () [0x00247] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Game.GameWorld.WorldPlace.HandlePacketClient () [0x00019] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Handlers.PacketHandler.HandlePacket (System.Object sender, Riptide.MessageReceivedEventArgs messageReceived) [0x00023] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+2024-04-17T18:40:17:Received place building packet for farm from MUFFINMAN(2)
+2024-04-17T18:40:17:Building init
+2024-04-17T18:40:17:Building unpack
+2024-04-17T18:40:17:Client Player (2 MUFFINMAN) (Player)
+2024-04-17T18:40:17:False
+2024-04-17T18:40:17:3
+2024-04-17T18:40:17:Player add Building unpacked
+2024-04-17T18:40:17:1
+2024-04-17T18:40:17:2
+2024-04-17T18:40:17:3
+2024-04-17T18:40:17:4
+2024-04-17T18:40:17:5
+2024-04-17T18:40:17:6
+2024-04-17T18:40:17:7
+2024-04-17T18:40:17:8
+2024-04-17T18:40:17:9
+2024-04-17T18:40:17:10
+2024-04-17T18:40:17:11
+2024-04-17T18:40:17:Error in add building hook
+2024-04-17T18:40:17:Object reference not set to an instance of an object
+2024-04-17T18:40:17:  at KCM.Main+PlayerAddBuildingHook.Prefix (Player __instance, Building b) [0x001ae] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+2024-04-17T18:40:17:Error handling packet 71 WorldPlace from 2
+2024-04-17T18:40:17:----------------------- Main exception -----------------------
+2024-04-17T18:40:17:System.NullReferenceException: Object reference not set to an instance of an object
+  at (wrapper dynamic-method) Player.AddBuilding_Patch3(object,Building)
+  at KCM.Packets.Game.GameWorld.WorldPlace.PlaceBuilding () [0x00247] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Game.GameWorld.WorldPlace.HandlePacketClient () [0x00019] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Handlers.PacketHandler.HandlePacket (System.Object sender, Riptide.MessageReceivedEventArgs messageReceived) [0x00023] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+2024-04-17T18:40:17:----------------------- Main message -----------------------
+2024-04-17T18:40:17:Object reference not set to an instance of an object
+2024-04-17T18:40:17:----------------------- Main stacktrace -----------------------
+2024-04-17T18:40:17:  at (wrapper dynamic-method) Player.AddBuilding_Patch3(object,Building)
+  at KCM.Packets.Game.GameWorld.WorldPlace.PlaceBuilding () [0x00247] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Game.GameWorld.WorldPlace.HandlePacketClient () [0x00019] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Handlers.PacketHandler.HandlePacket (System.Object sender, Riptide.MessageReceivedEventArgs messageReceived) [0x00023] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+2024-04-17T18:40:17:Received place building packet for farm from MUFFINMAN(2)
+2024-04-17T18:40:17:Building init
+2024-04-17T18:40:17:Building unpack
+2024-04-17T18:40:17:Client Player (2 MUFFINMAN) (Player)
+2024-04-17T18:40:17:False
+2024-04-17T18:40:17:3
+2024-04-17T18:40:17:Player add Building unpacked
+2024-04-17T18:40:17:1
+2024-04-17T18:40:17:2
+2024-04-17T18:40:17:3
+2024-04-17T18:40:17:4
+2024-04-17T18:40:17:5
+2024-04-17T18:40:17:6
+2024-04-17T18:40:17:7
+2024-04-17T18:40:17:8
+2024-04-17T18:40:17:9
+2024-04-17T18:40:17:10
+2024-04-17T18:40:17:11
+2024-04-17T18:40:17:Error in add building hook
+2024-04-17T18:40:17:Object reference not set to an instance of an object
+2024-04-17T18:40:17:  at KCM.Main+PlayerAddBuildingHook.Prefix (Player __instance, Building b) [0x001ae] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+2024-04-17T18:40:17:Error handling packet 71 WorldPlace from 2
+2024-04-17T18:40:17:----------------------- Main exception -----------------------
+2024-04-17T18:40:17:System.NullReferenceException: Object reference not set to an instance of an object
+  at (wrapper dynamic-method) Player.AddBuilding_Patch3(object,Building)
+  at KCM.Packets.Game.GameWorld.WorldPlace.PlaceBuilding () [0x00247] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Game.GameWorld.WorldPlace.HandlePacketClient () [0x00019] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Handlers.PacketHandler.HandlePacket (System.Object sender, Riptide.MessageReceivedEventArgs messageReceived) [0x00023] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+2024-04-17T18:40:17:----------------------- Main message -----------------------
+2024-04-17T18:40:17:Object reference not set to an instance of an object
+2024-04-17T18:40:17:----------------------- Main stacktrace -----------------------
+2024-04-17T18:40:17:  at (wrapper dynamic-method) Player.AddBuilding_Patch3(object,Building)
+  at KCM.Packets.Game.GameWorld.WorldPlace.PlaceBuilding () [0x00247] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Game.GameWorld.WorldPlace.HandlePacketClient () [0x00019] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Handlers.PacketHandler.HandlePacket (System.Object sender, Riptide.MessageReceivedEventArgs messageReceived) [0x00023] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+2024-04-17T18:40:25:Received add villager packet from MUFFINMAN(2)
+2024-04-17T18:40:25:Teleporting villager to (101.0, 0.0, 88.0)
+2024-04-17T18:40:25:Received add villager packet from MUFFINMAN(2)
+2024-04-17T18:40:25:Teleporting villager to (101.0, 0.0, 88.0)
+2024-04-17T18:40:25:Received add villager packet from MUFFINMAN(2)
+2024-04-17T18:40:25:Teleporting villager to (101.0, 0.0, 88.0)
+2024-04-17T18:40:38:Received place building packet for smallhouse from MUFFINMAN(2)
+2024-04-17T18:40:38:Building init
+2024-04-17T18:40:38:Building unpack
+2024-04-17T18:40:38:Client Player (2 MUFFINMAN) (Player)
+2024-04-17T18:40:38:False
+2024-04-17T18:40:38:3
+2024-04-17T18:40:38:Player add Building unpacked
+2024-04-17T18:40:38:1
+2024-04-17T18:40:38:2
+2024-04-17T18:40:38:3
+2024-04-17T18:40:38:4
+2024-04-17T18:40:38:Error in add building hook
+2024-04-17T18:40:38:Index was outside the bounds of the array.
+2024-04-17T18:40:38:  at KCM.Main+PlayerAddBuildingHook.Prefix (Player __instance, Building b) [0x000b2] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+2024-04-17T18:40:38:Error handling packet 71 WorldPlace from 2
+2024-04-17T18:40:38:----------------------- Main exception -----------------------
+2024-04-17T18:40:38:System.IndexOutOfRangeException: Index was outside the bounds of the array.
+  at (wrapper dynamic-method) Player.AddBuilding_Patch3(object,Building)
+  at KCM.Packets.Game.GameWorld.WorldPlace.PlaceBuilding () [0x00247] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Game.GameWorld.WorldPlace.HandlePacketClient () [0x00019] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Handlers.PacketHandler.HandlePacket (System.Object sender, Riptide.MessageReceivedEventArgs messageReceived) [0x00023] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+2024-04-17T18:40:38:----------------------- Main message -----------------------
+2024-04-17T18:40:38:Index was outside the bounds of the array.
+2024-04-17T18:40:38:----------------------- Main stacktrace -----------------------
+2024-04-17T18:40:38:  at (wrapper dynamic-method) Player.AddBuilding_Patch3(object,Building)
+  at KCM.Packets.Game.GameWorld.WorldPlace.PlaceBuilding () [0x00247] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Game.GameWorld.WorldPlace.HandlePacketClient () [0x00019] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Handlers.PacketHandler.HandlePacket (System.Object sender, Riptide.MessageReceivedEventArgs messageReceived) [0x00023] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+2024-04-17T18:41:03:Received add villager packet from MUFFINMAN(2)
+2024-04-17T18:41:03:Teleporting villager to (101.0, 0.0, 84.0)
+2024-04-17T18:41:03:Received add villager packet from MUFFINMAN(2)
+2024-04-17T18:41:03:Teleporting villager to (101.0, 0.0, 84.0)
+2024-04-17T18:41:03:Received add villager packet from MUFFINMAN(2)
+2024-04-17T18:41:03:Teleporting villager to (101.0, 0.0, 84.0)
+2024-04-17T18:41:06:Received place building packet for well from MUFFINMAN(2)
+2024-04-17T18:41:06:Building init
+2024-04-17T18:41:06:Building unpack
+2024-04-17T18:41:06:Client Player (2 MUFFINMAN) (Player)
+2024-04-17T18:41:06:False
+2024-04-17T18:41:06:3
+2024-04-17T18:41:06:Player add Building unpacked
+2024-04-17T18:41:06:1
+2024-04-17T18:41:06:2
+2024-04-17T18:41:06:3
+2024-04-17T18:41:06:4
+2024-04-17T18:41:06:5
+2024-04-17T18:41:06:6
+2024-04-17T18:41:06:7
+2024-04-17T18:41:06:8
+2024-04-17T18:41:06:9
+2024-04-17T18:41:06:10
+2024-04-17T18:41:06:11
+2024-04-17T18:41:06:Error in add building hook
+2024-04-17T18:41:06:Object reference not set to an instance of an object
+2024-04-17T18:41:06:  at KCM.Main+PlayerAddBuildingHook.Prefix (Player __instance, Building b) [0x001ae] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+2024-04-17T18:41:06:Error handling packet 71 WorldPlace from 2
+2024-04-17T18:41:06:----------------------- Main exception -----------------------
+2024-04-17T18:41:06:System.NullReferenceException: Object reference not set to an instance of an object
+  at (wrapper dynamic-method) Player.AddBuilding_Patch3(object,Building)
+  at KCM.Packets.Game.GameWorld.WorldPlace.PlaceBuilding () [0x00247] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Game.GameWorld.WorldPlace.HandlePacketClient () [0x00019] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Handlers.PacketHandler.HandlePacket (System.Object sender, Riptide.MessageReceivedEventArgs messageReceived) [0x00023] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+2024-04-17T18:41:06:----------------------- Main message -----------------------
+2024-04-17T18:41:06:Object reference not set to an instance of an object
+2024-04-17T18:41:06:----------------------- Main stacktrace -----------------------
+2024-04-17T18:41:06:  at (wrapper dynamic-method) Player.AddBuilding_Patch3(object,Building)
+  at KCM.Packets.Game.GameWorld.WorldPlace.PlaceBuilding () [0x00247] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Game.GameWorld.WorldPlace.HandlePacketClient () [0x00019] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Handlers.PacketHandler.HandlePacket (System.Object sender, Riptide.MessageReceivedEventArgs messageReceived) [0x00023] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+2024-04-17T18:41:08:Get save dir
+2024-04-17T18:41:08:Get save dir
+2024-04-17T18:41:08:Saving data for 2 (2) players.
+2024-04-17T18:41:08:Attempting to pack data for: Shadowfita(76561198327621045)
+2024-04-17T18:41:08:Player (Player) Player
+2024-04-17T18:41:08:Running patched player pack method
+2024-04-17T18:41:08:Saving banner system
+2024-04-17T18:41:08:Saving player creativeMode
+2024-04-17T18:41:08:Saving player upgrades
+2024-04-17T18:41:08:Saving player bannerIdx
+2024-04-17T18:41:08:Saving player WorkersArray
+2024-04-17T18:41:08:Saving player HomelessData
+2024-04-17T18:41:08:Saving player structures
+2024-04-17T18:41:08:Saving town happiness
+2024-04-17T18:41:08:Saving town happiness infos
+2024-04-17T18:41:08:Saving town integrity infos
+2024-04-17T18:41:08:Saving town landmass owner
+2024-04-17T18:41:08:Saving town bDidFirstFire
+2024-04-17T18:41:08:Saving town tax rates
+2024-04-17T18:41:08:Saving difficulty
+2024-04-17T18:41:08:Saving CurrYear
+2024-04-17T18:41:08:Saving timeAtFailHappiness
+2024-04-17T18:41:08:Saving happinessMods
+2024-04-17T18:41:08:Saving currConsumption
+2024-04-17T18:41:08:Saving lastConsumption
+2024-04-17T18:41:08:Saving currProduction
+2024-04-17T18:41:08:Saving lastProduction
+2024-04-17T18:41:08:Saving landMassNames
+2024-04-17T18:41:08:Saving JobPriorityOrder
+2024-04-17T18:41:08:Saving JobFilledAvailable
+2024-04-17T18:41:08:Saving CanUseTools
+2024-04-17T18:41:08:Saving usedCheats
+2024-04-17T18:41:08:Saving nameForOldAgeDeath
+2024-04-17T18:41:08:Saving deathsThisYear
+2024-04-17T18:41:08:Saving poorHealthGracePeriod
+2024-04-17T18:41:08:Saving dockOpenings
+2024-04-17T18:41:08:Saving tourism
+2024-04-17T18:41:08:False
+2024-04-17T18:41:08:Attempting to pack data for: MUFFINMAN(76561198306540024)
+2024-04-17T18:41:08:Client Player (2 MUFFINMAN) (Player) Client Player (2 MUFFINMAN)
+2024-04-17T18:41:08:Running patched player pack method
+2024-04-17T18:41:08:Saving banner system
+2024-04-17T18:41:08:Saving player creativeMode
+2024-04-17T18:41:08:Saving player upgrades
+2024-04-17T18:41:08:Saving player bannerIdx
+2024-04-17T18:41:08:Saving player WorkersArray
+2024-04-17T18:41:08:Saving player HomelessData
+2024-04-17T18:41:08:Saving player structures
+2024-04-17T18:41:08:Saving town happiness
+2024-04-17T18:41:08:Saving town happiness infos
+2024-04-17T18:41:08:Saving town integrity infos
+2024-04-17T18:41:08:Saving town landmass owner
+2024-04-17T18:41:08:Saving town bDidFirstFire
+2024-04-17T18:41:08:Saving difficulty
+2024-04-17T18:41:08:Saving CurrYear
+2024-04-17T18:41:08:Saving timeAtFailHappiness
+2024-04-17T18:41:08:Saving happinessMods
+2024-04-17T18:41:08:Saving currConsumption
+2024-04-17T18:41:08:Saving lastConsumption
+2024-04-17T18:41:08:Saving currProduction
+2024-04-17T18:41:08:Saving lastProduction
+2024-04-17T18:41:08:Saving landMassNames
+2024-04-17T18:41:08:Saving JobPriorityOrder
+2024-04-17T18:41:08:Saving JobFilledAvailable
+2024-04-17T18:41:08:Saving CanUseTools
+2024-04-17T18:41:08:Saving usedCheats
+2024-04-17T18:41:08:Saving nameForOldAgeDeath
+2024-04-17T18:41:08:Saving deathsThisYear
+2024-04-17T18:41:08:Saving poorHealthGracePeriod
+2024-04-17T18:41:08:Saving dockOpenings
+2024-04-17T18:41:08:Saving tourism
+2024-04-17T18:41:08:False
+2024-04-17T18:41:22:Received place building packet for smallhouse from MUFFINMAN(2)
+2024-04-17T18:41:22:Building init
+2024-04-17T18:41:22:Building unpack
+2024-04-17T18:41:22:Client Player (2 MUFFINMAN) (Player)
+2024-04-17T18:41:22:False
+2024-04-17T18:41:22:3
+2024-04-17T18:41:22:Player add Building unpacked
+2024-04-17T18:41:22:1
+2024-04-17T18:41:22:2
+2024-04-17T18:41:22:3
+2024-04-17T18:41:22:4
+2024-04-17T18:41:22:Error in add building hook
+2024-04-17T18:41:22:Index was outside the bounds of the array.
+2024-04-17T18:41:22:  at KCM.Main+PlayerAddBuildingHook.Prefix (Player __instance, Building b) [0x000b2] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+2024-04-17T18:41:22:Error handling packet 71 WorldPlace from 2
+2024-04-17T18:41:22:----------------------- Main exception -----------------------
+2024-04-17T18:41:22:System.IndexOutOfRangeException: Index was outside the bounds of the array.
+  at (wrapper dynamic-method) Player.AddBuilding_Patch3(object,Building)
+  at KCM.Packets.Game.GameWorld.WorldPlace.PlaceBuilding () [0x00247] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Game.GameWorld.WorldPlace.HandlePacketClient () [0x00019] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Handlers.PacketHandler.HandlePacket (System.Object sender, Riptide.MessageReceivedEventArgs messageReceived) [0x00023] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+2024-04-17T18:41:22:----------------------- Main message -----------------------
+2024-04-17T18:41:22:Index was outside the bounds of the array.
+2024-04-17T18:41:22:----------------------- Main stacktrace -----------------------
+2024-04-17T18:41:22:  at (wrapper dynamic-method) Player.AddBuilding_Patch3(object,Building)
+  at KCM.Packets.Game.GameWorld.WorldPlace.PlaceBuilding () [0x00247] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Game.GameWorld.WorldPlace.HandlePacketClient () [0x00019] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Handlers.PacketHandler.HandlePacket (System.Object sender, Riptide.MessageReceivedEventArgs messageReceived) [0x00023] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+2024-04-17T18:41:25:Received place building packet for smallhouse from MUFFINMAN(2)
+2024-04-17T18:41:25:Building init
+2024-04-17T18:41:25:Building unpack
+2024-04-17T18:41:25:Client Player (2 MUFFINMAN) (Player)
+2024-04-17T18:41:25:False
+2024-04-17T18:41:25:3
+2024-04-17T18:41:25:Player add Building unpacked
+2024-04-17T18:41:25:1
+2024-04-17T18:41:25:2
+2024-04-17T18:41:25:3
+2024-04-17T18:41:25:4
+2024-04-17T18:41:25:Error in add building hook
+2024-04-17T18:41:25:Index was outside the bounds of the array.
+2024-04-17T18:41:25:  at KCM.Main+PlayerAddBuildingHook.Prefix (Player __instance, Building b) [0x000b2] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+2024-04-17T18:41:25:Error handling packet 71 WorldPlace from 2
+2024-04-17T18:41:25:----------------------- Main exception -----------------------
+2024-04-17T18:41:25:System.IndexOutOfRangeException: Index was outside the bounds of the array.
+  at (wrapper dynamic-method) Player.AddBuilding_Patch3(object,Building)
+  at KCM.Packets.Game.GameWorld.WorldPlace.PlaceBuilding () [0x00247] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Game.GameWorld.WorldPlace.HandlePacketClient () [0x00019] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Handlers.PacketHandler.HandlePacket (System.Object sender, Riptide.MessageReceivedEventArgs messageReceived) [0x00023] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+2024-04-17T18:41:25:----------------------- Main message -----------------------
+2024-04-17T18:41:25:Index was outside the bounds of the array.
+2024-04-17T18:41:25:----------------------- Main stacktrace -----------------------
+2024-04-17T18:41:25:  at (wrapper dynamic-method) Player.AddBuilding_Patch3(object,Building)
+  at KCM.Packets.Game.GameWorld.WorldPlace.PlaceBuilding () [0x00247] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Game.GameWorld.WorldPlace.HandlePacketClient () [0x00019] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Handlers.PacketHandler.HandlePacket (System.Object sender, Riptide.MessageReceivedEventArgs messageReceived) [0x00023] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+2024-04-17T18:41:31:Get save dir
+2024-04-17T18:41:31:Get save dir
+2024-04-17T18:41:31:Saving data for 2 (2) players.
+2024-04-17T18:41:31:Attempting to pack data for: Shadowfita(76561198327621045)
+2024-04-17T18:41:31:Player (Player) Player
+2024-04-17T18:41:31:Running patched player pack method
+2024-04-17T18:41:31:Saving banner system
+2024-04-17T18:41:31:Saving player creativeMode
+2024-04-17T18:41:31:Saving player upgrades
+2024-04-17T18:41:31:Saving player bannerIdx
+2024-04-17T18:41:31:Saving player WorkersArray
+2024-04-17T18:41:31:Saving player HomelessData
+2024-04-17T18:41:31:Saving player structures
+2024-04-17T18:41:31:Saving town happiness
+2024-04-17T18:41:31:Saving town happiness infos
+2024-04-17T18:41:31:Saving town integrity infos
+2024-04-17T18:41:31:Saving town landmass owner
+2024-04-17T18:41:31:Saving town bDidFirstFire
+2024-04-17T18:41:31:Saving town tax rates
+2024-04-17T18:41:31:Saving difficulty
+2024-04-17T18:41:31:Saving CurrYear
+2024-04-17T18:41:31:Saving timeAtFailHappiness
+2024-04-17T18:41:31:Saving happinessMods
+2024-04-17T18:41:31:Saving currConsumption
+2024-04-17T18:41:31:Saving lastConsumption
+2024-04-17T18:41:31:Saving currProduction
+2024-04-17T18:41:31:Saving lastProduction
+2024-04-17T18:41:31:Saving landMassNames
+2024-04-17T18:41:31:Saving JobPriorityOrder
+2024-04-17T18:41:31:Saving JobFilledAvailable
+2024-04-17T18:41:31:Saving CanUseTools
+2024-04-17T18:41:31:Saving usedCheats
+2024-04-17T18:41:31:Saving nameForOldAgeDeath
+2024-04-17T18:41:31:Saving deathsThisYear
+2024-04-17T18:41:31:Saving poorHealthGracePeriod
+2024-04-17T18:41:31:Saving dockOpenings
+2024-04-17T18:41:31:Saving tourism
+2024-04-17T18:41:31:False
+2024-04-17T18:41:31:Attempting to pack data for: MUFFINMAN(76561198306540024)
+2024-04-17T18:41:31:Client Player (2 MUFFINMAN) (Player) Client Player (2 MUFFINMAN)
+2024-04-17T18:41:31:Running patched player pack method
+2024-04-17T18:41:31:Saving banner system
+2024-04-17T18:41:31:Saving player creativeMode
+2024-04-17T18:41:31:Saving player upgrades
+2024-04-17T18:41:31:Saving player bannerIdx
+2024-04-17T18:41:31:Saving player WorkersArray
+2024-04-17T18:41:31:Saving player HomelessData
+2024-04-17T18:41:31:Saving player structures
+2024-04-17T18:41:31:Saving town happiness
+2024-04-17T18:41:31:Saving town happiness infos
+2024-04-17T18:41:31:Saving town integrity infos
+2024-04-17T18:41:31:Saving town landmass owner
+2024-04-17T18:41:31:Saving town bDidFirstFire
+2024-04-17T18:41:31:Saving difficulty
+2024-04-17T18:41:31:Saving CurrYear
+2024-04-17T18:41:31:Saving timeAtFailHappiness
+2024-04-17T18:41:31:Saving happinessMods
+2024-04-17T18:41:31:Saving currConsumption
+2024-04-17T18:41:31:Saving lastConsumption
+2024-04-17T18:41:31:Saving currProduction
+2024-04-17T18:41:31:Saving lastProduction
+2024-04-17T18:41:31:Saving landMassNames
+2024-04-17T18:41:31:Saving JobPriorityOrder
+2024-04-17T18:41:31:Saving JobFilledAvailable
+2024-04-17T18:41:31:Saving CanUseTools
+2024-04-17T18:41:31:Saving usedCheats
+2024-04-17T18:41:31:Saving nameForOldAgeDeath
+2024-04-17T18:41:31:Saving deathsThisYear
+2024-04-17T18:41:31:Saving poorHealthGracePeriod
+2024-04-17T18:41:31:Saving dockOpenings
+2024-04-17T18:41:31:Saving tourism
+2024-04-17T18:41:31:False
+2024-04-17T18:41:43:Received add villager packet from MUFFINMAN(2)
+2024-04-17T18:41:43:Teleporting villager to (101.0, 0.0, 84.0)
+2024-04-17T18:41:43:Received add villager packet from MUFFINMAN(2)
+2024-04-17T18:41:43:Teleporting villager to (101.0, 0.0, 84.0)
+2024-04-17T18:41:43:Received add villager packet from MUFFINMAN(2)
+2024-04-17T18:41:43:Teleporting villager to (101.0, 0.0, 83.0)
+2024-04-17T18:42:22:Received place building packet for road from MUFFINMAN(2)
+2024-04-17T18:42:22:Building init
+2024-04-17T18:42:22:Building unpack
+2024-04-17T18:42:22:Client Player (2 MUFFINMAN) (Player)
+2024-04-17T18:42:22:False
+2024-04-17T18:42:22:3
+2024-04-17T18:42:22:Player add Building unpacked
+2024-04-17T18:42:22:1
+2024-04-17T18:42:22:2
+2024-04-17T18:42:22:3
+2024-04-17T18:42:22:4
+2024-04-17T18:42:22:5
+2024-04-17T18:42:22:6
+2024-04-17T18:42:22:7
+2024-04-17T18:42:22:8
+2024-04-17T18:42:22:9
+2024-04-17T18:42:22:10
+2024-04-17T18:42:22:11
+2024-04-17T18:42:22:Error in add building hook
+2024-04-17T18:42:22:Object reference not set to an instance of an object
+2024-04-17T18:42:22:  at KCM.Main+PlayerAddBuildingHook.Prefix (Player __instance, Building b) [0x001ae] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+2024-04-17T18:42:22:Error handling packet 71 WorldPlace from 2
+2024-04-17T18:42:22:----------------------- Main exception -----------------------
+2024-04-17T18:42:22:System.NullReferenceException: Object reference not set to an instance of an object
+  at (wrapper dynamic-method) Player.AddBuilding_Patch3(object,Building)
+  at KCM.Packets.Game.GameWorld.WorldPlace.PlaceBuilding () [0x00247] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Game.GameWorld.WorldPlace.HandlePacketClient () [0x00019] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Handlers.PacketHandler.HandlePacket (System.Object sender, Riptide.MessageReceivedEventArgs messageReceived) [0x00023] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+2024-04-17T18:42:22:----------------------- Main message -----------------------
+2024-04-17T18:42:22:Object reference not set to an instance of an object
+2024-04-17T18:42:22:----------------------- Main stacktrace -----------------------
+2024-04-17T18:42:22:  at (wrapper dynamic-method) Player.AddBuilding_Patch3(object,Building)
+  at KCM.Packets.Game.GameWorld.WorldPlace.PlaceBuilding () [0x00247] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Game.GameWorld.WorldPlace.HandlePacketClient () [0x00019] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Handlers.PacketHandler.HandlePacket (System.Object sender, Riptide.MessageReceivedEventArgs messageReceived) [0x00023] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+2024-04-17T18:42:23:Get save dir
+2024-04-17T18:42:23:Get save dir
+2024-04-17T18:42:23:Saving data for 2 (2) players.
+2024-04-17T18:42:23:Attempting to pack data for: Shadowfita(76561198327621045)
+2024-04-17T18:42:23:Player (Player) Player
+2024-04-17T18:42:23:Running patched player pack method
+2024-04-17T18:42:23:Saving banner system
+2024-04-17T18:42:23:Saving player creativeMode
+2024-04-17T18:42:23:Saving player upgrades
+2024-04-17T18:42:23:Saving player bannerIdx
+2024-04-17T18:42:23:Saving player WorkersArray
+2024-04-17T18:42:23:Saving player HomelessData
+2024-04-17T18:42:23:Saving player structures
+2024-04-17T18:42:23:Saving town happiness
+2024-04-17T18:42:23:Saving town happiness infos
+2024-04-17T18:42:23:Saving town integrity infos
+2024-04-17T18:42:23:Saving town landmass owner
+2024-04-17T18:42:23:Saving town bDidFirstFire
+2024-04-17T18:42:23:Saving town tax rates
+2024-04-17T18:42:23:Saving difficulty
+2024-04-17T18:42:23:Saving CurrYear
+2024-04-17T18:42:23:Saving timeAtFailHappiness
+2024-04-17T18:42:23:Saving happinessMods
+2024-04-17T18:42:23:Saving currConsumption
+2024-04-17T18:42:23:Saving lastConsumption
+2024-04-17T18:42:23:Saving currProduction
+2024-04-17T18:42:23:Saving lastProduction
+2024-04-17T18:42:23:Saving landMassNames
+2024-04-17T18:42:23:Saving JobPriorityOrder
+2024-04-17T18:42:23:Saving JobFilledAvailable
+2024-04-17T18:42:23:Saving CanUseTools
+2024-04-17T18:42:23:Saving usedCheats
+2024-04-17T18:42:23:Saving nameForOldAgeDeath
+2024-04-17T18:42:23:Saving deathsThisYear
+2024-04-17T18:42:23:Saving poorHealthGracePeriod
+2024-04-17T18:42:23:Saving dockOpenings
+2024-04-17T18:42:23:Saving tourism
+2024-04-17T18:42:23:False
+2024-04-17T18:42:23:Attempting to pack data for: MUFFINMAN(76561198306540024)
+2024-04-17T18:42:23:Client Player (2 MUFFINMAN) (Player) Client Player (2 MUFFINMAN)
+2024-04-17T18:42:23:Running patched player pack method
+2024-04-17T18:42:23:Saving banner system
+2024-04-17T18:42:23:Saving player creativeMode
+2024-04-17T18:42:23:Saving player upgrades
+2024-04-17T18:42:23:Saving player bannerIdx
+2024-04-17T18:42:23:Saving player WorkersArray
+2024-04-17T18:42:23:Saving player HomelessData
+2024-04-17T18:42:23:Saving player structures
+2024-04-17T18:42:23:Saving town happiness
+2024-04-17T18:42:23:Saving town happiness infos
+2024-04-17T18:42:23:Saving town integrity infos
+2024-04-17T18:42:23:Saving town landmass owner
+2024-04-17T18:42:23:Saving town bDidFirstFire
+2024-04-17T18:42:23:Saving difficulty
+2024-04-17T18:42:23:Saving CurrYear
+2024-04-17T18:42:23:Saving timeAtFailHappiness
+2024-04-17T18:42:23:Saving happinessMods
+2024-04-17T18:42:23:Saving currConsumption
+2024-04-17T18:42:23:Saving lastConsumption
+2024-04-17T18:42:23:Saving currProduction
+2024-04-17T18:42:23:Saving lastProduction
+2024-04-17T18:42:23:Saving landMassNames
+2024-04-17T18:42:23:Saving JobPriorityOrder
+2024-04-17T18:42:23:Saving JobFilledAvailable
+2024-04-17T18:42:23:Saving CanUseTools
+2024-04-17T18:42:23:Saving usedCheats
+2024-04-17T18:42:23:Saving nameForOldAgeDeath
+2024-04-17T18:42:23:Saving deathsThisYear
+2024-04-17T18:42:23:Saving poorHealthGracePeriod
+2024-04-17T18:42:23:Saving dockOpenings
+2024-04-17T18:42:23:Saving tourism
+2024-04-17T18:42:23:False
+2024-04-17T18:42:24:Received place building packet for road from MUFFINMAN(2)
+2024-04-17T18:42:24:Building init
+2024-04-17T18:42:24:Building unpack
+2024-04-17T18:42:24:Client Player (2 MUFFINMAN) (Player)
+2024-04-17T18:42:24:False
+2024-04-17T18:42:24:3
+2024-04-17T18:42:24:Player add Building unpacked
+2024-04-17T18:42:24:1
+2024-04-17T18:42:24:2
+2024-04-17T18:42:24:3
+2024-04-17T18:42:24:4
+2024-04-17T18:42:24:5
+2024-04-17T18:42:24:6
+2024-04-17T18:42:24:7
+2024-04-17T18:42:24:8
+2024-04-17T18:42:24:9
+2024-04-17T18:42:24:10
+2024-04-17T18:42:24:11
+2024-04-17T18:42:24:Error in add building hook
+2024-04-17T18:42:24:Object reference not set to an instance of an object
+2024-04-17T18:42:24:  at KCM.Main+PlayerAddBuildingHook.Prefix (Player __instance, Building b) [0x001ae] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+2024-04-17T18:42:24:Error handling packet 71 WorldPlace from 2
+2024-04-17T18:42:24:----------------------- Main exception -----------------------
+2024-04-17T18:42:24:System.NullReferenceException: Object reference not set to an instance of an object
+  at (wrapper dynamic-method) Player.AddBuilding_Patch3(object,Building)
+  at KCM.Packets.Game.GameWorld.WorldPlace.PlaceBuilding () [0x00247] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Game.GameWorld.WorldPlace.HandlePacketClient () [0x00019] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Handlers.PacketHandler.HandlePacket (System.Object sender, Riptide.MessageReceivedEventArgs messageReceived) [0x00023] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+2024-04-17T18:42:24:----------------------- Main message -----------------------
+2024-04-17T18:42:24:Object reference not set to an instance of an object
+2024-04-17T18:42:24:----------------------- Main stacktrace -----------------------
+2024-04-17T18:42:24:  at (wrapper dynamic-method) Player.AddBuilding_Patch3(object,Building)
+  at KCM.Packets.Game.GameWorld.WorldPlace.PlaceBuilding () [0x00247] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Game.GameWorld.WorldPlace.HandlePacketClient () [0x00019] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Handlers.PacketHandler.HandlePacket (System.Object sender, Riptide.MessageReceivedEventArgs messageReceived) [0x00023] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+2024-04-17T18:42:25:Received add villager packet from MUFFINMAN(2)
+2024-04-17T18:42:25:Teleporting villager to (101.0, 0.0, 83.0)
+2024-04-17T18:42:25:Received add villager packet from MUFFINMAN(2)
+2024-04-17T18:42:25:Teleporting villager to (101.0, 0.0, 83.0)
+2024-04-17T18:42:25:Received add villager packet from MUFFINMAN(2)
+2024-04-17T18:42:25:Teleporting villager to (101.0, 0.0, 83.0)
+2024-04-17T18:42:25:Received add villager packet from MUFFINMAN(2)
+2024-04-17T18:42:25:Teleporting villager to (101.0, 0.0, 83.0)
+2024-04-17T18:42:25:Received add villager packet from MUFFINMAN(2)
+2024-04-17T18:42:25:Teleporting villager to (101.0, 0.0, 82.0)
+2024-04-17T18:42:29:Received place building packet for forester from MUFFINMAN(2)
+2024-04-17T18:42:29:Building init
+2024-04-17T18:42:29:Building unpack
+2024-04-17T18:42:29:Client Player (2 MUFFINMAN) (Player)
+2024-04-17T18:42:29:False
+2024-04-17T18:42:29:3
+2024-04-17T18:42:29:Player add Building unpacked
+2024-04-17T18:42:29:1
+2024-04-17T18:42:29:2
+2024-04-17T18:42:29:3
+2024-04-17T18:42:29:4
+2024-04-17T18:42:29:5
+2024-04-17T18:42:29:6
+2024-04-17T18:42:29:7
+2024-04-17T18:42:29:8
+2024-04-17T18:42:29:9
+2024-04-17T18:42:29:10
+2024-04-17T18:42:29:11
+2024-04-17T18:42:29:Error in add building hook
+2024-04-17T18:42:29:Object reference not set to an instance of an object
+2024-04-17T18:42:29:  at KCM.Main+PlayerAddBuildingHook.Prefix (Player __instance, Building b) [0x001ae] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+2024-04-17T18:42:29:Error handling packet 71 WorldPlace from 2
+2024-04-17T18:42:29:----------------------- Main exception -----------------------
+2024-04-17T18:42:29:System.NullReferenceException: Object reference not set to an instance of an object
+  at (wrapper dynamic-method) Player.AddBuilding_Patch3(object,Building)
+  at KCM.Packets.Game.GameWorld.WorldPlace.PlaceBuilding () [0x00247] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Game.GameWorld.WorldPlace.HandlePacketClient () [0x00019] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Handlers.PacketHandler.HandlePacket (System.Object sender, Riptide.MessageReceivedEventArgs messageReceived) [0x00023] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+2024-04-17T18:42:29:----------------------- Main message -----------------------
+2024-04-17T18:42:29:Object reference not set to an instance of an object
+2024-04-17T18:42:29:----------------------- Main stacktrace -----------------------
+2024-04-17T18:42:29:  at (wrapper dynamic-method) Player.AddBuilding_Patch3(object,Building)
+  at KCM.Packets.Game.GameWorld.WorldPlace.PlaceBuilding () [0x00247] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Game.GameWorld.WorldPlace.HandlePacketClient () [0x00019] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Handlers.PacketHandler.HandlePacket (System.Object sender, Riptide.MessageReceivedEventArgs messageReceived) [0x00023] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+2024-04-17T18:42:33:1
+2024-04-17T18:42:33:2
+2024-04-17T18:42:33:3
+2024-04-17T18:42:33:4
+2024-04-17T18:42:33:5
+2024-04-17T18:42:33:6
+2024-04-17T18:42:33:7
+2024-04-17T18:42:33:8
+2024-04-17T18:42:33:9
+2024-04-17T18:42:33:10
+2024-04-17T18:42:33:11
+2024-04-17T18:42:33:12
+2024-04-17T18:42:33:13
+2024-04-17T18:42:33:14
+2024-04-17T18:42:33:Called by: AcceptCursorObjPlacement
+2024-04-17T18:42:33:1 Shadowfita - Sending building place packet for road
+2024-04-17T18:42:33:1
+2024-04-17T18:42:33:2
+2024-04-17T18:42:33:3
+2024-04-17T18:42:33:4
+2024-04-17T18:42:33:5
+2024-04-17T18:42:33:6
+2024-04-17T18:42:33:7
+2024-04-17T18:42:33:8
+2024-04-17T18:42:33:9
+2024-04-17T18:42:33:10
+2024-04-17T18:42:33:11
+2024-04-17T18:42:33:12
+2024-04-17T18:42:33:13
+2024-04-17T18:42:33:14
+2024-04-17T18:42:33:Called by: AcceptCursorObjPlacement
+2024-04-17T18:42:33:1 Shadowfita - Sending building place packet for road
+2024-04-17T18:42:33:1
+2024-04-17T18:42:33:2
+2024-04-17T18:42:33:3
+2024-04-17T18:42:33:4
+2024-04-17T18:42:33:5
+2024-04-17T18:42:33:6
+2024-04-17T18:42:33:7
+2024-04-17T18:42:33:8
+2024-04-17T18:42:33:9
+2024-04-17T18:42:33:10
+2024-04-17T18:42:33:11
+2024-04-17T18:42:33:12
+2024-04-17T18:42:33:13
+2024-04-17T18:42:33:14
+2024-04-17T18:42:33:Called by: AcceptCursorObjPlacement
+2024-04-17T18:42:33:1 Shadowfita - Sending building place packet for road
+2024-04-17T18:42:33:1
+2024-04-17T18:42:33:2
+2024-04-17T18:42:33:3
+2024-04-17T18:42:33:4
+2024-04-17T18:42:33:5
+2024-04-17T18:42:33:6
+2024-04-17T18:42:33:7
+2024-04-17T18:42:33:8
+2024-04-17T18:42:33:9
+2024-04-17T18:42:33:10
+2024-04-17T18:42:33:11
+2024-04-17T18:42:33:12
+2024-04-17T18:42:33:13
+2024-04-17T18:42:33:14
+2024-04-17T18:42:33:Called by: AcceptCursorObjPlacement
+2024-04-17T18:42:33:1 Shadowfita - Sending building place packet for road
+2024-04-17T18:42:33:1
+2024-04-17T18:42:33:2
+2024-04-17T18:42:33:3
+2024-04-17T18:42:33:4
+2024-04-17T18:42:33:5
+2024-04-17T18:42:33:6
+2024-04-17T18:42:33:7
+2024-04-17T18:42:33:8
+2024-04-17T18:42:33:9
+2024-04-17T18:42:33:10
+2024-04-17T18:42:33:11
+2024-04-17T18:42:33:12
+2024-04-17T18:42:33:13
+2024-04-17T18:42:33:14
+2024-04-17T18:42:33:Called by: AcceptCursorObjPlacement
+2024-04-17T18:42:33:1 Shadowfita - Sending building place packet for road
+2024-04-17T18:42:33:1
+2024-04-17T18:42:33:2
+2024-04-17T18:42:33:3
+2024-04-17T18:42:33:4
+2024-04-17T18:42:33:5
+2024-04-17T18:42:33:6
+2024-04-17T18:42:33:7
+2024-04-17T18:42:33:8
+2024-04-17T18:42:33:9
+2024-04-17T18:42:33:10
+2024-04-17T18:42:33:11
+2024-04-17T18:42:33:12
+2024-04-17T18:42:33:13
+2024-04-17T18:42:33:14
+2024-04-17T18:42:33:Called by: AcceptCursorObjPlacement
+2024-04-17T18:42:33:1 Shadowfita - Sending building place packet for road
+2024-04-17T18:42:33:1
+2024-04-17T18:42:33:2
+2024-04-17T18:42:33:3
+2024-04-17T18:42:33:4
+2024-04-17T18:42:33:5
+2024-04-17T18:42:33:6
+2024-04-17T18:42:33:7
+2024-04-17T18:42:33:8
+2024-04-17T18:42:33:9
+2024-04-17T18:42:33:10
+2024-04-17T18:42:33:11
+2024-04-17T18:42:33:12
+2024-04-17T18:42:33:13
+2024-04-17T18:42:33:14
+2024-04-17T18:42:33:Called by: AcceptCursorObjPlacement
+2024-04-17T18:42:33:1 Shadowfita - Sending building place packet for road
+2024-04-17T18:42:33:1
+2024-04-17T18:42:33:2
+2024-04-17T18:42:33:3
+2024-04-17T18:42:33:4
+2024-04-17T18:42:33:5
+2024-04-17T18:42:33:6
+2024-04-17T18:42:33:7
+2024-04-17T18:42:33:8
+2024-04-17T18:42:33:9
+2024-04-17T18:42:33:10
+2024-04-17T18:42:33:11
+2024-04-17T18:42:33:12
+2024-04-17T18:42:33:13
+2024-04-17T18:42:33:14
+2024-04-17T18:42:33:Called by: AcceptCursorObjPlacement
+2024-04-17T18:42:33:1 Shadowfita - Sending building place packet for road
+2024-04-17T18:42:33:Observer created for Building with 15 fields, 0 properties, and 0 non-primitive list variables
+2024-04-17T18:42:33:Observer created for Building with 15 fields, 0 properties, and 0 non-primitive list variables
+2024-04-17T18:42:33:Observer created for Building with 15 fields, 0 properties, and 0 non-primitive list variables
+2024-04-17T18:42:33:Observer created for Building with 15 fields, 0 properties, and 0 non-primitive list variables
+2024-04-17T18:42:33:Observer created for Building with 15 fields, 0 properties, and 0 non-primitive list variables
+2024-04-17T18:42:33:Observer created for Building with 15 fields, 0 properties, and 0 non-primitive list variables
+2024-04-17T18:42:33:Observer created for Building with 15 fields, 0 properties, and 0 non-primitive list variables
+2024-04-17T18:42:33:Observer created for Building with 15 fields, 0 properties, and 0 non-primitive list variables
+2024-04-17T18:42:36:Overridden complete build
+2024-04-17T18:42:38:Overridden complete build
+2024-04-17T18:42:39:Overridden complete build
+2024-04-17T18:42:39:Overridden complete build
+2024-04-17T18:42:39:Overridden complete build
+2024-04-17T18:42:40:Overridden complete build
+2024-04-17T18:42:40:Overridden complete build
+2024-04-17T18:42:40:Overridden complete build
+2024-04-17T18:42:46:Get save dir
+2024-04-17T18:42:46:Get save dir
+2024-04-17T18:42:46:Saving data for 2 (2) players.
+2024-04-17T18:42:46:Attempting to pack data for: Shadowfita(76561198327621045)
+2024-04-17T18:42:46:Player (Player) Player
+2024-04-17T18:42:46:Running patched player pack method
+2024-04-17T18:42:46:Saving banner system
+2024-04-17T18:42:46:Saving player creativeMode
+2024-04-17T18:42:46:Saving player upgrades
+2024-04-17T18:42:46:Saving player bannerIdx
+2024-04-17T18:42:46:Saving player WorkersArray
+2024-04-17T18:42:46:Saving player HomelessData
+2024-04-17T18:42:46:Saving player structures
+2024-04-17T18:42:46:Saving town happiness
+2024-04-17T18:42:46:Saving town happiness infos
+2024-04-17T18:42:46:Saving town integrity infos
+2024-04-17T18:42:46:Saving town landmass owner
+2024-04-17T18:42:46:Saving town bDidFirstFire
+2024-04-17T18:42:46:Saving town tax rates
+2024-04-17T18:42:46:Saving difficulty
+2024-04-17T18:42:46:Saving CurrYear
+2024-04-17T18:42:46:Saving timeAtFailHappiness
+2024-04-17T18:42:46:Saving happinessMods
+2024-04-17T18:42:46:Saving currConsumption
+2024-04-17T18:42:46:Saving lastConsumption
+2024-04-17T18:42:46:Saving currProduction
+2024-04-17T18:42:46:Saving lastProduction
+2024-04-17T18:42:46:Saving landMassNames
+2024-04-17T18:42:46:Saving JobPriorityOrder
+2024-04-17T18:42:46:Saving JobFilledAvailable
+2024-04-17T18:42:46:Saving CanUseTools
+2024-04-17T18:42:46:Saving usedCheats
+2024-04-17T18:42:46:Saving nameForOldAgeDeath
+2024-04-17T18:42:46:Saving deathsThisYear
+2024-04-17T18:42:46:Saving poorHealthGracePeriod
+2024-04-17T18:42:46:Saving dockOpenings
+2024-04-17T18:42:46:Saving tourism
+2024-04-17T18:42:46:False
+2024-04-17T18:42:46:Attempting to pack data for: MUFFINMAN(76561198306540024)
+2024-04-17T18:42:46:Client Player (2 MUFFINMAN) (Player) Client Player (2 MUFFINMAN)
+2024-04-17T18:42:46:Running patched player pack method
+2024-04-17T18:42:46:Saving banner system
+2024-04-17T18:42:46:Saving player creativeMode
+2024-04-17T18:42:46:Saving player upgrades
+2024-04-17T18:42:46:Saving player bannerIdx
+2024-04-17T18:42:46:Saving player WorkersArray
+2024-04-17T18:42:46:Saving player HomelessData
+2024-04-17T18:42:46:Saving player structures
+2024-04-17T18:42:46:Saving town happiness
+2024-04-17T18:42:46:Saving town happiness infos
+2024-04-17T18:42:46:Saving town integrity infos
+2024-04-17T18:42:46:Saving town landmass owner
+2024-04-17T18:42:46:Saving town bDidFirstFire
+2024-04-17T18:42:46:Saving difficulty
+2024-04-17T18:42:46:Saving CurrYear
+2024-04-17T18:42:46:Saving timeAtFailHappiness
+2024-04-17T18:42:46:Saving happinessMods
+2024-04-17T18:42:46:Saving currConsumption
+2024-04-17T18:42:46:Saving lastConsumption
+2024-04-17T18:42:46:Saving currProduction
+2024-04-17T18:42:46:Saving lastProduction
+2024-04-17T18:42:46:Saving landMassNames
+2024-04-17T18:42:46:Saving JobPriorityOrder
+2024-04-17T18:42:46:Saving JobFilledAvailable
+2024-04-17T18:42:46:Saving CanUseTools
+2024-04-17T18:42:46:Saving usedCheats
+2024-04-17T18:42:46:Saving nameForOldAgeDeath
+2024-04-17T18:42:46:Saving deathsThisYear
+2024-04-17T18:42:46:Saving poorHealthGracePeriod
+2024-04-17T18:42:46:Saving dockOpenings
+2024-04-17T18:42:46:Saving tourism
+2024-04-17T18:42:46:False
+2024-04-17T18:43:05:Received place building packet for well from MUFFINMAN(2)
+2024-04-17T18:43:05:Building init
+2024-04-17T18:43:05:Building unpack
+2024-04-17T18:43:05:Client Player (2 MUFFINMAN) (Player)
+2024-04-17T18:43:05:False
+2024-04-17T18:43:05:3
+2024-04-17T18:43:05:Player add Building unpacked
+2024-04-17T18:43:05:1
+2024-04-17T18:43:05:2
+2024-04-17T18:43:05:3
+2024-04-17T18:43:05:4
+2024-04-17T18:43:05:5
+2024-04-17T18:43:05:6
+2024-04-17T18:43:05:7
+2024-04-17T18:43:05:8
+2024-04-17T18:43:05:9
+2024-04-17T18:43:05:10
+2024-04-17T18:43:05:11
+2024-04-17T18:43:05:Error in add building hook
+2024-04-17T18:43:05:Object reference not set to an instance of an object
+2024-04-17T18:43:05:  at KCM.Main+PlayerAddBuildingHook.Prefix (Player __instance, Building b) [0x001ae] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+2024-04-17T18:43:05:Error handling packet 71 WorldPlace from 2
+2024-04-17T18:43:05:----------------------- Main exception -----------------------
+2024-04-17T18:43:05:System.NullReferenceException: Object reference not set to an instance of an object
+  at (wrapper dynamic-method) Player.AddBuilding_Patch3(object,Building)
+  at KCM.Packets.Game.GameWorld.WorldPlace.PlaceBuilding () [0x00247] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Game.GameWorld.WorldPlace.HandlePacketClient () [0x00019] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Handlers.PacketHandler.HandlePacket (System.Object sender, Riptide.MessageReceivedEventArgs messageReceived) [0x00023] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+2024-04-17T18:43:05:----------------------- Main message -----------------------
+2024-04-17T18:43:05:Object reference not set to an instance of an object
+2024-04-17T18:43:05:----------------------- Main stacktrace -----------------------
+2024-04-17T18:43:05:  at (wrapper dynamic-method) Player.AddBuilding_Patch3(object,Building)
+  at KCM.Packets.Game.GameWorld.WorldPlace.PlaceBuilding () [0x00247] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Game.GameWorld.WorldPlace.HandlePacketClient () [0x00019] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Handlers.PacketHandler.HandlePacket (System.Object sender, Riptide.MessageReceivedEventArgs messageReceived) [0x00023] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+2024-04-17T18:43:05:1
+2024-04-17T18:43:05:2
+2024-04-17T18:43:05:3
+2024-04-17T18:43:05:4
+2024-04-17T18:43:05:5
+2024-04-17T18:43:05:6
+2024-04-17T18:43:05:7
+2024-04-17T18:43:05:8
+2024-04-17T18:43:05:9
+2024-04-17T18:43:05:10
+2024-04-17T18:43:05:11
+2024-04-17T18:43:05:12
+2024-04-17T18:43:05:13
+2024-04-17T18:43:05:14
+2024-04-17T18:43:05:Called by: AcceptCursorObjPlacement
+2024-04-17T18:43:05:1 Shadowfita - Sending building place packet for road
+2024-04-17T18:43:05:Observer created for Building with 15 fields, 0 properties, and 0 non-primitive list variables
+2024-04-17T18:43:06:1
+2024-04-17T18:43:06:2
+2024-04-17T18:43:06:3
+2024-04-17T18:43:06:4
+2024-04-17T18:43:06:5
+2024-04-17T18:43:06:6
+2024-04-17T18:43:06:7
+2024-04-17T18:43:06:8
+2024-04-17T18:43:06:9
+2024-04-17T18:43:06:10
+2024-04-17T18:43:06:11
+2024-04-17T18:43:06:12
+2024-04-17T18:43:06:13
+2024-04-17T18:43:06:14
+2024-04-17T18:43:06:Called by: AcceptCursorObjPlacement
+2024-04-17T18:43:06:1 Shadowfita - Sending building place packet for road
+2024-04-17T18:43:06:Observer created for Building with 15 fields, 0 properties, and 0 non-primitive list variables
+2024-04-17T18:43:09:Received place building packet for smallstockpile from MUFFINMAN(2)
+2024-04-17T18:43:09:Building init
+2024-04-17T18:43:09:Building unpack
+2024-04-17T18:43:09:Client Player (2 MUFFINMAN) (Player)
+2024-04-17T18:43:09:False
+2024-04-17T18:43:09:3
+2024-04-17T18:43:09:Player add Building unpacked
+2024-04-17T18:43:09:1
+2024-04-17T18:43:09:2
+2024-04-17T18:43:09:3
+2024-04-17T18:43:09:4
+2024-04-17T18:43:09:5
+2024-04-17T18:43:09:6
+2024-04-17T18:43:09:7
+2024-04-17T18:43:09:8
+2024-04-17T18:43:09:9
+2024-04-17T18:43:09:10
+2024-04-17T18:43:09:11
+2024-04-17T18:43:09:Error in add building hook
+2024-04-17T18:43:09:Object reference not set to an instance of an object
+2024-04-17T18:43:09:  at KCM.Main+PlayerAddBuildingHook.Prefix (Player __instance, Building b) [0x001ae] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+2024-04-17T18:43:09:Error handling packet 71 WorldPlace from 2
+2024-04-17T18:43:09:----------------------- Main exception -----------------------
+2024-04-17T18:43:09:System.NullReferenceException: Object reference not set to an instance of an object
+  at (wrapper dynamic-method) Player.AddBuilding_Patch3(object,Building)
+  at KCM.Packets.Game.GameWorld.WorldPlace.PlaceBuilding () [0x00247] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Game.GameWorld.WorldPlace.HandlePacketClient () [0x00019] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Handlers.PacketHandler.HandlePacket (System.Object sender, Riptide.MessageReceivedEventArgs messageReceived) [0x00023] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+2024-04-17T18:43:09:----------------------- Main message -----------------------
+2024-04-17T18:43:09:Object reference not set to an instance of an object
+2024-04-17T18:43:09:----------------------- Main stacktrace -----------------------
+2024-04-17T18:43:09:  at (wrapper dynamic-method) Player.AddBuilding_Patch3(object,Building)
+  at KCM.Packets.Game.GameWorld.WorldPlace.PlaceBuilding () [0x00247] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Game.GameWorld.WorldPlace.HandlePacketClient () [0x00019] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Handlers.PacketHandler.HandlePacket (System.Object sender, Riptide.MessageReceivedEventArgs messageReceived) [0x00023] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+2024-04-17T18:43:10:Received add villager packet from MUFFINMAN(2)
+2024-04-17T18:43:10:Teleporting villager to (101.0, 0.0, 82.0)
+2024-04-17T18:43:10:Received add villager packet from MUFFINMAN(2)
+2024-04-17T18:43:10:Teleporting villager to (101.0, 0.0, 82.0)
+2024-04-17T18:43:10:Received add villager packet from MUFFINMAN(2)
+2024-04-17T18:43:10:Teleporting villager to (101.0, 0.0, 82.0)
+2024-04-17T18:43:15:Overridden complete build
+2024-04-17T18:43:17:Received place building packet for largehouse from MUFFINMAN(2)
+2024-04-17T18:43:17:Building init
+2024-04-17T18:43:17:Building unpack
+2024-04-17T18:43:17:Client Player (2 MUFFINMAN) (Player)
+2024-04-17T18:43:17:False
+2024-04-17T18:43:17:3
+2024-04-17T18:43:17:Player add Building unpacked
+2024-04-17T18:43:17:1
+2024-04-17T18:43:17:2
+2024-04-17T18:43:17:3
+2024-04-17T18:43:17:4
+2024-04-17T18:43:17:Error in add building hook
+2024-04-17T18:43:17:Index was outside the bounds of the array.
+2024-04-17T18:43:17:  at KCM.Main+PlayerAddBuildingHook.Prefix (Player __instance, Building b) [0x000b2] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+2024-04-17T18:43:17:Error handling packet 71 WorldPlace from 2
+2024-04-17T18:43:17:----------------------- Main exception -----------------------
+2024-04-17T18:43:17:System.IndexOutOfRangeException: Index was outside the bounds of the array.
+  at (wrapper dynamic-method) Player.AddBuilding_Patch3(object,Building)
+  at KCM.Packets.Game.GameWorld.WorldPlace.PlaceBuilding () [0x00247] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Game.GameWorld.WorldPlace.HandlePacketClient () [0x00019] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Handlers.PacketHandler.HandlePacket (System.Object sender, Riptide.MessageReceivedEventArgs messageReceived) [0x00023] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+2024-04-17T18:43:17:----------------------- Main message -----------------------
+2024-04-17T18:43:17:Index was outside the bounds of the array.
+2024-04-17T18:43:17:----------------------- Main stacktrace -----------------------
+2024-04-17T18:43:17:  at (wrapper dynamic-method) Player.AddBuilding_Patch3(object,Building)
+  at KCM.Packets.Game.GameWorld.WorldPlace.PlaceBuilding () [0x00247] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Game.GameWorld.WorldPlace.HandlePacketClient () [0x00019] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Handlers.PacketHandler.HandlePacket (System.Object sender, Riptide.MessageReceivedEventArgs messageReceived) [0x00023] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+2024-04-17T18:43:17:1
+2024-04-17T18:43:17:2
+2024-04-17T18:43:17:3
+2024-04-17T18:43:17:4
+2024-04-17T18:43:17:5
+2024-04-17T18:43:17:6
+2024-04-17T18:43:17:7
+2024-04-17T18:43:17:8
+2024-04-17T18:43:17:9
+2024-04-17T18:43:17:10
+2024-04-17T18:43:17:11
+2024-04-17T18:43:17:12
+2024-04-17T18:43:17:13
+2024-04-17T18:43:17:14
+2024-04-17T18:43:17:Called by: AcceptCursorObjPlacement
+2024-04-17T18:43:17:1 Shadowfita - Sending building place packet for quarry
+2024-04-17T18:43:17:Observer created for Building with 15 fields, 0 properties, and 0 non-primitive list variables
+2024-04-17T18:43:18:Overridden complete build
+2024-04-17T18:43:18:1
+2024-04-17T18:43:18:2
+2024-04-17T18:43:18:3
+2024-04-17T18:43:18:4
+2024-04-17T18:43:18:5
+2024-04-17T18:43:18:6
+2024-04-17T18:43:18:7
+2024-04-17T18:43:18:8
+2024-04-17T18:43:18:9
+2024-04-17T18:43:18:10
+2024-04-17T18:43:18:11
+2024-04-17T18:43:18:12
+2024-04-17T18:43:18:13
+2024-04-17T18:43:18:14
+2024-04-17T18:43:18:Called by: AcceptCursorObjPlacement
+2024-04-17T18:43:18:1 Shadowfita - Sending building place packet for quarry
+2024-04-17T18:43:18:Observer created for Building with 15 fields, 0 properties, and 0 non-primitive list variables
+2024-04-17T18:43:24:1
+2024-04-17T18:43:24:2
+2024-04-17T18:43:24:3
+2024-04-17T18:43:24:4
+2024-04-17T18:43:24:5
+2024-04-17T18:43:24:6
+2024-04-17T18:43:24:7
+2024-04-17T18:43:24:8
+2024-04-17T18:43:24:9
+2024-04-17T18:43:24:10
+2024-04-17T18:43:24:11
+2024-04-17T18:43:24:12
+2024-04-17T18:43:24:13
+2024-04-17T18:43:24:14
+2024-04-17T18:43:24:Called by: AcceptCursorObjPlacement
+2024-04-17T18:43:24:1 Shadowfita - Sending building place packet for smallhouse
+2024-04-17T18:43:25:Received place building packet for road from MUFFINMAN(2)
+2024-04-17T18:43:25:Building init
+2024-04-17T18:43:25:Building unpack
+2024-04-17T18:43:25:Client Player (2 MUFFINMAN) (Player)
+2024-04-17T18:43:25:False
+2024-04-17T18:43:25:3
+2024-04-17T18:43:25:Player add Building unpacked
+2024-04-17T18:43:25:1
+2024-04-17T18:43:25:2
+2024-04-17T18:43:25:3
+2024-04-17T18:43:25:4
+2024-04-17T18:43:25:5
+2024-04-17T18:43:25:6
+2024-04-17T18:43:25:7
+2024-04-17T18:43:25:8
+2024-04-17T18:43:25:9
+2024-04-17T18:43:25:10
+2024-04-17T18:43:25:11
+2024-04-17T18:43:25:Error in add building hook
+2024-04-17T18:43:25:Object reference not set to an instance of an object
+2024-04-17T18:43:25:  at KCM.Main+PlayerAddBuildingHook.Prefix (Player __instance, Building b) [0x001ae] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+2024-04-17T18:43:25:Error handling packet 71 WorldPlace from 2
+2024-04-17T18:43:25:----------------------- Main exception -----------------------
+2024-04-17T18:43:25:System.NullReferenceException: Object reference not set to an instance of an object
+  at (wrapper dynamic-method) Player.AddBuilding_Patch3(object,Building)
+  at KCM.Packets.Game.GameWorld.WorldPlace.PlaceBuilding () [0x00247] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Game.GameWorld.WorldPlace.HandlePacketClient () [0x00019] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Handlers.PacketHandler.HandlePacket (System.Object sender, Riptide.MessageReceivedEventArgs messageReceived) [0x00023] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+2024-04-17T18:43:25:----------------------- Main message -----------------------
+2024-04-17T18:43:25:Object reference not set to an instance of an object
+2024-04-17T18:43:25:----------------------- Main stacktrace -----------------------
+2024-04-17T18:43:25:  at (wrapper dynamic-method) Player.AddBuilding_Patch3(object,Building)
+  at KCM.Packets.Game.GameWorld.WorldPlace.PlaceBuilding () [0x00247] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Game.GameWorld.WorldPlace.HandlePacketClient () [0x00019] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Handlers.PacketHandler.HandlePacket (System.Object sender, Riptide.MessageReceivedEventArgs messageReceived) [0x00023] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+2024-04-17T18:43:25:Received place building packet for road from MUFFINMAN(2)
+2024-04-17T18:43:25:Building init
+2024-04-17T18:43:25:Building unpack
+2024-04-17T18:43:25:Client Player (2 MUFFINMAN) (Player)
+2024-04-17T18:43:25:False
+2024-04-17T18:43:25:3
+2024-04-17T18:43:25:Player add Building unpacked
+2024-04-17T18:43:25:1
+2024-04-17T18:43:25:2
+2024-04-17T18:43:25:3
+2024-04-17T18:43:25:4
+2024-04-17T18:43:25:5
+2024-04-17T18:43:25:6
+2024-04-17T18:43:25:7
+2024-04-17T18:43:25:8
+2024-04-17T18:43:25:9
+2024-04-17T18:43:25:10
+2024-04-17T18:43:25:11
+2024-04-17T18:43:25:Error in add building hook
+2024-04-17T18:43:25:Object reference not set to an instance of an object
+2024-04-17T18:43:25:  at KCM.Main+PlayerAddBuildingHook.Prefix (Player __instance, Building b) [0x001ae] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+2024-04-17T18:43:25:Error handling packet 71 WorldPlace from 2
+2024-04-17T18:43:25:----------------------- Main exception -----------------------
+2024-04-17T18:43:25:System.NullReferenceException: Object reference not set to an instance of an object
+  at (wrapper dynamic-method) Player.AddBuilding_Patch3(object,Building)
+  at KCM.Packets.Game.GameWorld.WorldPlace.PlaceBuilding () [0x00247] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Game.GameWorld.WorldPlace.HandlePacketClient () [0x00019] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Handlers.PacketHandler.HandlePacket (System.Object sender, Riptide.MessageReceivedEventArgs messageReceived) [0x00023] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+2024-04-17T18:43:25:----------------------- Main message -----------------------
+2024-04-17T18:43:25:Object reference not set to an instance of an object
+2024-04-17T18:43:25:----------------------- Main stacktrace -----------------------
+2024-04-17T18:43:25:  at (wrapper dynamic-method) Player.AddBuilding_Patch3(object,Building)
+  at KCM.Packets.Game.GameWorld.WorldPlace.PlaceBuilding () [0x00247] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Game.GameWorld.WorldPlace.HandlePacketClient () [0x00019] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Handlers.PacketHandler.HandlePacket (System.Object sender, Riptide.MessageReceivedEventArgs messageReceived) [0x00023] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+2024-04-17T18:43:25:Received place building packet for road from MUFFINMAN(2)
+2024-04-17T18:43:25:Building init
+2024-04-17T18:43:25:Building unpack
+2024-04-17T18:43:25:Client Player (2 MUFFINMAN) (Player)
+2024-04-17T18:43:25:False
+2024-04-17T18:43:25:3
+2024-04-17T18:43:25:Player add Building unpacked
+2024-04-17T18:43:25:1
+2024-04-17T18:43:25:2
+2024-04-17T18:43:25:3
+2024-04-17T18:43:25:4
+2024-04-17T18:43:25:5
+2024-04-17T18:43:25:6
+2024-04-17T18:43:25:7
+2024-04-17T18:43:25:8
+2024-04-17T18:43:25:9
+2024-04-17T18:43:25:10
+2024-04-17T18:43:25:11
+2024-04-17T18:43:25:Error in add building hook
+2024-04-17T18:43:25:Object reference not set to an instance of an object
+2024-04-17T18:43:25:  at KCM.Main+PlayerAddBuildingHook.Prefix (Player __instance, Building b) [0x001ae] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+2024-04-17T18:43:25:Error handling packet 71 WorldPlace from 2
+2024-04-17T18:43:25:----------------------- Main exception -----------------------
+2024-04-17T18:43:25:System.NullReferenceException: Object reference not set to an instance of an object
+  at (wrapper dynamic-method) Player.AddBuilding_Patch3(object,Building)
+  at KCM.Packets.Game.GameWorld.WorldPlace.PlaceBuilding () [0x00247] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Game.GameWorld.WorldPlace.HandlePacketClient () [0x00019] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Handlers.PacketHandler.HandlePacket (System.Object sender, Riptide.MessageReceivedEventArgs messageReceived) [0x00023] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+2024-04-17T18:43:25:----------------------- Main message -----------------------
+2024-04-17T18:43:25:Object reference not set to an instance of an object
+2024-04-17T18:43:25:----------------------- Main stacktrace -----------------------
+2024-04-17T18:43:25:  at (wrapper dynamic-method) Player.AddBuilding_Patch3(object,Building)
+  at KCM.Packets.Game.GameWorld.WorldPlace.PlaceBuilding () [0x00247] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Game.GameWorld.WorldPlace.HandlePacketClient () [0x00019] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Handlers.PacketHandler.HandlePacket (System.Object sender, Riptide.MessageReceivedEventArgs messageReceived) [0x00023] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+2024-04-17T18:43:25:Received place building packet for road from MUFFINMAN(2)
+2024-04-17T18:43:25:Building init
+2024-04-17T18:43:25:Building unpack
+2024-04-17T18:43:25:Client Player (2 MUFFINMAN) (Player)
+2024-04-17T18:43:25:False
+2024-04-17T18:43:25:3
+2024-04-17T18:43:25:Player add Building unpacked
+2024-04-17T18:43:25:1
+2024-04-17T18:43:25:2
+2024-04-17T18:43:25:3
+2024-04-17T18:43:25:4
+2024-04-17T18:43:25:5
+2024-04-17T18:43:25:6
+2024-04-17T18:43:25:7
+2024-04-17T18:43:25:8
+2024-04-17T18:43:25:9
+2024-04-17T18:43:25:10
+2024-04-17T18:43:25:11
+2024-04-17T18:43:25:Error in add building hook
+2024-04-17T18:43:25:Object reference not set to an instance of an object
+2024-04-17T18:43:25:  at KCM.Main+PlayerAddBuildingHook.Prefix (Player __instance, Building b) [0x001ae] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+2024-04-17T18:43:25:Error handling packet 71 WorldPlace from 2
+2024-04-17T18:43:25:----------------------- Main exception -----------------------
+2024-04-17T18:43:25:System.NullReferenceException: Object reference not set to an instance of an object
+  at (wrapper dynamic-method) Player.AddBuilding_Patch3(object,Building)
+  at KCM.Packets.Game.GameWorld.WorldPlace.PlaceBuilding () [0x00247] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Game.GameWorld.WorldPlace.HandlePacketClient () [0x00019] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Handlers.PacketHandler.HandlePacket (System.Object sender, Riptide.MessageReceivedEventArgs messageReceived) [0x00023] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+2024-04-17T18:43:25:----------------------- Main message -----------------------
+2024-04-17T18:43:25:Object reference not set to an instance of an object
+2024-04-17T18:43:25:----------------------- Main stacktrace -----------------------
+2024-04-17T18:43:25:  at (wrapper dynamic-method) Player.AddBuilding_Patch3(object,Building)
+  at KCM.Packets.Game.GameWorld.WorldPlace.PlaceBuilding () [0x00247] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Game.GameWorld.WorldPlace.HandlePacketClient () [0x00019] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Handlers.PacketHandler.HandlePacket (System.Object sender, Riptide.MessageReceivedEventArgs messageReceived) [0x00023] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+2024-04-17T18:43:25:Received place building packet for road from MUFFINMAN(2)
+2024-04-17T18:43:25:Building init
+2024-04-17T18:43:25:Building unpack
+2024-04-17T18:43:25:Client Player (2 MUFFINMAN) (Player)
+2024-04-17T18:43:25:False
+2024-04-17T18:43:25:3
+2024-04-17T18:43:25:Player add Building unpacked
+2024-04-17T18:43:25:1
+2024-04-17T18:43:25:2
+2024-04-17T18:43:25:3
+2024-04-17T18:43:25:4
+2024-04-17T18:43:25:5
+2024-04-17T18:43:25:6
+2024-04-17T18:43:25:7
+2024-04-17T18:43:25:8
+2024-04-17T18:43:25:9
+2024-04-17T18:43:25:10
+2024-04-17T18:43:25:11
+2024-04-17T18:43:25:Error in add building hook
+2024-04-17T18:43:25:Object reference not set to an instance of an object
+2024-04-17T18:43:25:  at KCM.Main+PlayerAddBuildingHook.Prefix (Player __instance, Building b) [0x001ae] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+2024-04-17T18:43:25:Error handling packet 71 WorldPlace from 2
+2024-04-17T18:43:25:----------------------- Main exception -----------------------
+2024-04-17T18:43:25:System.NullReferenceException: Object reference not set to an instance of an object
+  at (wrapper dynamic-method) Player.AddBuilding_Patch3(object,Building)
+  at KCM.Packets.Game.GameWorld.WorldPlace.PlaceBuilding () [0x00247] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Game.GameWorld.WorldPlace.HandlePacketClient () [0x00019] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Handlers.PacketHandler.HandlePacket (System.Object sender, Riptide.MessageReceivedEventArgs messageReceived) [0x00023] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+2024-04-17T18:43:25:----------------------- Main message -----------------------
+2024-04-17T18:43:25:Object reference not set to an instance of an object
+2024-04-17T18:43:25:----------------------- Main stacktrace -----------------------
+2024-04-17T18:43:25:  at (wrapper dynamic-method) Player.AddBuilding_Patch3(object,Building)
+  at KCM.Packets.Game.GameWorld.WorldPlace.PlaceBuilding () [0x00247] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Game.GameWorld.WorldPlace.HandlePacketClient () [0x00019] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Handlers.PacketHandler.HandlePacket (System.Object sender, Riptide.MessageReceivedEventArgs messageReceived) [0x00023] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+2024-04-17T18:43:25:Received place building packet for road from MUFFINMAN(2)
+2024-04-17T18:43:25:Building init
+2024-04-17T18:43:25:Building unpack
+2024-04-17T18:43:25:Client Player (2 MUFFINMAN) (Player)
+2024-04-17T18:43:25:False
+2024-04-17T18:43:25:3
+2024-04-17T18:43:25:Player add Building unpacked
+2024-04-17T18:43:25:1
+2024-04-17T18:43:25:2
+2024-04-17T18:43:25:3
+2024-04-17T18:43:25:4
+2024-04-17T18:43:25:5
+2024-04-17T18:43:25:6
+2024-04-17T18:43:25:7
+2024-04-17T18:43:25:8
+2024-04-17T18:43:25:9
+2024-04-17T18:43:25:10
+2024-04-17T18:43:25:11
+2024-04-17T18:43:25:Error in add building hook
+2024-04-17T18:43:25:Object reference not set to an instance of an object
+2024-04-17T18:43:25:  at KCM.Main+PlayerAddBuildingHook.Prefix (Player __instance, Building b) [0x001ae] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+2024-04-17T18:43:25:Error handling packet 71 WorldPlace from 2
+2024-04-17T18:43:25:----------------------- Main exception -----------------------
+2024-04-17T18:43:25:System.NullReferenceException: Object reference not set to an instance of an object
+  at (wrapper dynamic-method) Player.AddBuilding_Patch3(object,Building)
+  at KCM.Packets.Game.GameWorld.WorldPlace.PlaceBuilding () [0x00247] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Game.GameWorld.WorldPlace.HandlePacketClient () [0x00019] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Handlers.PacketHandler.HandlePacket (System.Object sender, Riptide.MessageReceivedEventArgs messageReceived) [0x00023] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+2024-04-17T18:43:25:----------------------- Main message -----------------------
+2024-04-17T18:43:25:Object reference not set to an instance of an object
+2024-04-17T18:43:25:----------------------- Main stacktrace -----------------------
+2024-04-17T18:43:25:  at (wrapper dynamic-method) Player.AddBuilding_Patch3(object,Building)
+  at KCM.Packets.Game.GameWorld.WorldPlace.PlaceBuilding () [0x00247] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Game.GameWorld.WorldPlace.HandlePacketClient () [0x00019] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Handlers.PacketHandler.HandlePacket (System.Object sender, Riptide.MessageReceivedEventArgs messageReceived) [0x00023] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+2024-04-17T18:43:25:Received place building packet for road from MUFFINMAN(2)
+2024-04-17T18:43:25:Building init
+2024-04-17T18:43:25:Building unpack
+2024-04-17T18:43:25:Client Player (2 MUFFINMAN) (Player)
+2024-04-17T18:43:25:False
+2024-04-17T18:43:25:3
+2024-04-17T18:43:25:Player add Building unpacked
+2024-04-17T18:43:25:1
+2024-04-17T18:43:25:2
+2024-04-17T18:43:25:3
+2024-04-17T18:43:25:4
+2024-04-17T18:43:25:5
+2024-04-17T18:43:25:6
+2024-04-17T18:43:25:7
+2024-04-17T18:43:25:8
+2024-04-17T18:43:25:9
+2024-04-17T18:43:25:10
+2024-04-17T18:43:25:11
+2024-04-17T18:43:25:Error in add building hook
+2024-04-17T18:43:25:Object reference not set to an instance of an object
+2024-04-17T18:43:25:  at KCM.Main+PlayerAddBuildingHook.Prefix (Player __instance, Building b) [0x001ae] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+2024-04-17T18:43:25:Error handling packet 71 WorldPlace from 2
+2024-04-17T18:43:25:----------------------- Main exception -----------------------
+2024-04-17T18:43:25:System.NullReferenceException: Object reference not set to an instance of an object
+  at (wrapper dynamic-method) Player.AddBuilding_Patch3(object,Building)
+  at KCM.Packets.Game.GameWorld.WorldPlace.PlaceBuilding () [0x00247] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Game.GameWorld.WorldPlace.HandlePacketClient () [0x00019] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Handlers.PacketHandler.HandlePacket (System.Object sender, Riptide.MessageReceivedEventArgs messageReceived) [0x00023] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+2024-04-17T18:43:25:----------------------- Main message -----------------------
+2024-04-17T18:43:25:Object reference not set to an instance of an object
+2024-04-17T18:43:25:----------------------- Main stacktrace -----------------------
+2024-04-17T18:43:25:  at (wrapper dynamic-method) Player.AddBuilding_Patch3(object,Building)
+  at KCM.Packets.Game.GameWorld.WorldPlace.PlaceBuilding () [0x00247] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Game.GameWorld.WorldPlace.HandlePacketClient () [0x00019] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Handlers.PacketHandler.HandlePacket (System.Object sender, Riptide.MessageReceivedEventArgs messageReceived) [0x00023] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+2024-04-17T18:44:21:Get save dir
+2024-04-17T18:44:21:Get save dir
+2024-04-17T18:44:21:Saving data for 2 (2) players.
+2024-04-17T18:44:21:Attempting to pack data for: Shadowfita(76561198327621045)
+2024-04-17T18:44:21:Player (Player) Player
+2024-04-17T18:44:21:Running patched player pack method
+2024-04-17T18:44:21:Saving banner system
+2024-04-17T18:44:21:Saving player creativeMode
+2024-04-17T18:44:21:Saving player upgrades
+2024-04-17T18:44:21:Saving player bannerIdx
+2024-04-17T18:44:21:Saving player WorkersArray
+2024-04-17T18:44:21:Saving player HomelessData
+2024-04-17T18:44:21:Saving player structures
+2024-04-17T18:44:21:Saving town happiness
+2024-04-17T18:44:21:Saving town happiness infos
+2024-04-17T18:44:21:Saving town integrity infos
+2024-04-17T18:44:21:Saving town landmass owner
+2024-04-17T18:44:21:Saving town bDidFirstFire
+2024-04-17T18:44:21:Saving town tax rates
+2024-04-17T18:44:21:Saving difficulty
+2024-04-17T18:44:21:Saving CurrYear
+2024-04-17T18:44:21:Saving timeAtFailHappiness
+2024-04-17T18:44:21:Saving happinessMods
+2024-04-17T18:44:21:Saving currConsumption
+2024-04-17T18:44:21:Saving lastConsumption
+2024-04-17T18:44:21:Saving currProduction
+2024-04-17T18:44:21:Saving lastProduction
+2024-04-17T18:44:21:Saving landMassNames
+2024-04-17T18:44:21:Saving JobPriorityOrder
+2024-04-17T18:44:21:Saving JobFilledAvailable
+2024-04-17T18:44:21:Saving CanUseTools
+2024-04-17T18:44:21:Saving usedCheats
+2024-04-17T18:44:21:Saving nameForOldAgeDeath
+2024-04-17T18:44:21:Saving deathsThisYear
+2024-04-17T18:44:21:Saving poorHealthGracePeriod
+2024-04-17T18:44:21:Saving dockOpenings
+2024-04-17T18:44:21:Saving tourism
+2024-04-17T18:44:21:False
+2024-04-17T18:44:21:Attempting to pack data for: MUFFINMAN(76561198306540024)
+2024-04-17T18:44:21:Client Player (2 MUFFINMAN) (Player) Client Player (2 MUFFINMAN)
+2024-04-17T18:44:21:Running patched player pack method
+2024-04-17T18:44:21:Saving banner system
+2024-04-17T18:44:21:Saving player creativeMode
+2024-04-17T18:44:21:Saving player upgrades
+2024-04-17T18:44:21:Saving player bannerIdx
+2024-04-17T18:44:21:Saving player WorkersArray
+2024-04-17T18:44:21:Saving player HomelessData
+2024-04-17T18:44:21:Saving player structures
+2024-04-17T18:44:21:Saving town happiness
+2024-04-17T18:44:21:Saving town happiness infos
+2024-04-17T18:44:21:Saving town integrity infos
+2024-04-17T18:44:21:Saving town landmass owner
+2024-04-17T18:44:21:Saving town bDidFirstFire
+2024-04-17T18:44:21:Saving difficulty
+2024-04-17T18:44:21:Saving CurrYear
+2024-04-17T18:44:21:Saving timeAtFailHappiness
+2024-04-17T18:44:21:Saving happinessMods
+2024-04-17T18:44:21:Saving currConsumption
+2024-04-17T18:44:21:Saving lastConsumption
+2024-04-17T18:44:21:Saving currProduction
+2024-04-17T18:44:21:Saving lastProduction
+2024-04-17T18:44:21:Saving landMassNames
+2024-04-17T18:44:21:Saving JobPriorityOrder
+2024-04-17T18:44:21:Saving JobFilledAvailable
+2024-04-17T18:44:21:Saving CanUseTools
+2024-04-17T18:44:21:Saving usedCheats
+2024-04-17T18:44:21:Saving nameForOldAgeDeath
+2024-04-17T18:44:21:Saving deathsThisYear
+2024-04-17T18:44:21:Saving poorHealthGracePeriod
+2024-04-17T18:44:21:Saving dockOpenings
+2024-04-17T18:44:21:Saving tourism
+2024-04-17T18:44:21:False
+2024-04-17T18:44:28:Received place building packet for largehouse from MUFFINMAN(2)
+2024-04-17T18:44:28:Building init
+2024-04-17T18:44:28:Building unpack
+2024-04-17T18:44:28:Client Player (2 MUFFINMAN) (Player)
+2024-04-17T18:44:28:False
+2024-04-17T18:44:28:3
+2024-04-17T18:44:28:Player add Building unpacked
+2024-04-17T18:44:28:1
+2024-04-17T18:44:28:2
+2024-04-17T18:44:28:3
+2024-04-17T18:44:28:4
+2024-04-17T18:44:28:Error in add building hook
+2024-04-17T18:44:28:Index was outside the bounds of the array.
+2024-04-17T18:44:28:  at KCM.Main+PlayerAddBuildingHook.Prefix (Player __instance, Building b) [0x000b2] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+2024-04-17T18:44:28:Error handling packet 71 WorldPlace from 2
+2024-04-17T18:44:28:----------------------- Main exception -----------------------
+2024-04-17T18:44:28:System.IndexOutOfRangeException: Index was outside the bounds of the array.
+  at (wrapper dynamic-method) Player.AddBuilding_Patch3(object,Building)
+  at KCM.Packets.Game.GameWorld.WorldPlace.PlaceBuilding () [0x00247] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Game.GameWorld.WorldPlace.HandlePacketClient () [0x00019] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Handlers.PacketHandler.HandlePacket (System.Object sender, Riptide.MessageReceivedEventArgs messageReceived) [0x00023] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+2024-04-17T18:44:28:----------------------- Main message -----------------------
+2024-04-17T18:44:28:Index was outside the bounds of the array.
+2024-04-17T18:44:28:----------------------- Main stacktrace -----------------------
+2024-04-17T18:44:28:  at (wrapper dynamic-method) Player.AddBuilding_Patch3(object,Building)
+  at KCM.Packets.Game.GameWorld.WorldPlace.PlaceBuilding () [0x00247] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Game.GameWorld.WorldPlace.HandlePacketClient () [0x00019] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+  at KCM.Packets.Handlers.PacketHandler.HandlePacket (System.Object sender, Riptide.MessageReceivedEventArgs messageReceived) [0x00023] in <0475fcb2ef4b45cca2d90372b3f565ad>:0 
+2024-04-17T18:44:58:Menu set to: PauseMenu
+2024-04-17T18:45:00:Menu set to: Save
+2024-04-17T18:45:00:Get save dir
+2024-04-17T18:45:00:Get save dir
+2024-04-17T18:45:01:Get save dir
+2024-04-17T18:45:01:Get save dir
+2024-04-17T18:45:01:Saving data for 2 (2) players.
+2024-04-17T18:45:01:Attempting to pack data for: Shadowfita(76561198327621045)
+2024-04-17T18:45:01:Player (Player) Player
+2024-04-17T18:45:01:Running patched player pack method
+2024-04-17T18:45:01:Saving banner system
+2024-04-17T18:45:01:Saving player creativeMode
+2024-04-17T18:45:01:Saving player upgrades
+2024-04-17T18:45:01:Saving player bannerIdx
+2024-04-17T18:45:01:Saving player WorkersArray
+2024-04-17T18:45:01:Saving player HomelessData
+2024-04-17T18:45:01:Saving player structures
+2024-04-17T18:45:01:Saving town happiness
+2024-04-17T18:45:01:Saving town happiness infos
+2024-04-17T18:45:01:Saving town integrity infos
+2024-04-17T18:45:01:Saving town landmass owner
+2024-04-17T18:45:01:Saving town bDidFirstFire
+2024-04-17T18:45:01:Saving town tax rates
+2024-04-17T18:45:01:Saving difficulty
+2024-04-17T18:45:01:Saving CurrYear
+2024-04-17T18:45:01:Saving timeAtFailHappiness
+2024-04-17T18:45:01:Saving happinessMods
+2024-04-17T18:45:01:Saving currConsumption
+2024-04-17T18:45:01:Saving lastConsumption
+2024-04-17T18:45:01:Saving currProduction
+2024-04-17T18:45:01:Saving lastProduction
+2024-04-17T18:45:01:Saving landMassNames
+2024-04-17T18:45:01:Saving JobPriorityOrder
+2024-04-17T18:45:01:Saving JobFilledAvailable
+2024-04-17T18:45:01:Saving CanUseTools
+2024-04-17T18:45:01:Saving usedCheats
+2024-04-17T18:45:01:Saving nameForOldAgeDeath
+2024-04-17T18:45:01:Saving deathsThisYear
+2024-04-17T18:45:01:Saving poorHealthGracePeriod
+2024-04-17T18:45:01:Saving dockOpenings
+2024-04-17T18:45:01:Saving tourism
+2024-04-17T18:45:01:False
+2024-04-17T18:45:01:Attempting to pack data for: MUFFINMAN(76561198306540024)
+2024-04-17T18:45:01:Client Player (2 MUFFINMAN) (Player) Client Player (2 MUFFINMAN)
+2024-04-17T18:45:01:Running patched player pack method
+2024-04-17T18:45:01:Saving banner system
+2024-04-17T18:45:01:Saving player creativeMode
+2024-04-17T18:45:01:Saving player upgrades
+2024-04-17T18:45:01:Saving player bannerIdx
+2024-04-17T18:45:01:Saving player WorkersArray
+2024-04-17T18:45:01:Saving player HomelessData
+2024-04-17T18:45:01:Saving player structures
+2024-04-17T18:45:01:Saving town happiness
+2024-04-17T18:45:01:Saving town happiness infos
+2024-04-17T18:45:01:Saving town integrity infos
+2024-04-17T18:45:01:Saving town landmass owner
+2024-04-17T18:45:01:Saving town bDidFirstFire
+2024-04-17T18:45:01:Saving difficulty
+2024-04-17T18:45:01:Saving CurrYear
+2024-04-17T18:45:01:Saving timeAtFailHappiness
+2024-04-17T18:45:01:Saving happinessMods
+2024-04-17T18:45:01:Saving currConsumption
+2024-04-17T18:45:01:Saving lastConsumption
+2024-04-17T18:45:01:Saving currProduction
+2024-04-17T18:45:01:Saving lastProduction
+2024-04-17T18:45:01:Saving landMassNames
+2024-04-17T18:45:01:Saving JobPriorityOrder
+2024-04-17T18:45:01:Saving JobFilledAvailable
+2024-04-17T18:45:01:Saving CanUseTools
+2024-04-17T18:45:01:Saving usedCheats
+2024-04-17T18:45:01:Saving nameForOldAgeDeath
+2024-04-17T18:45:01:Saving deathsThisYear
+2024-04-17T18:45:01:Saving poorHealthGracePeriod
+2024-04-17T18:45:01:Saving dockOpenings
+2024-04-17T18:45:01:Saving tourism
+2024-04-17T18:45:01:False
+2024-04-17T18:45:05:(SERVER): Server stopped.
+2024-04-17T18:45:05:Menu set to: ExitConfirm
+2024-04-17T18:45:05:(CLIENT): Disconnected from server: Disconnected.
+2024-04-17T18:45:05:Client disconnected event start
+2024-04-17T18:45:05:Client disconnected event end
