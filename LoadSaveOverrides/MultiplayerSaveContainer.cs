@@ -34,13 +34,13 @@ namespace KCM.LoadSaveOverrides
 
                     if (string.IsNullOrWhiteSpace(player.steamId))
                     {
-                        Main.helper.Log($"Skipping save for player with missing steamId (name={player.name ?? \"\"})");
+                        Main.helper.Log($"Skipping save for player with missing steamId (name={player.name ?? string.Empty})");
                         continue;
                     }
 
                     if (player.inst == null)
                     {
-                        Main.helper.Log($"Skipping save for player {player.name ?? \"\"} ({player.steamId}) because Player.inst is null");
+                        Main.helper.Log($"Skipping save for player {player.name ?? string.Empty} ({player.steamId}) because Player.inst is null");
                         continue;
                     }
 
@@ -54,7 +54,7 @@ namespace KCM.LoadSaveOverrides
                 }
                 catch (Exception ex)
                 {
-                    Main.helper.Log($"Error packing player data for save (steamId={player?.steamId ?? \"\"}, name={player?.name ?? \"\"})");
+                    Main.helper.Log($"Error packing player data for save (steamId={player?.steamId ?? string.Empty}, name={player?.name ?? string.Empty})");
                     Main.helper.Log(ex.ToString());
                 }
             }
