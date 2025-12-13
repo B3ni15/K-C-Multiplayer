@@ -70,7 +70,7 @@ namespace KCM.LoadSaveOverrides
             this.FireManagerSaveData = new FireManager.FireManagerSaveData().Pack(FireManager.inst);
             this.DragonSpawnSaveData = new DragonSpawn.DragonSpawnSaveData().Pack(DragonSpawn.inst);
             this.UnitSystemSaveData = new UnitSystem.UnitSystemSaveData().Pack(UnitSystem.inst);
-            this.RaidSystemSaveData2 = new RaiderSystem.RaiderSystemSaveData2().Pack(raiderSystem.inst);
+            this.RaidSystemSaveData2 = new RaiderSystem.RaiderSystemSaveData2().Pack(RaiderSystem.inst);
 
             if (ShipSystem.inst != null)
             {
@@ -259,7 +259,7 @@ namespace KCM.LoadSaveOverrides
             bool flag8 = this.RaidSystemSaveData2 != null;
             if (flag8)
             {
-                this.RaidSystemSaveData2.Unpack(raiderSystem.inst);
+                this.RaidSystemSaveData2.Unpack(RaiderSystem.inst);
             }
             Main.helper.Log("Unpacking orders manager");
             bool flag9 = this.OrdersManagerSaveData != null;
@@ -268,7 +268,6 @@ namespace KCM.LoadSaveOverrides
                 this.OrdersManagerSaveData.Unpack(OrdersManager.inst);
             }
             Main.helper.Log("Unpacking AI brains");
-            bool flag10 = this.AIBrainsSaveData != null;
             if (flag10)
             {
                 this.AIBrainsSaveData.Unpack(AIBrainsContainer.inst);
