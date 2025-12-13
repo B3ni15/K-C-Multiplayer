@@ -58,6 +58,7 @@ namespace KCM
         private static readonly Dictionary<int, long> lastTeamIdLookupLogMs = new Dictionary<int, long>();
         private static int resetInProgress = 0;
         private static int multiplayerSaveLoadInProgress = 0;
+        private static int worldReadyRebuildDone = 0;
 
         public static bool IsMultiplayerSaveLoadInProgress
         {
@@ -94,6 +95,7 @@ namespace KCM
 
                 try { LobbyManager.loadingSave = false; } catch { }
                 try { SetMultiplayerSaveLoadInProgress(false); } catch { }
+                try { Interlocked.Exchange(ref worldReadyRebuildDone, 0); } catch { }
 
                 try
                 {
@@ -158,6 +160,28 @@ namespace KCM
             catch
             {
             }
+        }
+
+        private static int GetLoadTickDelayOrMinusOne(object instance)
+        {
+            if (instance == null)
+                return -1;
+
+            try
+            {
+                FieldInfo loadTickDelayField = instance.GetType().GetField("loadTickDelay", BindingFlags.Instance | BindingFlags.NonPublic);
+                if (loadTickDelayField == null)
+                    return -1;
+
+                object v = loadTickDelayField.GetValue(instance);
+                if (v is int)
+                    return (int)v;
+            }
+            catch
+            {
+            }
+
+            return -1;
         }
 
         public static void RunPostLoadRebuild(string reason)
@@ -318,6 +342,33 @@ namespace KCM
 
         private void FixedUpdate()
         {
+            try
+            {
+                if (KCClient.client != null &&
+                    KCClient.client.IsConnected &&
+                    Volatile.Read(ref worldReadyRebuildDone) == 0 &&
+                    World.inst != null &&
+                    Player.inst != null &&
+                    VillagerSystem.inst != null)
+                {
+                    if (Interlocked.Exchange(ref worldReadyRebuildDone, 1) == 0)
+                    {
+                        Main.helper.Log("AutoRebuild: world ready; running post-load rebuild");
+                        RunPostLoadRebuild("auto:world-ready");
+                        Main.helper.Log(
+                            "AutoRebuild: timeScale=" + Time.timeScale +
+                            " loadTickDelay(Player/Unit/Job/Villager)=" +
+                            GetLoadTickDelayOrMinusOne(Player.inst) + "/" +
+                            GetLoadTickDelayOrMinusOne(UnitSystem.inst) + "/" +
+                            GetLoadTickDelayOrMinusOne(JobSystem.inst) + "/" +
+                            GetLoadTickDelayOrMinusOne(VillagerSystem.inst));
+                    }
+                }
+            }
+            catch
+            {
+            }
+
             // send batched building placement info
             /*if (PlaceHook.QueuedBuildings.Count > 0 && (FixedUpdateInterval % 25 == 0))
             {
