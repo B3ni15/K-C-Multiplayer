@@ -311,6 +311,14 @@ namespace KCM.LoadSaveOverrides
                 loadTickDelayField.SetValue(JobSystem.inst, 1);
             }
 
+            // VillagerSystem.inst.loadTickDelay = 1;
+            Type villagerSystemType = typeof(VillagerSystem);
+            loadTickDelayField = villagerSystemType.GetField("loadTickDelay", BindingFlags.Instance | BindingFlags.NonPublic);
+            if (loadTickDelayField != null)
+            {
+                loadTickDelayField.SetValue(VillagerSystem.inst, 1);
+            }
+
             Main.helper.Log($"Setting kingdom name to: {kingdomNames[Main.PlayerSteamID]}");
             TownNameUI.inst.SetTownName(kingdomNames[Main.PlayerSteamID]);
 
