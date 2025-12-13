@@ -155,7 +155,14 @@ namespace KCM
             {
                 FieldInfo loadTickDelayField = instance.GetType().GetField("loadTickDelay", BindingFlags.Instance | BindingFlags.NonPublic);
                 if (loadTickDelayField != null)
+                {
                     loadTickDelayField.SetValue(instance, ticks);
+                    return;
+                }
+
+                PropertyInfo loadTickDelayProp = instance.GetType().GetProperty("loadTickDelay", BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
+                if (loadTickDelayProp != null && loadTickDelayProp.CanWrite && loadTickDelayProp.PropertyType == typeof(int))
+                    loadTickDelayProp.SetValue(instance, ticks, null);
             }
             catch
             {
@@ -170,12 +177,20 @@ namespace KCM
             try
             {
                 FieldInfo loadTickDelayField = instance.GetType().GetField("loadTickDelay", BindingFlags.Instance | BindingFlags.NonPublic);
-                if (loadTickDelayField == null)
-                    return -1;
+                if (loadTickDelayField != null)
+                {
+                    object v = loadTickDelayField.GetValue(instance);
+                    if (v is int)
+                        return (int)v;
+                }
 
-                object v = loadTickDelayField.GetValue(instance);
-                if (v is int)
-                    return (int)v;
+                PropertyInfo loadTickDelayProp = instance.GetType().GetProperty("loadTickDelay", BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
+                if (loadTickDelayProp != null && loadTickDelayProp.CanRead && loadTickDelayProp.PropertyType == typeof(int))
+                {
+                    object pv = loadTickDelayProp.GetValue(instance, null);
+                    if (pv is int)
+                        return (int)pv;
+                }
             }
             catch
             {
@@ -339,6 +354,11 @@ namespace KCM
         #endregion
 
         public static int FixedUpdateInterval = 0;
+        private static long lastVillagerMoveMs = 0;
+        private static long lastVillagerProbeMs = 0;
+        private static long lastVillagerStallLogMs = 0;
+        private static Guid probedVillagerGuid = Guid.Empty;
+        private static Vector3 probedVillagerLastPos = Vector3.zero;
 
         private void FixedUpdate()
         {
@@ -362,6 +382,74 @@ namespace KCM
                             GetLoadTickDelayOrMinusOne(UnitSystem.inst) + "/" +
                             GetLoadTickDelayOrMinusOne(JobSystem.inst) + "/" +
                             GetLoadTickDelayOrMinusOne(VillagerSystem.inst));
+                    }
+                }
+            }
+            catch
+            {
+            }
+
+            try
+            {
+                if (KCClient.client != null &&
+                    KCClient.client.IsConnected &&
+                    World.inst != null &&
+                    Time.timeScale > 0f &&
+                    Villager.villagers != null &&
+                    Villager.villagers.Count > 0)
+                {
+                    long now = DateTimeOffset.Now.ToUnixTimeMilliseconds();
+                    if ((now - lastVillagerProbeMs) >= 2000)
+                    {
+                        lastVillagerProbeMs = now;
+
+                        Villager v = null;
+                        try
+                        {
+                            if (probedVillagerGuid != Guid.Empty)
+                                v = Villager.villagers.data.FirstOrDefault(x => x != null && x.guid == probedVillagerGuid);
+                        }
+                        catch
+                        {
+                        }
+
+                        if (v == null)
+                        {
+                            v = Villager.villagers.data.FirstOrDefault(x => x != null);
+                            if (v != null)
+                            {
+                                probedVillagerGuid = v.guid;
+                                probedVillagerLastPos = v.Pos;
+                                lastVillagerMoveMs = now;
+                            }
+                        }
+
+                        if (v != null)
+                        {
+                            float movedSqr = (v.Pos - probedVillagerLastPos).sqrMagnitude;
+                            if (movedSqr > 0.01f)
+                            {
+                                probedVillagerLastPos = v.Pos;
+                                lastVillagerMoveMs = now;
+                            }
+
+                            if ((now - lastVillagerMoveMs) >= 15000 && (now - lastVillagerStallLogMs) >= 15000)
+                            {
+                                lastVillagerStallLogMs = now;
+                                Main.helper.Log(
+                                    "VillagerStallDetect: no movement for " + (now - lastVillagerMoveMs) +
+                                    "ms timeScale=" + Time.timeScale +
+                                    " villagers=" + Villager.villagers.Count +
+                                    " sampleGuid=" + probedVillagerGuid +
+                                    " samplePos=" + v.Pos);
+                                Main.helper.Log(
+                                    "VillagerStallDetect: loadTickDelay(Player/Unit/Job/Villager)=" +
+                                    GetLoadTickDelayOrMinusOne(Player.inst) + "/" +
+                                    GetLoadTickDelayOrMinusOne(UnitSystem.inst) + "/" +
+                                    GetLoadTickDelayOrMinusOne(JobSystem.inst) + "/" +
+                                    GetLoadTickDelayOrMinusOne(VillagerSystem.inst));
+                            }
+                        }
                     }
                 }
             }
