@@ -1597,6 +1597,12 @@ namespace KCM
                 if (KCClient.client.IsConnected)
                 {
                     var bindingFlags = BindingFlags.Instance | BindingFlags.NonPublic;
+                    var landmassOwner = p.PlayerLandmassOwner;
+                    if (landmassOwner == null)
+                    {
+                        Main.helper.Log("PlayerLandmassOwner was null during PlayerSaveData.Pack; using vanilla save pack.");
+                        return true;
+                    }
 
                     Main.helper.Log("Running patched player pack method");
                     Main.helper.Log("Saving banner system");
@@ -1608,8 +1614,8 @@ namespace KCM
                     __instance.GetType().GetField("upgrades", bindingFlags).SetValue(__instance, new List<Player.UpgradeType>());
 
 
-                    Main.helper.Log("Saving player bannerIdx");
-                    __instance.bannerIdx = p.PlayerLandmassOwner.bannerIdx;
+                     Main.helper.Log("Saving player bannerIdx");
+                    __instance.bannerIdx = landmassOwner.bannerIdx;
 
                     Main.helper.Log("Saving player WorkersArray");
                     __instance.WorkersArray = new Villager.VillagerSaveData[p.Workers.Count];
@@ -1622,11 +1628,13 @@ namespace KCM
                         }
                     }
 
-                    Main.helper.Log("Saving player HomelessData");
+                     Main.helper.Log("Saving player HomelessData");
                     __instance.HomelessData = new List<Guid>();
                     for (int k = 0; k < p.Homeless.Count; k++)
                     {
-                        __instance.HomelessData.Add(p.Homeless.data[k].guid);
+                        var homeless = p.Homeless.data[k];
+                        if (homeless != null)
+                            __instance.HomelessData.Add(homeless.guid);
                     }
                     __instance.structures = new List<Building.BuildingSaveData[]>();
                     __instance.subStructures = new List<Building.BuildingSaveData[]>();
@@ -1634,17 +1642,35 @@ namespace KCM
                     Main.helper.Log("Saving player structures");
                     World.inst.ForEachTile(0, 0, World.inst.GridWidth, World.inst.GridHeight, delegate (int x, int z, Cell cell)
                     {
-                        bool flag4 = cell.OccupyingStructure.Count > 0;
+                        if (cell == null)
+                            return;
+
+                        bool flag4 = cell.OccupyingStructure != null && cell.OccupyingStructure.Count > 0;
                         if (flag4)
                         {
                             List<Building.BuildingSaveData> occupyingStructureData = new List<Building.BuildingSaveData>();
                             for (int i3 = 0; i3 < cell.OccupyingStructure.Count; i3++)
                             {
                                 var building = cell.OccupyingStructure[i3];
-                                bool flag5 = Vector3.Distance(cell.OccupyingStructure[i3].transform.position.xz(), cell.Position.xz()) <= 1E-05f;
-                                if (flag5 && building.TeamID() == p.PlayerLandmassOwner.teamId)
+                                if (building == null)
+                                    continue;
+
+                                var buildingTransform = building.transform;
+                                if (buildingTransform == null)
+                                    continue;
+
+                                bool flag5 = Vector3.Distance(buildingTransform.position.xz(), cell.Position.xz()) <= 1E-05f;
+                                if (flag5 && building.TeamID() == landmassOwner.teamId)
                                 {
-                                    occupyingStructureData.Add(new Building.BuildingSaveData().Pack(cell.OccupyingStructure[i3]));
+                                    try
+                                    {
+                                        occupyingStructureData.Add(new Building.BuildingSaveData().Pack(building));
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        Main.helper.Log("Error packing structure for save: " + (building.UniqueName ?? string.Empty));
+                                        Main.helper.Log(ex.ToString());
+                                    }
                                 }
                             }
                             bool flag6 = occupyingStructureData.Count > 0;
@@ -1653,17 +1679,32 @@ namespace KCM
                                 __instance.structures.Add(occupyingStructureData.ToArray());
                             }
                         }
-                        bool flag7 = cell.SubStructure.Count > 0;
+                        bool flag7 = cell.SubStructure != null && cell.SubStructure.Count > 0;
                         if (flag7)
                         {
                             List<Building.BuildingSaveData> subStructureData = new List<Building.BuildingSaveData>();
                             for (int i4 = 0; i4 < cell.SubStructure.Count; i4++)
                             {
                                 var building = cell.SubStructure[i4];
-                                bool flag8 = Vector3.Distance(cell.SubStructure[i4].transform.position.xz(), cell.Position.xz()) <= 1E-05f;
-                                if (flag8 && building.TeamID() == p.PlayerLandmassOwner.teamId)
+                                if (building == null)
+                                    continue;
+
+                                var buildingTransform = building.transform;
+                                if (buildingTransform == null)
+                                    continue;
+
+                                bool flag8 = Vector3.Distance(buildingTransform.position.xz(), cell.Position.xz()) <= 1E-05f;
+                                if (flag8 && building.TeamID() == landmassOwner.teamId)
                                 {
-                                    subStructureData.Add(new Building.BuildingSaveData().Pack(cell.SubStructure[i4]));
+                                    try
+                                    {
+                                        subStructureData.Add(new Building.BuildingSaveData().Pack(building));
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        Main.helper.Log("Error packing sub-structure for save: " + (building.UniqueName ?? string.Empty));
+                                        Main.helper.Log(ex.ToString());
+                                    }
                                 }
                             }
                             bool flag9 = subStructureData.Count > 0;

@@ -71,7 +71,25 @@ namespace KCM.LoadSaveOverrides
             this.DragonSpawnSaveData = new DragonSpawn.DragonSpawnSaveData().Pack(DragonSpawn.inst);
             this.UnitSystemSaveData = new UnitSystem.UnitSystemSaveData().Pack(UnitSystem.inst);
             this.RaidSystemSaveData2 = new RaiderSystem.RaiderSystemSaveData2().Pack(RaiderSystem.inst);
-            this.ShipSystemSaveData = new ShipSystem.ShipSystemSaveData().Pack(ShipSystem.inst);
+
+            if (ShipSystem.inst != null)
+            {
+                try
+                {
+                    this.ShipSystemSaveData = new ShipSystem.ShipSystemSaveData().Pack(ShipSystem.inst);
+                }
+                catch (Exception ex)
+                {
+                    Main.helper.Log("Error packing ShipSystem for save; skipping ShipSystemSaveData.");
+                    Main.helper.Log(ex.ToString());
+                    this.ShipSystemSaveData = null;
+                }
+            }
+            else
+            {
+                this.ShipSystemSaveData = null;
+            }
+
             this.AIBrainsSaveData = new AIBrainsContainer.SaveData().Pack(AIBrainsContainer.inst);
             this.SiegeMonsterSaveData = new SiegeMonster.SiegeMonsterSaveData().Pack(null);
             this.CartSystemSaveData = new CartSystem.CartSystemSaveData().Pack(CartSystem.inst);
