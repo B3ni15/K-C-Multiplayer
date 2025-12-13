@@ -21,15 +21,15 @@ namespace KCM.ServerLobby
 
         public void Start()
         {
+            banner = transform.Find("PlayerBanner").GetComponent<RawImage>();
+
             SetValues();
 
             InvokeRepeating("SetValues", 0, 0.25f);
 
-            banner = transform.Find("PlayerBanner").GetComponent<RawImage>();
-
             transform.Find("PlayerBanner").GetComponent<Button>().onClick.AddListener(() =>
             {
-                Main.TransitionTo(MenuState.NameAndBanner);//ChooseBannerUI Hooks required, as well as townnameui
+                Main.TransitionTo(MenuState.NameAndBanner);
             });
         }
 
@@ -37,14 +37,37 @@ namespace KCM.ServerLobby
         {
             try
             {
-                KCPlayer player;
-                Main.kCPlayers.TryGetValue(Main.GetPlayerByClientID(Client).steamId, out player);
-                transform.Find("PlayerName").GetComponent<TextMeshProUGUI>().text = player.name;
-                transform.Find("Ready").gameObject.SetActive(player.ready);
+                if (banner == null)
+                {
+                    var bannerTransform = transform.Find("PlayerBanner");
+                    if (bannerTransform == null)
+                        return;
+                    banner = bannerTransform.GetComponent<RawImage>();
+                    if (banner == null)
+                        return;
+                }
 
-                var bannerTexture = World.inst.liverySets[player.banner].banners;
-                
-                banner.texture = bannerTexture;
+                if (!Main.clientSteamIds.TryGetValue(Client, out var steamId))
+                    return;
+
+                if (!Main.kCPlayers.TryGetValue(steamId, out var player) || player == null)
+                    return;
+
+                var nameTransform = transform.Find("PlayerName");
+                if (nameTransform != null)
+                    nameTransform.GetComponent<TextMeshProUGUI>().text = player.name ?? "";
+
+                var readyTransform = transform.Find("Ready");
+                if (readyTransform != null)
+                    readyTransform.gameObject.SetActive(player.ready);
+
+                if (World.inst == null || World.inst.liverySets == null)
+                    return;
+
+                if (player.banner < 0 || player.banner >= World.inst.liverySets.Length)
+                    return;
+
+                banner.texture = World.inst.liverySets[player.banner].banners;
             }
             catch (Exception ex)
             {
