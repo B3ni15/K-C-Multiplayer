@@ -102,6 +102,7 @@ namespace KCM
         public static void Connect(string ip)
         {
             Main.helper.Log("Trying to connect to: " + ip);
+            try { Application.runInBackground = true; } catch { }
             client.Connect(ip, useMessageHandlers: false);
         }
 

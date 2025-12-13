@@ -942,26 +942,14 @@ namespace KCM
         [HarmonyPatch(typeof(Player), "AddBuilding")]
         public class PlayerAddBuildingHook
         {
-            static int step = 1;
-            static void LogStep(bool reset = false)
-            {
-                if (reset)
-                    step = 1;
-
-                Main.helper.Log(step.ToString());
-                step++;
-            }
-
             public static bool Prefix(Player __instance, Building b)
             {
                 try
                 {
                     if (KCClient.client.IsConnected)
                     {
-                        LogStep(true);
                         __instance.Buildings.Add(b);
                         IResourceStorage[] storages = b.GetComponents<IResourceStorage>();
-                        LogStep();
                         for (int i = 0; i < storages.Length; i++)
                         {
                             bool flag = !storages[i].IsPrivate();
@@ -970,50 +958,38 @@ namespace KCM
                                 FreeResourceManager.inst.AddResourceStorage(storages[i]);
                             }
                         }
-                        LogStep();
                         int landMass = b.LandMass();
                         Home res = b.GetComponent<Home>();
                         bool flag2 = res != null;
-                        LogStep();
                         if (flag2)
                         {
                             __instance.Residentials.Add(res);
                             __instance.ResidentialsPerLandmass[landMass].Add(res);
                         }
                         WagePayer wagePayer = b.GetComponent<WagePayer>();
-                        LogStep();
                         bool flag3 = wagePayer != null;
                         if (flag3)
                         {
                             __instance.WagePayers.Add(wagePayer);
                         }
                         RadiusBonus radiusBonus = b.GetComponent<RadiusBonus>();
-                        LogStep();
                         bool flag4 = radiusBonus != null;
                         if (flag4)
                         {
                             __instance.RadiusBonuses.Add(radiusBonus);
                         }
-                        LogStep();
                         var globalBuildingRegistry = __instance.GetType().GetField("globalBuildingRegistry", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(__instance) as ArrayExt<Player.BuildingRegistry>;
-                        LogStep();
                         var landMassBuildingRegistry = __instance.GetType().GetField("landMassBuildingRegistry", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(__instance) as ArrayExt<Player.LandMassBuildingRegistry>;
-                        LogStep();
                         var unbuiltBuildingsPerLandmass = __instance.GetType().GetField("unbuiltBuildingsPerLandmass", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(__instance) as ArrayExt<ArrayExt<Building>>;
-                        LogStep();
 
                         __instance.AddToRegistry(globalBuildingRegistry, b);
-                        LogStep();
                         __instance.AddToRegistry(landMassBuildingRegistry.data[landMass].registry, b);
-                        LogStep();
                         landMassBuildingRegistry.data[landMass].buildings.Add(b);
-                        LogStep();
                         bool flag5 = !b.IsBuilt();
                         if (flag5)
                         {
                             unbuiltBuildingsPerLandmass.data[landMass].Add(b);
                         }
-                        LogStep();
 
 
                         return false;
@@ -1270,6 +1246,8 @@ namespace KCM
         {
             private static long lastTime = 0;
             private static long lastClientBlockLogTime = 0;
+            private static long lastHostPauseTraceLogTime = 0;
+            private static int lastSentSpeed = -1;
 
             public static bool Prefix(int idx, ref bool __state)
             {
@@ -1299,8 +1277,23 @@ namespace KCM
                 if (!calledFromPacket)
                 {
                     long now = DateTimeOffset.Now.ToUnixTimeMilliseconds();
-                    if ((now - lastTime) >= 250) // Set speed spam fix / hack
+                    // Ensure that real speed changes are always propagated, even if they happen in quick succession (eg. pause/unpause).
+                    if (idx != lastSentSpeed || (now - lastTime) >= 250) // Set speed spam fix / hack
                         __state = true;
+
+                    // Diagnostics for "random pause": log a stack trace when the host hits speed 0 from local code.
+                    if (idx == 0 && (now - lastHostPauseTraceLogTime) >= 2000)
+                    {
+                        lastHostPauseTraceLogTime = now;
+                        try
+                        {
+                            Main.helper.Log("Host speed set to 0 (pause). Call stack:");
+                            Main.helper.Log(new StackTrace(2, false).ToString());
+                        }
+                        catch
+                        {
+                        }
+                    }
                 }
 
                 return true;
@@ -1320,6 +1313,7 @@ namespace KCM
                     }.Send();
 
                     lastTime = DateTimeOffset.Now.ToUnixTimeMilliseconds();
+                    lastSentSpeed = idx;
                 }
             }
         }
