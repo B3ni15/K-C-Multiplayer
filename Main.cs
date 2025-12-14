@@ -637,7 +637,9 @@ namespace KCM
                                 lastVillagerMoveMs = now;
                             }
 
-                            if ((now - lastVillagerMoveMs) >= 15000 && (now - lastVillagerStallLogMs) >= 15000)
+                            // Note: We now have proactive loadTickDelay refresh above, so villager stall detection
+                            // is less critical. Only log if there's an actual extended stall with bad delay values.
+                            if ((now - lastVillagerMoveMs) >= 30000 && (now - lastVillagerStallLogMs) >= 30000)
                             {
                                 lastVillagerStallLogMs = now;
                                 Main.helper.Log(
