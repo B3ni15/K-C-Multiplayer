@@ -56,6 +56,12 @@ namespace KCM
         public static Dictionary<ushort, string> clientSteamIds = new Dictionary<ushort, string>();
         public static Dictionary<Guid, BuildingStatePacket> pendingBuildingStatePackets = new Dictionary<Guid, BuildingStatePacket>();
 
+        // Advanced sync logging helper
+        public static void LogSync(string message)
+        {
+            helper.Log($"[SYNC] {message}");
+        }
+
         public static KCPlayer GetPlayerByClientID(ushort clientId)
         {
             return kCPlayers[clientSteamIds[clientId]];

@@ -128,8 +128,7 @@ namespace KCM.Packets.Handlers
 
             IPacket packet = DeserialisePacket(messageReceived);
 
-            //Main.helper.Log($"Server Received packet {Packets[id].packet.GetType().Name} from {messageReceived.FromConnection.Id}");
-
+            Main.LogSync($"SERVER RECV: {Packets[id].packet.GetType().Name} (id={id}) from client {messageReceived.FromConnection.Id}");
 
             if (KCServer.IsRunning)
             {
@@ -169,11 +168,9 @@ namespace KCM.Packets.Handlers
                 var id = messageReceived.MessageId;
 
 
-                //Main.helper.Log($"Client Received packet {Packets[id].packet.GetType().Name} from {messageReceived.FromConnection.Id}");
-
                 IPacket packet = DeserialisePacket(messageReceived);
 
-                //Main.helper.Log($"Client Received packet {Packets[id].packet.GetType().Name} from {packet.clientId}");
+                Main.LogSync($"CLIENT RECV: {Packets[id].packet.GetType().Name} (id={id}) from client {packet.clientId}");
 
                 if (KCClient.client.IsConnected)
                 {

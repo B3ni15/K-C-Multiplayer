@@ -38,6 +38,7 @@ namespace KCM.Packets
         {
             try
             {
+                Main.LogSync($"SEND TO ALL: {this.GetType().Name} (id={packetId}) except={exceptToClient}");
                 if (exceptToClient == 0)
                 {
                     if (KCServer.IsRunning)
@@ -75,6 +76,7 @@ namespace KCM.Packets
         {
             try
             {
+                Main.LogSync($"SEND: {this.GetType().Name} (id={packetId}) to={toClient} myId={KCClient.client?.Id}");
                 if (KCClient.client.IsConnected && toClient == 0)
                 {
                     this.clientId = KCClient.client.Id;

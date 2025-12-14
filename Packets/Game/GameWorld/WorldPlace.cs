@@ -46,7 +46,16 @@ namespace KCM.Packets.Game.GameWorld
 
         public void PlaceBuilding()
         {
-            Main.helper.Log("Received place building packet for " + uniqueName + " from " + player.name + $"({player.id})");
+            Main.LogSync("========== BUILDING PLACEMENT START ==========");
+            Main.LogSync($"Building: {uniqueName} from player: {player?.name} (id={player?.id})");
+            Main.LogSync($"  guid={guid}");
+            Main.LogSync($"  globalPosition={globalPosition}");
+            Main.LogSync($"  localPosition={localPosition}");
+            Main.LogSync($"  rotation={rotation} (euler={rotation.eulerAngles})");
+            Main.LogSync($"  built={built}, placed={placed}, open={open}");
+            Main.LogSync($"  constructionProgress={constructionProgress}, constructionPaused={constructionPaused}");
+            Main.LogSync($"  life={life}, ModifiedMaxLife={ModifiedMaxLife}");
+            Main.LogSync($"  yearBuilt={yearBuilt}, decayProtection={decayProtection}");
 
             // Check for duplicate building by guid to prevent double placement from network retries
             var existingBuilding = player.inst.Buildings.data.FirstOrDefault(b => b != null && b.guid == guid);
@@ -156,15 +165,24 @@ namespace KCM.Packets.Game.GameWorld
                 Main.helper.Log($"Client player ({player.name}) Landmass Names Count: {player.inst.LandMassNames.Count}, Contents: {string.Join(", ", player.inst.LandMassNames)}");
 
                 player.inst.LandMassNames[building.LandMass()] = player.kingdomName;
-                Player.inst.LandMassNames[building.LandMass()] = player.kingdomName; 
+                Player.inst.LandMassNames[building.LandMass()] = player.kingdomName;
 
-                //Player.inst = originalPlayer;
+                // Log final building state after placement
+                Main.LogSync("---------- BUILDING PLACED FINAL STATE ----------");
+                Main.LogSync($"  Final position: {building.transform.position}");
+                if (building.transform.childCount > 0)
+                {
+                    Main.LogSync($"  Child[0] rotation: {building.transform.GetChild(0).rotation} (euler={building.transform.GetChild(0).rotation.eulerAngles})");
+                    Main.LogSync($"  Child[0] localPosition: {building.transform.GetChild(0).localPosition}");
+                }
+                Main.LogSync($"  IsBuilt={building.IsBuilt()}, IsPlaced={building.IsPlaced()}");
+                Main.LogSync($"  TeamID={building.TeamID()}, LandMass={building.LandMass()}");
+                Main.LogSync("========== BUILDING PLACEMENT END ==========");
             }
             else
             {
-                Main.helper.Log(structureData.uniqueName + " failed to load correctly");
+                Main.LogSync($"FAILED to place building: {structureData.uniqueName} - GetPlaceableByUniqueName returned null");
             }
-            //building.Init();
         }
 
     }

@@ -58,6 +58,14 @@ namespace KCM.Packets.State
             if (building == null)
                 return;
 
+            Main.LogSync($"========== BUILDING STATE UPDATE ==========");
+            Main.LogSync($"Building: {uniqueName} guid={guid}");
+            Main.LogSync($"  globalPosition={globalPosition}");
+            Main.LogSync($"  localPosition={localPosition}");
+            Main.LogSync($"  rotation={rotation} (euler={rotation.eulerAngles})");
+            Main.LogSync($"  built={built}, placed={placed}, open={open}");
+            Main.LogSync($"  constructionProgress={constructionProgress}");
+
             try
             {
                 building.UniqueName = uniqueName;

@@ -26,7 +26,12 @@ namespace KCM.StateManagement.BuildingState
 
                 Building building = (Building)observer.state;
 
-                //Main.helper.Log("Should send building network update for: " + building.UniqueName);
+                Main.LogSync($"SENDING building state update for: {building.UniqueName} guid={building.guid}");
+                Main.LogSync($"  position={building.transform.position}");
+                if (building.transform.childCount > 0)
+                {
+                    Main.LogSync($"  rotation={building.transform.GetChild(0).rotation} (euler={building.transform.GetChild(0).rotation.eulerAngles})");
+                }
 
                 new BuildingStatePacket()
                 {
