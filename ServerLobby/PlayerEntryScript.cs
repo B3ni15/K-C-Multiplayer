@@ -21,16 +21,15 @@ namespace KCM.ServerLobby
 
         public void Start()
         {
-            SetValues();
-
-            InvokeRepeating("SetValues", 0, 0.25f);
-
             banner = transform.Find("PlayerBanner").GetComponent<RawImage>();
 
             transform.Find("PlayerBanner").GetComponent<Button>().onClick.AddListener(() =>
             {
                 Main.TransitionTo(MenuState.NameAndBanner);//ChooseBannerUI Hooks required, as well as townnameui
             });
+
+            SetValues();
+            InvokeRepeating("SetValues", 0, 0.25f);
         }
 
         public void SetValues()
