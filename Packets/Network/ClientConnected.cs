@@ -99,7 +99,7 @@ namespace KCM.Packets.Network
                         chunkSize = chunk.Length,
                         saveDataIndex = sent,
                         totalChunks = chunks.Count
-                    }.Send(clientId);
+                    }.Send(clientId, Riptide.MessageSendMode.Reliable);
 
                     Main.helper.Log(" ");
 

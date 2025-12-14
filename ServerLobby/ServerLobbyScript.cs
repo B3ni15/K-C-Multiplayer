@@ -144,7 +144,6 @@ namespace KCM
                 {
 
                     Main.helper.Log("Disable all");
-                    //StartGameButton.gameObject.SetActive(false);
                     StartGameButton.onClick.RemoveAllListeners();
                     StartGameButton.GetComponentInChildren<TextMeshProUGUI>().text = "Ready";
                     StartGameButton.onClick.AddListener(() =>
@@ -189,6 +188,16 @@ namespace KCM
                     StartGameButton.GetComponentInChildren<TextMeshProUGUI>().text = "Start";
                     StartGameButton.onClick.AddListener(() =>
                     {
+                        if (World.inst.GetTextSeed() != WorldSeed.text)
+                        {
+                            World.inst.seed = World.inst.SeedFromText(WorldSeed.text);
+                        }
+
+                        new WorldSeed()
+                        {
+                            Seed = World.inst.seed
+                        }.SendToAll(KCClient.client.Id);
+
                         new StartGame().SendToAll();
 
                         if (PlacementType.value == 0 && !LobbyManager.loadingSave)
