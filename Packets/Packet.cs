@@ -11,21 +11,25 @@ namespace KCM.Packets
     {
         public abstract ushort packetId { get; }
         public ushort clientId { get; set; }
-        public virtual Riptide.MessageSendMode sendMode => Riptide.MessageSendMode.Reliable;
 
         public KCPlayer player
         {
             get
             {
-                string steamId;
-                if (!Main.clientSteamIds.TryGetValue(clientId, out steamId) || string.IsNullOrEmpty(steamId))
+                KCPlayer p = null;
+
+                if (!Main.clientSteamIds.ContainsKey(clientId))
                     return null;
 
-                KCPlayer player;
-                if (Main.kCPlayers.TryGetValue(steamId, out player))
-                    return player;
+                //Main.helper.Log($"SteamID: {Main.GetPlayerByClientID(clientId).steamId} for {clientId} ({Main.GetPlayerByClientID(clientId).id})");
 
-                Main.helper.Log($"Error getting player from packet {packetId} {GetType().Name} from {clientId}");
+                if (Main.kCPlayers.TryGetValue(Main.GetPlayerByClientID(clientId).steamId, out p))
+                    return p;
+                else
+                {
+                    Main.helper.Log($"Error getting player from packet {packetId} {this.GetType().Name} from {clientId}");
+                }
+
                 return null;
             }
         }

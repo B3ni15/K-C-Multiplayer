@@ -14,8 +14,6 @@ namespace KCM.Packets.Lobby
 
         public override void HandlePacketServer()
         {
-            if (player == null)
-                return;
             IsReady = !player.ready;
             //SendToAll(KCClient.client.Id);
 
@@ -24,8 +22,6 @@ namespace KCM.Packets.Lobby
 
         public override void HandlePacketClient()
         {
-            if (player == null)
-                return;
             player.ready = IsReady;
         }
     }

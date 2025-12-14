@@ -35,17 +35,13 @@ namespace KCM.Packets.Lobby
 
                 Main.helper.Log("PlayerList: " + playersName[i] + " " + playersId[i] + " " + steamIds[i]);
 
-                KCPlayer player;
-                if (!Main.kCPlayers.TryGetValue(steamIds[i], out player) || player == null)
+                Main.kCPlayers.Add(steamIds[i], new KCPlayer(playersName[i], playersId[i], steamIds[i])
                 {
-                    player = new KCPlayer(playersName[i], playersId[i], steamIds[i]);
-                    Main.kCPlayers[steamIds[i]] = player;
-                }
-
-                player.name = playersName[i];
-                player.ready = playersReady[i];
-                player.banner = playersBanner[i];
-                player.kingdomName = playersKingdomName[i];
+                    name = playersName[i],
+                    ready = playersReady[i],
+                    banner = playersBanner[i],
+                    kingdomName = playersKingdomName[i]
+                });
 
 
                 if (Main.clientSteamIds.ContainsKey(playersId[i]))
@@ -53,8 +49,7 @@ namespace KCM.Packets.Lobby
                 else
                     Main.clientSteamIds.Add(playersId[i], steamIds[i]);
 
-                if (player.inst != null && player.inst.PlayerLandmassOwner != null)
-                    player.inst.PlayerLandmassOwner.SetBannerIdx(playersBanner[i]);
+                Main.kCPlayers[steamIds[i]].inst.PlayerLandmassOwner.SetBannerIdx(playersBanner[i]);
 
                 LobbyHandler.AddPlayerEntry(playersId[i]);
             }

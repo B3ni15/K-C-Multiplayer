@@ -1,7 +1,6 @@
 ﻿using KCM;
 using KCM.Enums;
 using KCM.Packets.Handlers;
-using KCM.StateManagement.Observers;
 using Steamworks;
 using UnityEngine;
 
@@ -154,7 +153,20 @@ namespace Riptide.Demos.Steam.PlayerHosted
             //NetworkManager.Singleton.StopServer();
             //NetworkManager.Singleton.DisconnectClient();
             SteamMatchmaking.LeaveLobby(lobbyId);
-            Main.ResetMultiplayerState("LeaveLobby");
+
+            if (KCClient.client.IsConnected)
+                KCClient.client.Disconnect();
+
+            Main.helper.Log("clear players");
+            Main.kCPlayers.Clear();
+            LobbyHandler.ClearPlayerList();
+            LobbyHandler.ClearChatEntries();
+            Main.helper.Log("end clear players");
+
+            if (KCServer.IsRunning)
+                KCServer.server.Stop();
+
+
 
             Main.TransitionTo(MenuState.ServerBrowser);
             ServerBrowser.registerServer = false;

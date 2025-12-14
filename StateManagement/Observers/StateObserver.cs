@@ -12,24 +12,6 @@ namespace KCM.StateManagement.Observers
     {
         public static Dictionary<int, IObserver> observers = new Dictionary<int, IObserver>();
 
-        public static void ClearAll()
-        {
-            foreach (var observer in observers.Values)
-            {
-                try
-                {
-                    var component = observer as Component;
-                    if (component != null)
-                        UnityEngine.Object.Destroy(component.gameObject);
-                }
-                catch
-                {
-                }
-            }
-
-            observers.Clear();
-        }
-
         public static void RegisterObserver<T>(T instance, string[] monitoredFields, EventHandler<StateUpdateEventArgs> eventHandler = null, EventHandler<StateUpdateEventArgs> sendUpdateHandler = null)
         {
             if (observers.ContainsKey(instance.GetHashCode()))

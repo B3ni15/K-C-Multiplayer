@@ -128,31 +128,6 @@ namespace KCM.StateManagement.Observers
             if (this.state == null)
                 return;
 
-            // Unity uses "fake null" for destroyed objects. Since our state is stored as object,
-            // we must explicitly detect that case to avoid exceptions + log spam.
-            try
-            {
-                UnityEngine.Object unityObj = this.state as UnityEngine.Object;
-                if (this.state is UnityEngine.Object && unityObj == null)
-                {
-                    try { StateObserver.observers.Remove(this.state.GetHashCode()); } catch { }
-                    try
-                    {
-                        if (observerObject != null)
-                            UnityEngine.Object.Destroy(observerObject);
-                        else
-                            UnityEngine.Object.Destroy(this.gameObject);
-                    }
-                    catch
-                    {
-                    }
-                    return;
-                }
-            }
-            catch
-            {
-            }
-
             if (!(currentMs - lastUpdate > updateInterval)) // Don't run if the update interval hasn't passed (default 100 milliseconds);
                 return;
 

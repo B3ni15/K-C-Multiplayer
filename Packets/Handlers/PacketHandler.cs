@@ -15,14 +15,6 @@ namespace KCM.Packets.Handlers
 {
     public class PacketHandler
     {
-        [ThreadStatic]
-        private static bool isHandlingPacket;
-
-        public static bool IsHandlingPacket
-        {
-            get { return isHandlingPacket; }
-        }
-
         public static Dictionary<ushort, PacketRef> Packets = new Dictionary<ushort, PacketRef>();
         public class PacketRef
         {
@@ -92,9 +84,7 @@ namespace KCM.Packets.Handlers
                 {
 
                     IPacket p = (IPacket)Activator.CreateInstance(packet);
-                    var properties = packet.GetProperties(BindingFlags.Instance | BindingFlags.Public)
-                        .Where(prop => prop.Name != "packetId" && prop.Name != "sendMode")
-                        .ToArray();
+                    var properties = packet.GetProperties(BindingFlags.Instance | BindingFlags.Public).Where(prop => prop.Name != "packetId").ToArray();
                     Array.Sort(properties, (x, y) => String.Compare(x.Name, y.Name));
                     ushort id = (ushort)p.GetType().GetProperty("packetId").GetValue(p, null);
 
@@ -147,9 +137,7 @@ namespace KCM.Packets.Handlers
                 {
                     packet.HandlePacketServer();
 
-                    bool shouldRelay = packet.GetType().GetCustomAttributes(typeof(NoServerRelayAttribute), inherit: true).Length == 0;
-                    if (shouldRelay)
-                        ((Packet)packet).SendToAll();
+                    ((Packet)packet).SendToAll();
                 }
                 catch (Exception ex)
                 {
@@ -191,7 +179,6 @@ namespace KCM.Packets.Handlers
                 {
                     try
                     {
-                        isHandlingPacket = true;
                         packet.HandlePacketClient();
                     }
                     catch (Exception ex)
@@ -214,10 +201,6 @@ namespace KCM.Packets.Handlers
                             Main.helper.Log(ex.InnerException.StackTrace);
                         }
                     }
-                    finally
-                    {
-                        isHandlingPacket = false;
-                    }
                 }
 
                 /* if (PacketHandlers.TryGetValue(id, out PacketHandlerDelegate handler))
@@ -239,20 +222,14 @@ namespace KCM.Packets.Handlers
             try
             {
                 var packetRef = Packets[packet.packetId];
-
-                MessageSendMode sendMode = MessageSendMode.Reliable;
-                Packet basePacket = packet as Packet;
-                if (basePacket != null)
-                    sendMode = basePacket.sendMode;
-
-                Message message = Message.Create(sendMode, packet.packetId);
+                Message message = Message.Create(MessageSendMode.Reliable, packet.packetId);
 
                 foreach (var prop in packetRef.properties)
                 {
                     if (prop.PropertyType.IsEnum)
                     {
                         currentPropName = prop.Name;
-                        message.AddInt(Convert.ToInt32(prop.GetValue(packet, null)));
+                        message.AddInt((int)prop.GetValue(packet, null));
                     }
                     else if (prop.PropertyType == typeof(ushort))
                     {
@@ -321,27 +298,6 @@ namespace KCM.Packets.Handlers
                         message.AddInt(list.Count);
                         foreach (var item in list)
                             message.AddInt(item);
-                    }
-
-                    else if (prop.PropertyType == typeof(List<Guid>))
-                    {
-                        currentPropName = prop.Name;
-                        List<Guid> list = (List<Guid>)prop.GetValue(packet, null);
-                        message.AddInt(list.Count);
-                        foreach (var item in list)
-                            message.AddBytes(item.ToByteArray(), true);
-                    }
-                    else if (prop.PropertyType == typeof(List<Vector3>))
-                    {
-                        currentPropName = prop.Name;
-                        List<Vector3> list = (List<Vector3>)prop.GetValue(packet, null);
-                        message.AddInt(list.Count);
-                        foreach (var item in list)
-                        {
-                            message.AddFloat(item.x);
-                            message.AddFloat(item.y);
-                            message.AddFloat(item.z);
-                        }
                     }
 
                     else if (prop.PropertyType.IsGenericType && prop.PropertyType.GetGenericTypeDefinition() == typeof(Dictionary<,>))
@@ -505,7 +461,9 @@ namespace KCM.Packets.Handlers
                     if (prop.PropertyType.IsEnum)
                     {
                         int enumValue = message.GetInt();
-                        prop.SetValue(p, Enum.ToObject(prop.PropertyType, enumValue));
+                        string enumName = Enum.GetName(prop.PropertyType, enumValue);
+
+                        prop.SetValue(p, Enum.Parse(prop.PropertyType, enumName));
                     }
                     else if (prop.PropertyType == typeof(ushort))
                     {
@@ -574,29 +532,6 @@ namespace KCM.Packets.Handlers
 
                         for (int i = 0; i < count; i++)
                             list.Add(message.GetInt());
-
-                        prop.SetValue(p, list);
-                    }
-                    else if (prop.PropertyType == typeof(List<Guid>))
-                    {
-                        int count = message.GetInt();
-                        List<Guid> list = new List<Guid>();
-
-                        for (int i = 0; i < count; i++)
-                            list.Add(new Guid(message.GetBytes()));
-
-                        prop.SetValue(p, list);
-                    }
-                    else if (prop.PropertyType == typeof(List<Vector3>))
-                    {
-                        int count = message.GetInt();
-                        List<Vector3> list = new List<Vector3>();
-
-                        for (int i = 0; i < count; i++)
-                        {
-                            Vector3 vector = new Vector3(message.GetFloat(), message.GetFloat(), message.GetFloat());
-                            list.Add(vector);
-                        }
 
                         prop.SetValue(p, list);
                     }

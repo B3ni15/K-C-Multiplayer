@@ -51,24 +51,12 @@ namespace KCM.ServerLobby.LobbyChat
         {
             try
             {
-                if (banner == null)
-                    return;
-
-                string steamId;
-                if (!Main.clientSteamIds.TryGetValue(Client, out steamId))
-                    return;
-
                 KCPlayer player;
-                if (!Main.kCPlayers.TryGetValue(steamId, out player) || player == null)
-                    return;
+                Main.kCPlayers.TryGetValue(Main.GetPlayerByClientID(Client).steamId, out player);
 
-                if (World.inst == null || World.inst.liverySets == null)
-                    return;
-
-                if (player.banner < 0 || player.banner >= World.inst.liverySets.Count)
-                    return;
-
-                banner.texture = World.inst.liverySets[player.banner].banners;
+                var bannerTexture = World.inst.liverySets[player.banner].banners;
+                
+                banner.texture = bannerTexture;
             }
             catch (Exception ex)
             {
