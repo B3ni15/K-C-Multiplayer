@@ -1394,38 +1394,60 @@ namespace KCM
             {
                 if (KCClient.client.IsConnected)
                 {
+                    Main.helper.Log($"[ProcessBuilding] START - {structureData.uniqueName}");
 
-                    Building Building = GameState.inst.GetPlaceableByUniqueName(structureData.uniqueName);
-                    bool flag = Building;
-                    if (flag)
+                    try
                     {
-                        Building building = UnityEngine.Object.Instantiate<Building>(Building);
-                        building.transform.position = structureData.globalPosition;
-                        building.Init();
-                        building.transform.SetParent(p.buildingContainer.transform, true);
-                        structureData.Unpack(building);
-                        p.AddBuilding(building);
+                        Building Building = GameState.inst.GetPlaceableByUniqueName(structureData.uniqueName);
+                        Main.helper.Log($"[ProcessBuilding] GetPlaceable: {(Building != null ? "OK" : "NULL")}");
 
-                        // Place building in world and setup pathing
-                        World.inst.PlaceFromLoad(building);
-                        structureData.UnpackStage2(building);
-
-                        Main.helper.Log($"Loading player id: {p.PlayerLandmassOwner.teamId}");
-                        Main.helper.Log($"loading building: {building.FriendlyName}");
-                        Main.helper.Log($" (teamid: {building.TeamID()})");
-                        Main.helper.Log(p.ToString());
-                        bool flag2 = building.GetComponent<Keep>() != null && building.TeamID() == p.PlayerLandmassOwner.teamId;
-                        Main.helper.Log("Set keep? " + flag2);
-                        if (flag2)
+                        if (Building)
                         {
-                            p.keep = building.GetComponent<Keep>();
-                            Main.helper.Log(p.keep.ToString());
+                            Building building = UnityEngine.Object.Instantiate<Building>(Building);
+                            Main.helper.Log($"[ProcessBuilding] Instantiated");
+
+                            building.transform.position = structureData.globalPosition;
+                            Main.helper.Log($"[ProcessBuilding] Position set: {structureData.globalPosition}");
+
+                            building.Init();
+                            Main.helper.Log($"[ProcessBuilding] Init done");
+
+                            building.transform.SetParent(p.buildingContainer.transform, true);
+                            Main.helper.Log($"[ProcessBuilding] SetParent done");
+
+                            structureData.Unpack(building);
+                            Main.helper.Log($"[ProcessBuilding] Unpack done");
+
+                            p.AddBuilding(building);
+                            Main.helper.Log($"[ProcessBuilding] AddBuilding done");
+
+                            World.inst.PlaceFromLoad(building);
+                            Main.helper.Log($"[ProcessBuilding] PlaceFromLoad done");
+
+                            structureData.UnpackStage2(building);
+                            Main.helper.Log($"[ProcessBuilding] UnpackStage2 done");
+
+                            bool isKeep = building.GetComponent<Keep>() != null && building.TeamID() == p.PlayerLandmassOwner.teamId;
+                            if (isKeep)
+                            {
+                                p.keep = building.GetComponent<Keep>();
+                                Main.helper.Log($"[ProcessBuilding] Keep set");
+                            }
+
+                            __result = building;
+                            Main.helper.Log($"[ProcessBuilding] SUCCESS - {structureData.uniqueName}");
                         }
-                        __result = building;
+                        else
+                        {
+                            Main.helper.Log($"[ProcessBuilding] FAILED - {structureData.uniqueName} not found in GameState");
+                            __result = null;
+                        }
                     }
-                    else
+                    catch (Exception e)
                     {
-                        Main.helper.Log(structureData.uniqueName + " failed to load correctly");
+                        Main.helper.Log($"[ProcessBuilding] EXCEPTION: {structureData.uniqueName}");
+                        Main.helper.Log($"[ProcessBuilding] Error: {e.Message}");
+                        Main.helper.Log($"[ProcessBuilding] Stack: {e.StackTrace}");
                         __result = null;
                     }
 
