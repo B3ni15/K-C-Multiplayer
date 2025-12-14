@@ -36,24 +36,32 @@ namespace KCM.Packets.State
         {
             if (clientId == KCClient.client.Id) return; //prevent double placing on same client
 
-            //Main.helper.Log("Received building state packet for: " + uniqueName + " from " + Main.kCPlayers[Main.GetPlayerByClientID(clientId).steamId].name + $"({clientId})");
-
-
             Building building = player.inst.GetBuilding(guid);
 
             if (building == null)
             {
                 Main.helper.Log("Building not found.");
+                Main.QueuePendingBuildingState(this);
                 return;
             }
 
+            ApplyToBuilding(building);
+        }
+
+        public override void HandlePacketServer()
+        {
+            //throw new NotImplementedException();
+        }
+
+        public void ApplyToBuilding(Building building)
+        {
+            if (building == null)
+                return;
+
             try
             {
-                //PrintProperties();
-
                 building.UniqueName = uniqueName;
                 building.customName = customName;
-
 
                 building.transform.position = this.globalPosition;
                 building.transform.GetChild(0).rotation = this.rotation;
@@ -63,14 +71,12 @@ namespace KCM.Packets.State
                 SetPrivateFieldValue(building, "placed", placed);
                 SetPrivateFieldValue(building, "resourceProgress", resourceProgress);
 
-
                 building.Open = open;
                 building.doBuildAnimation = doBuildAnimation;
                 building.constructionPaused = constructionPaused;
                 building.constructionProgress = constructionProgress;
                 building.Life = life;
                 building.ModifiedMaxLife = ModifiedMaxLife;
-
 
                 //building.yearBuilt = yearBuilt;
                 SetPrivateFieldValue(building, "yearBuilt", yearBuilt);
@@ -84,11 +90,6 @@ namespace KCM.Packets.State
                 Main.helper.Log(e.Message);
                 Main.helper.Log(e.StackTrace);
             }
-        }
-
-        public override void HandlePacketServer()
-        {
-            //throw new NotImplementedException();
         }
 
         private void SetPrivateFieldValue(object obj, string fieldName, object value)

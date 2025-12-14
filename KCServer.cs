@@ -110,7 +110,15 @@ namespace KCM
         private void OnApplicationQuit()
         {
             if (server != null && server.IsRunning)
+            {
+                new ShowModal
+                {
+                    title = "Host disconnected",
+                    message = "The host has left the game."
+                }.SendToAll();
+
                 server.Stop();
+            }
         }
 
         private void Preload(KCModHelper helper)
