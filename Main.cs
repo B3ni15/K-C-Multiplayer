@@ -1110,7 +1110,7 @@ namespace KCM
             }
         }
 
-        [HarmonyPatch(typeof(Villager), "Update")]
+        [HarmonyPatch(typeof(Villager), nameof(Villager.Update), new Type[0])]
         public class VillagerMovementSync
         {
             private struct MovementSnapshot
