@@ -18,11 +18,8 @@ namespace KCM.Enums
         KingdomName = 32,
         StartGame = 33,
         WorldSeed = 34,
-
-
         Building = 50,
         BuildingOnPlacement = 51,
-
         World = 70,
         WorldPlace = 71,
         FellTree = 72,

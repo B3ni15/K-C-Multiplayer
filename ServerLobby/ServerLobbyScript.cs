@@ -247,10 +247,16 @@ namespace KCM
                             foreach (var player in Main.kCPlayers.Values)
                                 player.inst.SetupJobPriorities();
 
+                            // Send world seed with all map parameters to ensure clients generate identical world
                             new WorldSeed()
                             {
-                                Seed = World.inst.seed
+                                Seed = World.inst.seed,
+                                WorldSize = World.inst.mapSize,
+                                WorldType = World.inst.mapBias,
+                                WorldRivers = World.inst.mapRiverLakes
                             }.SendToAll(KCClient.client.Id);
+
+                            Main.helper.Log($"[WORLD SYNC] Generated new world - Seed: {World.inst.seed}, Size: {World.inst.mapSize}, Type: {World.inst.mapBias}, Rivers: {World.inst.mapRiverLakes}");
                         }
                         catch (Exception ex)
                         {

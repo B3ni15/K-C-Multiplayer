@@ -111,11 +111,16 @@ namespace KCM.Packets.Network
             }
             else
             {
-
+                // Send world seed with all map parameters to ensure correct generation
                 new WorldSeed()
                 {
-                    Seed = World.inst.seed
+                    Seed = World.inst.seed,
+                    WorldSize = World.inst.mapSize,
+                    WorldType = World.inst.mapBias,
+                    WorldRivers = World.inst.mapRiverLakes
                 }.SendToAll(KCClient.client.Id);
+
+                Main.helper.Log($"[WORLD SYNC] Sent world to new client - Seed: {World.inst.seed}, Size: {World.inst.mapSize}, Type: {World.inst.mapBias}, Rivers: {World.inst.mapRiverLakes}");
             }
         }
 
