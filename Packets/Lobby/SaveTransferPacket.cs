@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Riptide.Demos.Steam.PlayerHosted;
 using static KCM.Main;
 
 namespace KCM.Packets.Lobby
