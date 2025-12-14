@@ -12,6 +12,7 @@ namespace KCM.Packets.Game.GamePlayer
         public override ushort packetId => (ushort)Enums.Packets.AddVillager;
 
         public Guid guid { get; set; }
+        public Vector3 position { get; set; }
 
         public override void HandlePacketClient()
         {
@@ -19,10 +20,24 @@ namespace KCM.Packets.Game.GamePlayer
             {
                 if (KCClient.client.Id == clientId) return;
 
+                // Check for duplicate villager by guid
+                var existingVillager = player.inst.Workers.data.FirstOrDefault(v => v != null && v.guid == guid);
+                if (existingVillager != null)
+                {
+                    Main.helper.Log($"Villager with guid {guid} already exists, skipping duplicate");
+                    return;
+                }
+
                 Main.helper.Log("Received add villager packet from " + player.name + $"({player.id})");
 
                 Villager v = Villager.CreateVillager();
                 v.guid = guid;
+
+                // Set villager position
+                if (position != Vector3.zero)
+                {
+                    v.TeleportTo(position);
+                }
 
                 player.inst.Workers.Add(v);
                 player.inst.Homeless.Add(v);
@@ -31,6 +46,7 @@ namespace KCM.Packets.Game.GamePlayer
             catch (Exception e)
             {
                 Main.helper.Log("Error handling add villager packet: " + e.Message);
+                Main.helper.Log(e.StackTrace);
             }
         }
 

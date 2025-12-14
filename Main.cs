@@ -780,6 +780,7 @@ namespace KCM
                         new AddVillagerPacket()
                         {
                             guid = __result.guid,
+                            position = pos,  // Include villager spawn position
                         }.Send();
                     }
                     catch (Exception e)
