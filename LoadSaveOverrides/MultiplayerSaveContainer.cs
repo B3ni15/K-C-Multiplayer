@@ -295,29 +295,6 @@ namespace KCM.LoadSaveOverrides
                 }
             }
 
-            // Fix 2: Refresh all villagers to fix stuck AI
-            Main.helper.Log("Refreshing villager states...");
-            foreach (var kcPlayer in Main.kCPlayers.Values)
-            {
-                if (kcPlayer.inst == null) continue;
-
-                for (int i = 0; i < kcPlayer.inst.Workers.Count; i++)
-                {
-                    var villager = kcPlayer.inst.Workers.data[i];
-                    if (villager == null) continue;
-
-                    try
-                    {
-                        // Teleport to current position to reset pathfinding
-                        villager.TeleportTo(villager.Pos);
-                    }
-                    catch (Exception e)
-                    {
-                        Main.helper.Log($"Error refreshing villager: {e.Message}");
-                    }
-                }
-            }
-
             Main.helper.Log("Post-load multiplayer fixes complete.");
 
             return obj;

@@ -182,73 +182,15 @@ namespace KCM
         #endregion
 
         public static int FixedUpdateInterval = 0;
-        private static Dictionary<Guid, Vector3> lastVillagerPositions = new Dictionary<Guid, Vector3>();
 
         public static void ClearVillagerPositionCache()
         {
-            lastVillagerPositions.Clear();
+            // Kept for API compatibility with LobbyManager
         }
 
         private void FixedUpdate()
         {
-            // Periodic villager position sync from server to clients
-            // Sync every 150 frames (~3 seconds at 50 FPS) to reduce bandwidth
-            if (KCServer.IsRunning && KCClient.client.IsConnected && FixedUpdateInterval % 150 == 0)
-            {
-                try
-                {
-                    SyncVillagerPositions();
-                }
-                catch (Exception e)
-                {
-                    helper.Log($"Error in villager sync: {e.Message}");
-                }
-            }
-
             FixedUpdateInterval++;
-        }
-
-        private void SyncVillagerPositions()
-        {
-            // Only sync villagers that have moved significantly
-            const float movementThreshold = 0.5f;
-
-            foreach (var kcPlayer in kCPlayers.Values)
-            {
-                if (kcPlayer.inst == null) continue;
-
-                for (int i = 0; i < kcPlayer.inst.Workers.Count; i++)
-                {
-                    var villager = kcPlayer.inst.Workers.data[i];
-                    if (villager == null) continue;
-
-                    Vector3 currentPos = villager.Pos;
-                    Vector3 lastPos;
-
-                    bool shouldSync = false;
-                    if (!lastVillagerPositions.TryGetValue(villager.guid, out lastPos))
-                    {
-                        // First time seeing this villager
-                        lastVillagerPositions[villager.guid] = currentPos;
-                        shouldSync = true;
-                    }
-                    else if (Vector3.Distance(currentPos, lastPos) > movementThreshold)
-                    {
-                        // Villager has moved significantly
-                        lastVillagerPositions[villager.guid] = currentPos;
-                        shouldSync = true;
-                    }
-
-                    if (shouldSync)
-                    {
-                        new Packets.Game.GameVillager.VillagerTeleportTo()
-                        {
-                            guid = villager.guid,
-                            pos = currentPos
-                        }.SendToAll(KCClient.client.Id);
-                    }
-                }
-            }
         }
 
         #region "TransitionTo"
