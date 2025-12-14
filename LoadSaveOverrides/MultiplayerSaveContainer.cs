@@ -332,6 +332,19 @@ namespace KCM.LoadSaveOverrides
             Main.helper.Log($"Setting kingdom name to: {kingdomNames[Main.PlayerSteamID]}");
             TownNameUI.inst.SetTownName(kingdomNames[Main.PlayerSteamID]);
 
+            // Force transition to PlayingMode to enable villager movement
+            try
+            {
+                Main.helper.Log("MultiplayerSaveContainer.Unpack: Setting PlayingMode");
+                GameState.inst.SetNewMode(GameState.inst.playingMode);
+                Main.helper.Log("MultiplayerSaveContainer.Unpack: PlayingMode set successfully");
+            }
+            catch (Exception e)
+            {
+                Main.helper.Log("MultiplayerSaveContainer.Unpack: Failed to set PlayingMode");
+                Main.helper.Log(e.ToString());
+            }
+
             return obj;
         }
     }
