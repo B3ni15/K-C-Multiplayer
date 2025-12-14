@@ -1132,7 +1132,11 @@ namespace KCM
                     return;
 
                 Guid guid = __instance.guid;
-                Vector3 currentPosition = __instance.transform.position;
+                Component villagerComponent = __instance as Component;
+                if (villagerComponent == null)
+                    return;
+
+                Vector3 currentPosition = villagerComponent.transform.position;
                 float now = Time.time;
 
                 if (lastSnapshots.TryGetValue(guid, out MovementSnapshot snapshot))
