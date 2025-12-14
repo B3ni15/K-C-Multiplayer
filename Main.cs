@@ -3,6 +3,7 @@ using Assets.Code.UI;
 using Harmony;
 using KCM.Enums;
 using KCM.LoadSaveOverrides;
+using KCM.Packets;
 using KCM.Packets.Game;
 using KCM.Packets.Game.Dragon;
 using KCM.Packets.Game.GameBuilding;
@@ -456,7 +457,6 @@ namespace KCM
                 // Your code here
 
                 // Get the name of the last method that called OnPlayerPlacement
-                string callTree = "";
                 List<string> strings = new List<string>();
 
                 for (int i = 1; i < 10; i++)
