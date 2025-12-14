@@ -435,7 +435,6 @@ namespace KCM
                 // Your code here
 
                 // Get the name of the last method that called OnPlayerPlacement
-                string callTree = "";
                 List<string> strings = new List<string>();
 
                 for (int i = 1; i < 10; i++)

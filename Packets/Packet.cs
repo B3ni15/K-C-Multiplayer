@@ -110,7 +110,7 @@ namespace KCM.Packets
             {
                 if (KCServer.IsRunning && toClient != 0)
                 {
-                    KCServer.server.Send(PacketHandler.SerialisePacket(this), toClient, Riptide.MessageSendMode.Reliable);
+                    KCServer.server.Send(PacketHandler.SerialisePacket(this), toClient, true);
                 }
             }
             catch (Exception ex)

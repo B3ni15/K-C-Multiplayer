@@ -60,8 +60,6 @@ namespace KCM
             Falle
         }
 
-        bool awake = false;
-
         public void Start()
         {
             Main.helper.Log("ServerLobby start called");
@@ -188,14 +186,30 @@ namespace KCM
                     StartGameButton.GetComponentInChildren<TextMeshProUGUI>().text = "Start";
                     StartGameButton.onClick.AddListener(() =>
                     {
-                        if (World.inst.GetTextSeed() != WorldSeed.text)
+                        int definitiveSeed;
+                        if (string.IsNullOrWhiteSpace(WorldSeed.text))
                         {
-                            World.inst.seed = World.inst.SeedFromText(WorldSeed.text);
+                            World.inst.Generate();
+                            definitiveSeed = World.inst.seed;
+                        }
+                        else
+                        {
+                            if (int.TryParse(WorldSeed.text, out int parsedSeed))
+                            {
+                                definitiveSeed = parsedSeed;
+                                World.inst.Generate(definitiveSeed);
+                            }
+                            else
+                            {
+                                Main.helper.LogWarning($"Invalid seed '{WorldSeed.text}' entered. Generating a random seed.");
+                                World.inst.Generate();
+                                definitiveSeed = World.inst.seed;
+                            }
                         }
 
                         new WorldSeed()
                         {
-                            Seed = World.inst.seed
+                            Seed = definitiveSeed
                         }.SendToAll(KCClient.client.Id);
 
                         new StartGame().SendToAll();
