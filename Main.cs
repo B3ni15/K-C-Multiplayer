@@ -290,26 +290,6 @@ namespace KCM
                 {
                     helper?.Log("VillagerSystem.enabled = " + VillagerSystem.inst.enabled);
                 }
-
-                // Force transition to PlayingMode to enable villager movement
-                try
-                {
-                    if (GameState.inst != null)
-                    {
-                        helper?.Log("RunPostLoadRebuild: Current GameState mode: " + TryGetGameModeName());
-                        if (GameState.inst.playingMode != null)
-                        {
-                            helper?.Log("RunPostLoadRebuild: Setting PlayingMode");
-                            GameState.inst.SetNewMode(GameState.inst.playingMode);
-                            helper?.Log("RunPostLoadRebuild: PlayingMode set successfully");
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    helper?.Log("RunPostLoadRebuild: Failed to set PlayingMode");
-                    helper?.Log(ex.ToString());
-                }
             }
             catch (Exception e)
             {
