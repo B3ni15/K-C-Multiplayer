@@ -49,6 +49,8 @@ namespace KCM.Packets.Lobby
 
             received += chunkSize;
 
+            Main.helper.Log($"[SaveTransfer] Processed chunk {chunkId}/{totalChunks}. Received: {received} bytes of {saveSize}.");
+
             if (saveSize > 0)
             {
                 float savePercent = (float)received / (float)saveSize;
@@ -66,14 +68,21 @@ namespace KCM.Packets.Lobby
                 ServerLobbyScript.ProgressText.text = "0.00 KB / 0.00 KB";
             }
 
-
+            if (!IsTransferComplete())
+            {
+                Main.helper.Log($"[SaveTransfer] Transfer not yet complete after chunk {chunkId}. Missing: {WhichIsNotComplete()}");
+            }
 
             if (chunkId + 1 == totalChunks)
             {
-                Main.helper.Log($"Received last save transfer packet.");
+                Main.helper.Log($"Received last save transfer packet. Final check: IsComplete={IsTransferComplete()}");
 
-                Main.helper.Log(WhichIsNotComplete());
+                if (!IsTransferComplete())
+                {
+                    Main.helper.Log($"[SaveTransfer] WARNING: Transfer is NOT complete even after last chunk. Missing: {WhichIsNotComplete()}");
+                }
             }
+
 
             if (IsTransferComplete())
             {
