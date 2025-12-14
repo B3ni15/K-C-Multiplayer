@@ -1660,9 +1660,10 @@ namespace KCM
                     __instance.JobCustomMaxEnabledFlag = new bool[World.inst.NumLandMasses][];
                     for (int lm = 0; lm < World.inst.NumLandMasses; lm++)
                     {
-                        __instance.JobFilledAvailable[lm] = new int[38];
-                        __instance.JobCustomMaxEnabledFlag[lm] = new bool[38];
-                        for (int n = 0; n < 38; n++)
+                        int numJobTypes = p.JobFilledAvailable.data[lm].GetLength(0);
+                        __instance.JobFilledAvailable[lm] = new int[numJobTypes];
+                        __instance.JobCustomMaxEnabledFlag[lm] = new bool[numJobTypes];
+                        for (int n = 0; n < numJobTypes; n++)
                         {
                             __instance.JobFilledAvailable[lm][n] = p.JobFilledAvailable.data[lm][n, 1];
                         }

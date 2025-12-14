@@ -57,7 +57,17 @@ namespace KCM.Packets.Lobby
 
         public override void HandlePacketClient()
         {
-            Start();
+            if (!LobbyManager.loadingSave)
+            {
+                Start();
+            }
+            else
+            {
+                // If loading a save, just ensure the game is in the correct UI state for loading.
+                // The actual game start will happen after save data is unpacked in SaveTransferPacket.HandlePacketClient().
+                // This prevents MainMenuMode.StartGame() from being called prematurely and causing NullReferenceExceptions.
+                GameState.inst.SetNewMode(GameState.inst.playingMode);
+            }
         }
 
         public override void HandlePacketServer()
