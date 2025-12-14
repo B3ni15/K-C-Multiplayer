@@ -27,6 +27,16 @@ namespace KCM.StateManagement.BuildingState
             {
                 Observer observer = (Observer)sender;
                 Building building = (Building)observer.state;
+
+                if (building == null)
+                {
+                    if(observer != null)
+                    {
+                        UnityEngine.Object.Destroy(observer.gameObject);
+                    }
+                    return;
+                }
+
                 Guid guid = building.guid;
 
                 if (lastUpdateTime.ContainsKey(guid) && Time.time < lastUpdateTime[guid] + UpdateInterval)
@@ -38,6 +48,8 @@ namespace KCM.StateManagement.BuildingState
                     lastUpdateTime.Add(guid, Time.time);
                 else
                     lastUpdateTime[guid] = Time.time;
+
+                //Main.helper.Log("Should send building network update for: " + building.UniqueName);
 
                 new BuildingStatePacket()
                 {
