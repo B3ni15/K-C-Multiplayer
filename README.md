@@ -14,6 +14,7 @@
 | Orientaciok (rotaciok) nem szinkronizalodnak | Reszben javitva | Rotation es localPosition kozvetlenul alkalmazva WorldPlace-ben |
 | Host torol valamit -> kliens nem latja | Meg nincs elkezdve | BuildingDestroy packet szukseges |
 | Host nem latja a kliens epuleteit helyesen (rossz textúrak) | Javitva | UpdateMaterialSelection() hozzaadva WorldPlace.cs-ben |
+| Tobb Keep ugyanarra a szigetre | Meg nincs elkezdve | Engedi hogy masik jatekos szigetere Keep-et rakjunk, igy az eredeti jatekos elveszti a Keep-jet es nem tudja mozgatni az embereit |
 
 ### Status Definiciok
 
