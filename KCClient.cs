@@ -36,6 +36,7 @@ namespace KCM
 
         private static void Client_Disconnected(object sender, DisconnectedEventArgs e)
         {
+            Main.CleanupMultiplayerSession();
             Main.helper.Log("Client disconnected event start");
             try
             {

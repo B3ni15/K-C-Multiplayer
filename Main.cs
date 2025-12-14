@@ -106,10 +106,57 @@ namespace KCM
         public static string PlayerSteamID = SteamUser.GetSteamID().ToString();
 
         public static KCMSteamManager KCMSteamManager = null;
+        public static LobbyManager lobbyManager = null;
         public static SteamServer steamServer = new SteamServer();
         public static Riptide.Transports.Steam.SteamClient steamClient = new Riptide.Transports.Steam.SteamClient(steamServer);
 
         public static ushort currentClient = 0;
+
+        public static void CleanupMultiplayerSession()
+        {
+            if (helper == null) return; // Avoid running if mod is not fully initialized
+
+            helper.Log("--- Starting Multiplayer Session Cleanup ---");
+
+            // Disconnect client
+            if (KCClient.client != null && KCClient.client.IsConnected)
+            {
+                helper.Log("Disconnecting client...");
+                KCClient.client.Disconnect();
+            }
+
+            // Stop server
+            if (KCServer.server != null && KCServer.IsRunning)
+            {
+                helper.Log("Stopping server...");
+                KCServer.server.Stop();
+            }
+
+            // Clear player lists
+            if (kCPlayers.Count > 0 || clientSteamIds.Count > 0)
+            {
+                helper.Log($"Clearing {kCPlayers.Count} KCPlayer entries and {clientSteamIds.Count} client steam IDs.");
+                kCPlayers.Clear();
+                clientSteamIds.Clear();
+            }
+
+            // Destroy persistent managers
+            if (KCMSteamManager != null)
+            {
+                helper.Log("Destroying KCMSteamManager.");
+                Destroy(KCMSteamManager.gameObject);
+                KCMSteamManager = null;
+            }
+
+            if (lobbyManager != null)
+            {
+                helper.Log("Destroying LobbyManager.");
+                Destroy(lobbyManager.gameObject);
+                lobbyManager = null;
+            }
+
+            helper.Log("--- Multiplayer Session Cleanup Finished ---");
+        }
 
         #region "SceneLoaded"
         private void SceneLoaded(KCModHelper helper)
@@ -123,7 +170,7 @@ namespace KCM
             KCMSteamManager = new GameObject("KCMSteamManager").AddComponent<KCMSteamManager>();
             DontDestroyOnLoad(KCMSteamManager);
 
-            var lobbyManager = new GameObject("LobbyManager").AddComponent<LobbyManager>();
+            lobbyManager = new GameObject("LobbyManager").AddComponent<LobbyManager>();
             DontDestroyOnLoad(lobbyManager);
 
             //SteamFriends.InviteUserToGame(new CSteamID(76561198036307537), "test");
