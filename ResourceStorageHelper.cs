@@ -12,15 +12,24 @@ namespace KCM
         private static MethodInfo isPrivateMethod;
         private static MethodInfo addResourceStorageMethod;
 
+        private static readonly string[] resourceStorageTypeNames = new[]
+        {
+            "Assets.Interface.IResourceStorage, Assembly-CSharp",
+            "Assets.Interface.IResourceStorage, Assembly-CSharp-firstpass",
+            "Assets.Interface.IResourceStorage, Assembly-CSharp-Editor",
+        };
+
         private static void EnsureInitialized()
         {
             if (resourceStorageType != null)
                 return;
 
-            resourceStorageType = AppDomain.CurrentDomain
-                .GetAssemblies()
-                .Select(a => a.GetType("Assets.Interface.IResourceStorage", false))
-                .FirstOrDefault(t => t != null);
+            foreach (var typeName in resourceStorageTypeNames)
+            {
+                resourceStorageType = Type.GetType(typeName);
+                if (resourceStorageType != null)
+                    break;
+            }
 
             if (resourceStorageType == null)
                 return;
