@@ -701,6 +701,8 @@ namespace KCM
                         }
                         LogStep();
 
+                        // CRITICAL: Bake pathing for villager movement!
+                        b.BakePathing();
 
                         return false;
                     }
