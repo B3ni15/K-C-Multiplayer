@@ -20,9 +20,6 @@ namespace KCM.Packets
 
                 if (!Main.clientSteamIds.ContainsKey(clientId))
                     return null;
-
-                //Main.helper.Log($"SteamID: {Main.GetPlayerByClientID(clientId).steamId} for {clientId} ({Main.GetPlayerByClientID(clientId).id})");
-
                 if (Main.kCPlayers.TryGetValue(Main.GetPlayerByClientID(clientId).steamId, out p))
                     return p;
                 else
@@ -88,6 +85,37 @@ namespace KCM.Packets
             catch (Exception ex)
             {
                 Main.helper.Log($"Error sending packet {packetId} {this.GetType().Name} from {clientId}");
+
+                Main.helper.Log("----------------------- Main exception -----------------------");
+                Main.helper.Log(ex.ToString());
+                Main.helper.Log("----------------------- Main message -----------------------");
+                Main.helper.Log(ex.Message);
+                Main.helper.Log("----------------------- Main stacktrace -----------------------");
+                Main.helper.Log(ex.StackTrace);
+                if (ex.InnerException != null)
+                {
+                    Main.helper.Log("----------------------- Inner exception -----------------------");
+                    Main.helper.Log(ex.InnerException.ToString());
+                    Main.helper.Log("----------------------- Inner message -----------------------");
+                    Main.helper.Log(ex.InnerException.Message);
+                    Main.helper.Log("----------------------- Inner stacktrace -----------------------");
+                    Main.helper.Log(ex.InnerException.StackTrace);
+                }
+            }
+        }
+
+        public void SendReliable(ushort toClient)
+        {
+            try
+            {
+                if (KCServer.IsRunning && toClient != 0)
+                {
+                    KCServer.server.Send(PacketHandler.SerialisePacket(this), toClient, Riptide.MessageSendMode.Reliable);
+                }
+            }
+            catch (Exception ex)
+            {
+                Main.helper.Log($"Error sending reliable packet {packetId} {this.GetType().Name} from {clientId}");
 
                 Main.helper.Log("----------------------- Main exception -----------------------");
                 Main.helper.Log(ex.ToString());
