@@ -226,6 +226,45 @@ namespace KCM
             catch
             {
             }
+
+            return -1;
+        }
+
+        private static string TryGetGameModeName()
+        {
+            try
+            {
+                if (GameState.inst == null)
+                    return "null";
+
+                var t = GameState.inst.GetType();
+
+                var modeProp = t.GetProperty("mode", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
+                    ?? t.GetProperty("Mode", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
+                    ?? t.GetProperty("CurrentMode", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+
+                if (modeProp != null)
+                {
+                    object m = modeProp.GetValue(GameState.inst, null);
+                    return m != null ? m.GetType().Name : "null";
+                }
+
+                var modeField = t.GetField("mode", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
+                    ?? t.GetField("Mode", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
+                    ?? t.GetField("currentMode", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
+                    ?? t.GetField("currMode", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+
+                if (modeField != null)
+                {
+                    object fm = modeField.GetValue(GameState.inst);
+                    return fm != null ? fm.GetType().Name : "null";
+                }
+            }
+            catch
+            {
+            }
+
+            return "unknown";
         }
 
         private static bool TryGetVillagerPosition(Villager villager, out Vector3 position)
@@ -502,6 +541,7 @@ namespace KCM
         #endregion
 
         public static int FixedUpdateInterval = 0;
+        private static int worldReadyRebuildDone = 0;
         private static long lastVillagerMoveMs = 0;
         private static long lastVillagerProbeMs = 0;
         private static long lastVillagerStallLogMs = 0;
