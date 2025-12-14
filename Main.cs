@@ -1190,18 +1190,14 @@ namespace KCM
             public static bool Prefix(ref string __result)
             {
                 Main.helper.Log("Get save dir");
-                if (KCClient.client.IsConnected)
+                if (KCServer.IsRunning || KCClient.client.IsConnected)
                 {
-                    if (KCServer.IsRunning)
-                    {
-
-                    }
                     __result = Application.persistentDataPath + "/Saves/Multiplayer";
 
                     return false;
                 }
 
-                __result = Application.persistentDataPath + "/Saves"; ;
+                __result = Application.persistentDataPath + "/Saves";
                 return true;
             }
         }
