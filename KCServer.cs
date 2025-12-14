@@ -18,18 +18,22 @@ namespace KCM
 {
     public class KCServer : MonoBehaviour
     {
-        public static Server server = new Server(Main.steamServer);
+        public static Server server = null;
         public static bool started = false;
-
-        static KCServer()
-        {
-            //server.registerMessageHandler(typeof(KCServer).GetMethod("ClientJoined"));
-
-            server.MessageReceived += PacketHandler.HandlePacketServer;
-        }
 
         public static void StartServer()
         {
+            // Stop and cleanup existing server if running
+            if (server != null)
+            {
+                if (server.IsRunning)
+                {
+                    server.Stop();
+                }
+                // Unsubscribe old event handlers to prevent memory leaks
+                server.MessageReceived -= PacketHandler.HandlePacketServer;
+            }
+
             server = new Server(Main.steamServer);
             server.MessageReceived += PacketHandler.HandlePacketServer;
 
@@ -95,16 +99,18 @@ namespace KCM
             }
         }*/
 
-        public static bool IsRunning { get { return server.IsRunning; } }
+        public static bool IsRunning { get { return server != null && server.IsRunning; } }
 
         private void Update()
         {
-            server.Update();
+            if (server != null)
+                server.Update();
         }
 
         private void OnApplicationQuit()
         {
-            server.Stop();
+            if (server != null && server.IsRunning)
+                server.Stop();
         }
 
         private void Preload(KCModHelper helper)
