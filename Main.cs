@@ -1406,6 +1406,10 @@ namespace KCM
                         structureData.Unpack(building);
                         p.AddBuilding(building);
 
+                        // Place building in world and setup pathing
+                        World.inst.PlaceFromLoad(building);
+                        structureData.UnpackStage2(building);
+
                         Main.helper.Log($"Loading player id: {p.PlayerLandmassOwner.teamId}");
                         Main.helper.Log($"loading building: {building.FriendlyName}");
                         Main.helper.Log($" (teamid: {building.TeamID()})");
