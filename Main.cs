@@ -479,6 +479,22 @@ namespace KCM
                     {
                         lastVillagerProbeMs = now;
 
+                        // Proactively check and fix loadTickDelay every 2 seconds
+                        int villagerDelay = GetLoadTickDelayOrMinusOne(VillagerSystem.inst);
+                        int unitDelay = GetLoadTickDelayOrMinusOne(UnitSystem.inst);
+                        int jobDelay = GetLoadTickDelayOrMinusOne(JobSystem.inst);
+                        int playerDelay = GetLoadTickDelayOrMinusOne(Player.inst);
+
+                        if (villagerDelay <= 0 || unitDelay <= 0 || jobDelay <= 0 || playerDelay <= 0)
+                        {
+                            Main.helper.Log("LoadTickDelay refresh: delays were " +
+                                playerDelay + "/" + unitDelay + "/" + jobDelay + "/" + villagerDelay + ", resetting to 1");
+                            SetLoadTickDelay(Player.inst, 1);
+                            SetLoadTickDelay(UnitSystem.inst, 1);
+                            SetLoadTickDelay(JobSystem.inst, 1);
+                            SetLoadTickDelay(VillagerSystem.inst, 1);
+                        }
+
                         Villager v = null;
                         try
                         {
@@ -528,11 +544,15 @@ namespace KCM
                                     GetLoadTickDelayOrMinusOne(VillagerSystem.inst));
 
                                 // Try to fix stalled systems by resetting loadTickDelay
-                                if (GetLoadTickDelayOrMinusOne(VillagerSystem.inst) == -1 ||
-                                    GetLoadTickDelayOrMinusOne(UnitSystem.inst) == -1 ||
-                                    GetLoadTickDelayOrMinusOne(JobSystem.inst) == -1)
+                                int villagerDelay = GetLoadTickDelayOrMinusOne(VillagerSystem.inst);
+                                int unitDelay = GetLoadTickDelayOrMinusOne(UnitSystem.inst);
+                                int jobDelay = GetLoadTickDelayOrMinusOne(JobSystem.inst);
+                                int playerDelay = GetLoadTickDelayOrMinusOne(Player.inst);
+
+                                if (villagerDelay <= 0 || unitDelay <= 0 || jobDelay <= 0 || playerDelay <= 0)
                                 {
-                                    Main.helper.Log("VillagerStallDetect: Attempting to fix stalled systems");
+                                    Main.helper.Log("VillagerStallDetect: Attempting to fix stalled systems (delays: " +
+                                        playerDelay + "/" + unitDelay + "/" + jobDelay + "/" + villagerDelay + ")");
                                     SetLoadTickDelay(Player.inst, 1);
                                     SetLoadTickDelay(UnitSystem.inst, 1);
                                     SetLoadTickDelay(JobSystem.inst, 1);
