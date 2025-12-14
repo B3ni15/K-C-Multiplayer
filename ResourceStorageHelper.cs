@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using System.Reflection;
 using UnityEngine;
 
@@ -12,11 +11,11 @@ namespace KCM
         private static MethodInfo isPrivateMethod;
         private static MethodInfo addResourceStorageMethod;
 
-        private static readonly string[] resourceStorageTypeNames = new[]
+        private static readonly Assembly[] candidateAssemblies = new[]
         {
-            "Assets.Interface.IResourceStorage, Assembly-CSharp",
-            "Assets.Interface.IResourceStorage, Assembly-CSharp-firstpass",
-            "Assets.Interface.IResourceStorage, Assembly-CSharp-Editor",
+            typeof(Player).Assembly,
+            typeof(World).Assembly,
+            typeof(FreeResourceManager).Assembly,
         };
 
         private static void EnsureInitialized()
@@ -24,9 +23,12 @@ namespace KCM
             if (resourceStorageType != null)
                 return;
 
-            foreach (var typeName in resourceStorageTypeNames)
+            foreach (var assembly in candidateAssemblies)
             {
-                resourceStorageType = Type.GetType(typeName);
+                if (assembly == null)
+                    continue;
+
+                resourceStorageType = assembly.GetType("Assets.Interface.IResourceStorage", false);
                 if (resourceStorageType != null)
                     break;
             }
