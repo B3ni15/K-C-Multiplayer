@@ -159,14 +159,16 @@ namespace Riptide.Demos.Steam.PlayerHosted
 
             Main.helper.Log("clear players");
             Main.kCPlayers.Clear();
+            Main.clientSteamIds.Clear();  // Clear client-to-steam ID mapping
             LobbyHandler.ClearPlayerList();
             LobbyHandler.ClearChatEntries();
             Main.helper.Log("end clear players");
 
+            // Reset loading state
+            loadingSave = false;
+
             if (KCServer.IsRunning)
                 KCServer.server.Stop();
-
-
 
             Main.TransitionTo(MenuState.ServerBrowser);
             ServerBrowser.registerServer = false;
