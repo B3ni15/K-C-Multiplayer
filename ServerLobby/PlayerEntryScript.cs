@@ -21,11 +21,11 @@ namespace KCM.ServerLobby
 
         public void Start()
         {
+            banner = transform.Find("PlayerBanner").GetComponent<RawImage>();
+
             SetValues();
 
             InvokeRepeating("SetValues", 0, 0.25f);
-
-            banner = transform.Find("PlayerBanner").GetComponent<RawImage>();
 
             transform.Find("PlayerBanner").GetComponent<Button>().onClick.AddListener(() =>
             {

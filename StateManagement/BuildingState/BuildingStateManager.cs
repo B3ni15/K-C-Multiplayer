@@ -1,4 +1,4 @@
-﻿using KCM.Packets;
+using KCM.Packets;
 using KCM.Packets.State;
 using KCM.StateManagement.Observers;
 using System;
@@ -6,12 +6,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UnityEngine;
 using static KCM.StateManagement.Observers.Observer;
 
 namespace KCM.StateManagement.BuildingState
 {
     public class BuildingStateManager
     {
+        private static readonly Dictionary<Guid, float> lastUpdateTime = new Dictionary<Guid, float>();
+        private const float UpdateInterval = 0.1f; // 10 times per second
 
         public static void BuildingStateChanged(object sender, StateUpdateEventArgs args)
         {
@@ -23,10 +26,18 @@ namespace KCM.StateManagement.BuildingState
             try
             {
                 Observer observer = (Observer)sender;
-
                 Building building = (Building)observer.state;
+                Guid guid = building.guid;
 
-                //Main.helper.Log("Should send building network update for: " + building.UniqueName);
+                if (lastUpdateTime.ContainsKey(guid) && Time.time < lastUpdateTime[guid] + UpdateInterval)
+                {
+                    return; // Not time to update yet
+                }
+
+                if (!lastUpdateTime.ContainsKey(guid))
+                    lastUpdateTime.Add(guid, Time.time);
+                else
+                    lastUpdateTime[guid] = Time.time;
 
                 new BuildingStatePacket()
                 {

@@ -141,13 +141,6 @@ namespace KCM
             }
 
             // Destroy persistent managers
-            if (KCMSteamManager != null)
-            {
-                helper.Log("Destroying KCMSteamManager.");
-                Destroy(KCMSteamManager.gameObject);
-                KCMSteamManager = null;
-            }
-
             if (lobbyManager != null)
             {
                 helper.Log("Destroying LobbyManager.");
