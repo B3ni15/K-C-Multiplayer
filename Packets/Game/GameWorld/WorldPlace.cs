@@ -48,6 +48,14 @@ namespace KCM.Packets.Game.GameWorld
         {
             Main.helper.Log("Received place building packet for " + uniqueName + " from " + player.name + $"({player.id})");
 
+            // Check for duplicate building by guid to prevent double placement from network retries
+            var existingBuilding = player.inst.Buildings.data.FirstOrDefault(b => b != null && b.guid == guid);
+            if (existingBuilding != null)
+            {
+                Main.helper.Log($"Building with guid {guid} already exists for player {player.name}, skipping duplicate placement");
+                return;
+            }
+
             //var originalPlayer = Player.inst;
             //Player.inst = player.inst;
 
