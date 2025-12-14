@@ -255,6 +255,70 @@ namespace KCM.LoadSaveOverrides
             Main.helper.Log($"Setting kingdom name to: {kingdomNames[Main.PlayerSteamID]}");
             TownNameUI.inst.SetTownName(kingdomNames[Main.PlayerSteamID]);
 
+            // Post-load fixes for multiplayer
+            Main.helper.Log("Running post-load multiplayer fixes...");
+
+            // Fix 1: Re-register all resource storages for all players
+            Main.helper.Log("Re-registering resource storages...");
+            foreach (var kcPlayer in Main.kCPlayers.Values)
+            {
+                if (kcPlayer.inst == null) continue;
+
+                foreach (var building in kcPlayer.inst.Buildings.data)
+                {
+                    if (building == null) continue;
+
+                    // Re-register resource storages
+                    var storages = building.GetComponents<IResourceStorage>();
+                    foreach (var storage in storages)
+                    {
+                        if (storage != null && !storage.IsPrivate())
+                        {
+                            try
+                            {
+                                FreeResourceManager.inst.AddResourceStorage(storage);
+                            }
+                            catch (Exception e)
+                            {
+                                Main.helper.Log($"Error re-registering storage for {building.UniqueName}: {e.Message}");
+                            }
+                        }
+                    }
+
+                    // Refresh building pathing
+                    try
+                    {
+                        building.BakePathing();
+                    }
+                    catch { }
+                }
+            }
+
+            // Fix 2: Refresh all villagers to fix stuck AI
+            Main.helper.Log("Refreshing villager states...");
+            foreach (var kcPlayer in Main.kCPlayers.Values)
+            {
+                if (kcPlayer.inst == null) continue;
+
+                for (int i = 0; i < kcPlayer.inst.Workers.Count; i++)
+                {
+                    var villager = kcPlayer.inst.Workers.data[i];
+                    if (villager == null) continue;
+
+                    try
+                    {
+                        // Teleport to current position to reset pathfinding
+                        villager.TeleportTo(villager.Pos);
+                    }
+                    catch (Exception e)
+                    {
+                        Main.helper.Log($"Error refreshing villager: {e.Message}");
+                    }
+                }
+            }
+
+            Main.helper.Log("Post-load multiplayer fixes complete.");
+
             return obj;
         }
     }
