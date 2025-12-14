@@ -1132,7 +1132,7 @@ namespace KCM
                     return;
 
                 Guid guid = __instance.guid;
-                Component villagerComponent = __instance as Component;
+                Component villagerComponent = (Component)(object)__instance;
                 if (villagerComponent == null)
                     return;
 
