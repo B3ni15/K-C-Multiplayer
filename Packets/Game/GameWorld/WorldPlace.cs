@@ -164,8 +164,23 @@ namespace KCM.Packets.Game.GameWorld
                 Main.helper.Log($"Host player Landmass Names Count: {Player.inst.LandMassNames.Count}, Contents: {string.Join(", ", Player.inst.LandMassNames)}");
                 Main.helper.Log($"Client player ({player.name}) Landmass Names Count: {player.inst.LandMassNames.Count}, Contents: {string.Join(", ", player.inst.LandMassNames)}");
 
-                player.inst.LandMassNames[building.LandMass()] = player.kingdomName;
-                Player.inst.LandMassNames[building.LandMass()] = player.kingdomName;
+                // Ensure LandMassNames arrays are large enough to prevent IndexOutOfRangeException
+                int landMass = building.LandMass();
+
+                // Expand player.inst.LandMassNames if needed
+                while (player.inst.LandMassNames.Count <= landMass)
+                {
+                    player.inst.LandMassNames.Add("");
+                }
+
+                // Expand Player.inst.LandMassNames if needed
+                while (Player.inst.LandMassNames.Count <= landMass)
+                {
+                    Player.inst.LandMassNames.Add("");
+                }
+
+                player.inst.LandMassNames[landMass] = player.kingdomName;
+                Player.inst.LandMassNames[landMass] = player.kingdomName;
 
                 // Log final building state after placement
                 Main.LogSync("---------- BUILDING PLACED FINAL STATE ----------");

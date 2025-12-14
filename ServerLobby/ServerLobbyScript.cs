@@ -60,8 +60,6 @@ namespace KCM
             Falle
         }
 
-        bool awake = false;
-
         public void Start()
         {
             Main.helper.Log("ServerLobby start called");

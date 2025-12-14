@@ -3,6 +3,7 @@ using Assets.Code.UI;
 using Harmony;
 using KCM.Enums;
 using KCM.LoadSaveOverrides;
+using KCM.Packets;
 using KCM.Packets.Game;
 using KCM.Packets.Game.Dragon;
 using KCM.Packets.Game.GameBuilding;
@@ -339,6 +340,22 @@ namespace KCM
             {
                 Main.helper.Log($"Menu set to: {(MenuState)newState}");
 
+                // Stop server if host goes back to menu
+                if (newState == MainMenuMode.State.Menu && KCServer.IsRunning)
+                {
+                    Main.helper.Log("Host returning to menu - stopping server and notifying clients");
+
+                    // Notify all clients that host is leaving
+                    new ShowModal
+                    {
+                        title = "Host disconnected",
+                        message = "The host has returned to the menu."
+                    }.SendToAll();
+
+                    // Stop the server
+                    KCServer.server.Stop();
+                }
+
                 Main.prevMenuState = Main.menuState;
 
                 if (newState != MainMenuMode.State.Uninitialized)
@@ -440,7 +457,6 @@ namespace KCM
                 // Your code here
 
                 // Get the name of the last method that called OnPlayerPlacement
-                string callTree = "";
                 List<string> strings = new List<string>();
 
                 for (int i = 1; i < 10; i++)
@@ -758,6 +774,52 @@ namespace KCM
                         LogStep();
                         var unbuiltBuildingsPerLandmass = __instance.GetType().GetField("unbuiltBuildingsPerLandmass", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(__instance) as ArrayExt<ArrayExt<Building>>;
                         LogStep();
+
+                        // NULL checks for reflection-based fields
+                        if (globalBuildingRegistry == null)
+                        {
+                            Main.helper.Log("ERROR: globalBuildingRegistry is null!");
+                            return false;
+                        }
+                        if (landMassBuildingRegistry == null)
+                        {
+                            Main.helper.Log("ERROR: landMassBuildingRegistry is null!");
+                            return false;
+                        }
+                        if (unbuiltBuildingsPerLandmass == null)
+                        {
+                            Main.helper.Log("ERROR: unbuiltBuildingsPerLandmass is null!");
+                            return false;
+                        }
+
+                        // Array bounds check for landMass
+                        if (landMass >= landMassBuildingRegistry.data.Length)
+                        {
+                            Main.helper.Log($"ERROR: landMass={landMass} >= landMassBuildingRegistry array length={landMassBuildingRegistry.data.Length}");
+                            return false;
+                        }
+                        if (landMass >= unbuiltBuildingsPerLandmass.data.Length)
+                        {
+                            Main.helper.Log($"ERROR: landMass={landMass} >= unbuiltBuildingsPerLandmass array length={unbuiltBuildingsPerLandmass.data.Length}");
+                            return false;
+                        }
+
+                        // Check if registry objects are initialized
+                        if (landMassBuildingRegistry.data[landMass] == null)
+                        {
+                            Main.helper.Log($"ERROR: landMassBuildingRegistry.data[{landMass}] is null!");
+                            return false;
+                        }
+                        if (landMassBuildingRegistry.data[landMass].registry == null)
+                        {
+                            Main.helper.Log($"ERROR: landMassBuildingRegistry.data[{landMass}].registry is null!");
+                            return false;
+                        }
+                        if (landMassBuildingRegistry.data[landMass].buildings == null)
+                        {
+                            Main.helper.Log($"ERROR: landMassBuildingRegistry.data[{landMass}].buildings is null!");
+                            return false;
+                        }
 
                         __instance.AddToRegistry(globalBuildingRegistry, b);
                         LogStep();
