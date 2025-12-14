@@ -29,22 +29,19 @@ namespace KCM.Packets.Lobby
 
         public override void HandlePacketClient()
         {
-            float savePercent = (float)received / (float)saveSize;
-
             // Initialize saveData and chunksReceived on the first packet received
-            if (saveData.Length == 1)
+            // And reset static variables for a new transfer
+            if (chunkId == 0) // This is the first chunk of a new transfer
             {
+                Main.helper.Log("Save Transfer started! Resetting static transfer state.");
+                loadingSave = true; // This is SaveTransferPacket.loadingSave
 
-                Main.helper.Log("Save Transfer started!");
-                loadingSave = true;
-
-                ServerLobbyScript.LoadingSave.SetActive(true);
-
-                // save percentage
-
-
+                // Reset static transfer variables
                 saveData = new byte[saveSize];
                 chunksReceived = new bool[totalChunks];
+                received = 0; // Reset received bytes counter
+
+                ServerLobbyScript.LoadingSave.SetActive(true);
             }
 
 
@@ -57,10 +54,24 @@ namespace KCM.Packets.Lobby
             // Seek to the next position to write to
             received += chunkSize;
 
+            // Recalculate savePercent AFTER 'received' is updated
+            if (saveSize > 0)
+            {
+                float savePercent = (float)received / (float)saveSize;
+                string receivedKB = ((float)received / 1000f).ToString("0.00");
+                string totalKB = ((float)saveSize / 1000f).ToString("0.00");
 
-            ServerLobbyScript.ProgressBar.fillAmount = savePercent;
-            ServerLobbyScript.ProgressBarText.text = (savePercent * 100).ToString("0.00") + "%";
-            ServerLobbyScript.ProgressText.text = $"{((float)(received / 1000)).ToString("0.00")} KB / {((float)(saveSize / 1000)).ToString("0.00")} KB";
+                ServerLobbyScript.ProgressBar.fillAmount = savePercent;
+                ServerLobbyScript.ProgressBarText.text = (savePercent * 100).ToString("0.00") + "%";
+                ServerLobbyScript.ProgressText.text = $"{receivedKB} KB / {totalKB} KB";
+            }
+            else
+            {
+                ServerLobbyScript.ProgressBar.fillAmount = 0f;
+                ServerLobbyScript.ProgressBarText.text = "0.00%";
+                ServerLobbyScript.ProgressText.text = "0.00 KB / 0.00 KB";
+            }
+
 
 
             if (chunkId + 1 == totalChunks)
