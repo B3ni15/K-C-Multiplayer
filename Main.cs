@@ -1418,14 +1418,9 @@ namespace KCM
                             structureData.Unpack(building);
                             Main.helper.Log($"[ProcessBuilding] Unpack done");
 
-                            p.AddBuilding(building);
-                            Main.helper.Log($"[ProcessBuilding] AddBuilding done");
-
-                            World.inst.PlaceFromLoad(building);
-                            Main.helper.Log($"[ProcessBuilding] PlaceFromLoad done");
-
-                            structureData.UnpackStage2(building);
-                            Main.helper.Log($"[ProcessBuilding] UnpackStage2 done");
+                            // NOTE: AddBuilding, PlaceFromLoad and UnpackStage2 are called by the original
+                            // PlayerSaveData.Unpack method after ProcessBuilding returns
+                            Main.helper.Log($"[ProcessBuilding] Returning building to Unpack");
 
                             bool isKeep = building.GetComponent<Keep>() != null && building.TeamID() == p.PlayerLandmassOwner.teamId;
                             if (isKeep)
