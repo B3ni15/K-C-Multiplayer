@@ -310,6 +310,27 @@ namespace KCM.Packets.Handlers
                             message.AddInt(item);
                     }
 
+                    else if (prop.PropertyType == typeof(List<Guid>))
+                    {
+                        currentPropName = prop.Name;
+                        List<Guid> list = (List<Guid>)prop.GetValue(packet, null);
+                        message.AddInt(list.Count);
+                        foreach (var item in list)
+                            message.AddBytes(item.ToByteArray(), true);
+                    }
+                    else if (prop.PropertyType == typeof(List<Vector3>))
+                    {
+                        currentPropName = prop.Name;
+                        List<Vector3> list = (List<Vector3>)prop.GetValue(packet, null);
+                        message.AddInt(list.Count);
+                        foreach (var item in list)
+                        {
+                            message.AddFloat(item.x);
+                            message.AddFloat(item.y);
+                            message.AddFloat(item.z);
+                        }
+                    }
+
                     else if (prop.PropertyType.IsGenericType && prop.PropertyType.GetGenericTypeDefinition() == typeof(Dictionary<,>))
                     {
                         currentPropName = prop.Name;
@@ -540,6 +561,29 @@ namespace KCM.Packets.Handlers
 
                         for (int i = 0; i < count; i++)
                             list.Add(message.GetInt());
+
+                        prop.SetValue(p, list);
+                    }
+                    else if (prop.PropertyType == typeof(List<Guid>))
+                    {
+                        int count = message.GetInt();
+                        List<Guid> list = new List<Guid>();
+
+                        for (int i = 0; i < count; i++)
+                            list.Add(new Guid(message.GetBytes()));
+
+                        prop.SetValue(p, list);
+                    }
+                    else if (prop.PropertyType == typeof(List<Vector3>))
+                    {
+                        int count = message.GetInt();
+                        List<Vector3> list = new List<Vector3>();
+
+                        for (int i = 0; i < count; i++)
+                        {
+                            Vector3 vector = new Vector3(message.GetFloat(), message.GetFloat(), message.GetFloat());
+                            list.Add(vector);
+                        }
 
                         prop.SetValue(p, list);
                     }

@@ -15,8 +15,12 @@ namespace KCM.StateManagement.Sync
         private const int ResourceBroadcastIntervalMs = 2000;
         private const int MaxBuildingSnapshotBytes = 30000;
         private const int MaxVillagerTeleportsPerResync = 400;
+        private const int VillagerValidationIntervalMs = 10000; // 10 seconds
+        private const int VillagerSnapshotIntervalMs = 1000;
 
         private static long lastResourceBroadcastMs;
+        private static long lastVillagerValidationMs;
+        private static long lastVillagerSnapshotMs;
 
         private static FieldInfo freeResourceAmountField;
         private static MethodInfo resourceAmountGetMethod;
@@ -30,27 +34,50 @@ namespace KCM.StateManagement.Sync
                 return;
 
             long now = DateTimeOffset.Now.ToUnixTimeMilliseconds();
-            if ((now - lastResourceBroadcastMs) < ResourceBroadcastIntervalMs)
-                return;
-
-            lastResourceBroadcastMs = now;
-
-            try
+            
+            // Resource broadcast
+            if ((now - lastResourceBroadcastMs) >= ResourceBroadcastIntervalMs)
             {
-                ResourceSnapshotPacket snapshot = BuildResourceSnapshotPacket();
-                if (snapshot == null)
-                    return;
+                lastResourceBroadcastMs = now;
 
-                snapshot.clientId = KCClient.client != null ? KCClient.client.Id : (ushort)0;
+                try
+                {
+                    ResourceSnapshotPacket snapshot = BuildResourceSnapshotPacket();
+                    if (snapshot == null)
+                        return;
 
-                // Exclude host/local client from receiving its own snapshot.
-                ushort exceptId = KCClient.client != null ? KCClient.client.Id : (ushort)0;
-                snapshot.SendToAll(exceptId);
+                    snapshot.clientId = KCClient.client != null ? KCClient.client.Id : (ushort)0;
+
+                    // Exclude host/local client from receiving its own snapshot.
+                    ushort exceptId = KCClient.client != null ? KCClient.client.Id : (ushort)0;
+                    snapshot.SendToAll(exceptId);
+                }
+                catch (Exception ex)
+                {
+                    Main.helper.Log("Error broadcasting resource snapshot");
+                    Main.helper.Log(ex.ToString());
+                }
             }
-            catch (Exception ex)
+            
+            // Villager state validation
+            if ((now - lastVillagerValidationMs) >= VillagerValidationIntervalMs)
             {
-                Main.helper.Log("Error broadcasting resource snapshot");
-                Main.helper.Log(ex.ToString());
+                lastVillagerValidationMs = now;
+                ValidateAndCorrectVillagerStates();
+            }
+
+            if ((now - lastVillagerSnapshotMs) >= VillagerSnapshotIntervalMs)
+            {
+                lastVillagerSnapshotMs = now;
+                try
+                {
+                    BroadcastVillagerSnapshot();
+                }
+                catch (Exception ex)
+                {
+                    Main.helper.Log("Error broadcasting villager snapshot");
+                    Main.helper.Log(ex.ToString());
+                }
             }
         }
 
@@ -548,6 +575,44 @@ namespace KCM.StateManagement.Sync
             }
         }
 
+        private static void BroadcastVillagerSnapshot()
+        {
+            if (!KCServer.IsRunning)
+                return;
+
+            if (KCServer.server.ClientCount == 0)
+                return;
+
+            if (Villager.villagers == null || Villager.villagers.Count == 0)
+                return;
+
+            List<Guid> guids = new List<Guid>();
+            List<Vector3> positions = new List<Vector3>();
+            const int maxVillagersPerSnapshot = 50;
+
+            for (int i = 0; i < Villager.villagers.Count && guids.Count < maxVillagersPerSnapshot; i++)
+            {
+                Villager villager = Villager.villagers.data[i];
+                if (villager == null)
+                    continue;
+
+                guids.Add(villager.guid);
+                positions.Add(villager.Pos);
+            }
+
+            if (guids.Count == 0)
+                return;
+
+            VillagerSnapshotPacket snapshot = new VillagerSnapshotPacket
+            {
+                guids = guids,
+                positions = positions
+            };
+
+            ushort exceptId = KCClient.client != null ? KCClient.client.Id : (ushort)0;
+            snapshot.SendToAll(exceptId);
+        }
+
         public static void ApplyResourceSnapshot(List<int> resourceTypes, List<int> amounts)
         {
             if (resourceTypes == null || amounts == null)
@@ -729,6 +794,96 @@ namespace KCM.StateManagement.Sync
             }
             catch
             {
+            }
+        }
+
+        private static void ValidateAndCorrectVillagerStates()
+        {
+            try
+            {
+                int stuckVillagers = 0;
+                int correctedVillagers = 0;
+                
+                for (int i = 0; i < Villager.villagers.Count; i++)
+                {
+                    Villager v = Villager.villagers.data[i];
+                    if (v == null)
+                        continue;
+                        
+                    try
+                    {
+                        bool needsCorrection = false;
+                        
+                        // Check if villager position is invalid
+                        if (float.IsNaN(v.Pos.x) || float.IsNaN(v.Pos.y) || float.IsNaN(v.Pos.z))
+                        {
+                            needsCorrection = true;
+                            stuckVillagers++;
+                        }
+                        
+                        if (needsCorrection)
+                        {
+                            // Correct villager state
+                            try
+                            {
+                                // Ensure valid position
+                                if (float.IsNaN(v.Pos.x) || float.IsNaN(v.Pos.y) || float.IsNaN(v.Pos.z))
+                                {
+                                    // Teleport to a safe position
+                                    Vector3 safePos = new Vector3(World.inst.GridWidth / 2, 0, World.inst.GridHeight / 2);
+                                    v.TeleportTo(safePos);
+                                }
+                                
+                                correctedVillagers++;
+                            }
+                            catch (Exception e)
+                            {
+                                Main.helper.Log($"Error correcting villager {i}: {e.Message}");
+                            }
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        Main.helper.Log($"Error validating villager {i}: {e.Message}");
+                    }
+                }
+                
+                if (stuckVillagers > 0)
+                {
+                    Main.helper.Log($"Villager validation: Found {stuckVillagers} stuck villagers, corrected {correctedVillagers}");
+                }
+                
+                // Force villager system refresh if we found issues
+                if (stuckVillagers > 0 && VillagerSystem.inst != null)
+                {
+                    try
+                    {
+                        var villagerSystemType = typeof(VillagerSystem);
+                        var refreshMethods = villagerSystemType.GetMethods(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
+                            .Where(m => m.Name.Contains("Refresh") || m.Name.Contains("Update") || m.Name.Contains("Restart"));
+                            
+                        foreach (var method in refreshMethods)
+                        {
+                            if (method.GetParameters().Length == 0)
+                            {
+                                try
+                                {
+                                    method.Invoke(VillagerSystem.inst, null);
+                                    Main.helper.Log($"Called VillagerSystem.{method.Name} for validation");
+                                }
+                                catch { }
+                            }
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        Main.helper.Log($"Error refreshing villager system: {e.Message}");
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Main.helper.Log("Error in villager state validation: " + e.Message);
             }
         }
     }

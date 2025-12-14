@@ -1,4 +1,4 @@
-﻿using Assets.Code;
+using Assets.Code;
 using Riptide;
 using Riptide.Transports;
 using Steamworks;
@@ -8,6 +8,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using UnityEngine;
 
 namespace KCM.LoadSaveOverrides
 {
@@ -24,7 +25,6 @@ namespace KCM.LoadSaveOverrides
 
             Main.helper.Log($"Saving data for {Main.kCPlayers.Count} ({KCServer.server.ClientCount}) players.");
 
-            //this.PlayerSaveData = new PlayerSaveDataOverride().Pack(Player.inst);
             foreach (var player in Main.kCPlayers.Values)
             {
                 try
@@ -102,10 +102,8 @@ namespace KCM.LoadSaveOverrides
 
         public override object Unpack(object obj)
         {
-            //original Player reset was up here
             foreach (var kvp in players)
             {
-
                 KCPlayer player;
 
                 if (!Main.kCPlayers.TryGetValue(kvp.Key, out player))
@@ -120,7 +118,6 @@ namespace KCM.LoadSaveOverrides
             foreach (var player in Main.kCPlayers.Values)
                 player.inst.Reset();
 
-
             AIBrainsContainer.inst.ClearAIs();
             this.CameraSaveData.Unpack(Cam.inst);
             this.WorldSaveData.Unpack(World.inst);
@@ -131,10 +128,6 @@ namespace KCM.LoadSaveOverrides
                 this.FishSystemSaveData.Unpack(FishSystem.inst);
             }
             this.TownNameSaveData.Unpack(TownNameUI.inst);
-
-
-            //TownNameUI.inst.townName = kingdomNames[Main.PlayerSteamID];
-            TownNameUI.inst.SetTownName(kingdomNames[Main.PlayerSteamID]);
 
             Main.helper.Log("Unpacking player data");
 
@@ -149,9 +142,8 @@ namespace KCM.LoadSaveOverrides
                     clientPlayerData = kvp.Value;
                 }
                 else
-                { // Maybe ??
+                {
                     Main.helper.Log("Loading player data: " + kvp.Key);
-
 
                     KCPlayer player;
 
@@ -165,39 +157,63 @@ namespace KCM.LoadSaveOverrides
                     Player.inst = player.inst;
                     Main.helper.Log($"Number of landmasses: {World.inst.NumLandMasses}");
 
-                    //Reset was here before unpack
                     kvp.Value.Unpack(player.inst);
 
                     Player.inst = oldPlayer;
-
 
                     player.banner = player.inst.PlayerLandmassOwner.bannerIdx;
                     player.kingdomName = TownNameUI.inst.townName;
                 }
             }
 
-            clientPlayerData.Unpack(Player.inst); // Unpack the current client player last so that loading of villagers works correctly.
+            clientPlayerData.Unpack(Player.inst);
 
             Main.helper.Log("unpacked player data");
             Main.helper.Log("Setting banner and name");
 
             var client = Main.kCPlayers[SteamUser.GetSteamID().ToString()];
 
-
             client.banner = Player.inst.PlayerLandmassOwner.bannerIdx;
             client.kingdomName = TownNameUI.inst.townName;
 
             Main.helper.Log("Finished unpacking player data");
 
-            /*
-             *  Not even going to bother fixing AI brains save data yet, not in short-term roadmap
-             */
-
-            /*bool flag2 = this.AIBrainsSaveData != null;
-            if (flag2)
+            Main.helper.Log("Unpacking AI brains");
+            bool flag10 = this.AIBrainsSaveData != null;
+            if (flag10)
             {
-                this.AIBrainsSaveData.UnpackPrePlayer(AIBrainsContainer.inst);
-            }*/
+                try
+                {
+                    this.AIBrainsSaveData.Unpack(AIBrainsContainer.inst);
+                    Main.helper.Log("AI brains unpacked successfully");
+                }
+                catch (Exception e)
+                {
+                    Main.helper.Log("Error unpacking AI brains: " + e.Message);
+                    Main.helper.Log("Attempting to reinitialize AI systems");
+                    try
+                    {
+                        AIBrainsContainer.inst.ClearAIs();
+                        Main.helper.Log("AI systems reinitialized");
+                    }
+                    catch (Exception ex)
+                    {
+                        Main.helper.Log("Failed to reinitialize AI systems: " + ex.Message);
+                    }
+                }
+            }
+            else
+            {
+                Main.helper.Log("No AI brains save data found, initializing fresh AI");
+                try
+                {
+                    Main.helper.Log("Fresh AI initialization completed");
+                }
+                catch (Exception e)
+                {
+                    Main.helper.Log("Failed fresh AI initialization: " + e.Message);
+                }
+            }
 
             Main.helper.Log("Unpacking free resource manager");
             this.FreeResourceManagerSaveData.Unpack(FreeResourceManager.inst);
@@ -252,7 +268,6 @@ namespace KCM.LoadSaveOverrides
                 this.OrdersManagerSaveData.Unpack(OrdersManager.inst);
             }
             Main.helper.Log("Unpacking AI brains");
-            bool flag10 = this.AIBrainsSaveData != null;
             if (flag10)
             {
                 this.AIBrainsSaveData.Unpack(AIBrainsContainer.inst);
@@ -279,7 +294,6 @@ namespace KCM.LoadSaveOverrides
                 Main.helper.Log(e.ToString());
             }
 
-
             World.inst.UpscaleFeatures();
             Player.inst.RefreshVisibility(true);
             for (int i = 0; i < Player.inst.Buildings.Count; i++)
@@ -287,36 +301,32 @@ namespace KCM.LoadSaveOverrides
                 Player.inst.Buildings.data[i].UpdateMaterialSelection();
             }
 
-            // Player.inst.loadTickDelay = 1;
             Type playerType = typeof(Player);
             FieldInfo loadTickDelayField = playerType.GetField("loadTickDelay", BindingFlags.Instance | BindingFlags.NonPublic);
             if (loadTickDelayField != null)
             {
-                loadTickDelayField.SetValue(Player.inst, 1);
+                loadTickDelayField.SetValue(Player.inst, 3);
             }
 
-            // UnitSystem.inst.loadTickDelay = 1;
             Type unitSystemType = typeof(UnitSystem);
             loadTickDelayField = unitSystemType.GetField("loadTickDelay", BindingFlags.Instance | BindingFlags.NonPublic);
             if (loadTickDelayField != null)
             {
-                loadTickDelayField.SetValue(UnitSystem.inst, 1);
+                loadTickDelayField.SetValue(UnitSystem.inst, 3);
             }
 
-            // JobSystem.inst.loadTickDelay = 1;
             Type jobSystemType = typeof(JobSystem);
             loadTickDelayField = jobSystemType.GetField("loadTickDelay", BindingFlags.Instance | BindingFlags.NonPublic);
             if (loadTickDelayField != null)
             {
-                loadTickDelayField.SetValue(JobSystem.inst, 1);
+                loadTickDelayField.SetValue(JobSystem.inst, 3);
             }
 
-            // VillagerSystem.inst.loadTickDelay = 1;
             Type villagerSystemType = typeof(VillagerSystem);
             loadTickDelayField = villagerSystemType.GetField("loadTickDelay", BindingFlags.Instance | BindingFlags.NonPublic);
             if (loadTickDelayField != null)
             {
-                loadTickDelayField.SetValue(VillagerSystem.inst, 1);
+                loadTickDelayField.SetValue(VillagerSystem.inst, 3);
             }
 
             Main.helper.Log($"Setting kingdom name to: {kingdomNames[Main.PlayerSteamID]}");

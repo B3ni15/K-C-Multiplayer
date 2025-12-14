@@ -1,4 +1,4 @@
-﻿using Assets.Code;
+using Assets.Code;
 using Assets.Code.UI;
 using Assets.Interface;
 using Harmony;
@@ -58,6 +58,7 @@ namespace KCM
         private static readonly Dictionary<int, long> lastTeamIdLookupLogMs = new Dictionary<int, long>();
         private static int resetInProgress = 0;
         private static int multiplayerSaveLoadInProgress = 0;
+        private static int worldReadyRebuildDone = 0;
 
         public static bool IsMultiplayerSaveLoadInProgress
         {
@@ -94,6 +95,7 @@ namespace KCM
 
                 try { LobbyManager.loadingSave = false; } catch { }
                 try { SetMultiplayerSaveLoadInProgress(false); } catch { }
+                try { Interlocked.Exchange(ref worldReadyRebuildDone, 0); } catch { }
 
                 try
                 {
@@ -151,13 +153,108 @@ namespace KCM
 
             try
             {
-                FieldInfo loadTickDelayField = instance.GetType().GetField("loadTickDelay", BindingFlags.Instance | BindingFlags.NonPublic);
+                FieldInfo loadTickDelayField = instance.GetType().GetField("loadTickDelay", BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
                 if (loadTickDelayField != null)
+                {
                     loadTickDelayField.SetValue(instance, ticks);
+                    return;
+                }
+
+                PropertyInfo loadTickDelayProp = instance.GetType().GetProperty("loadTickDelay", BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
+                if (loadTickDelayProp != null && loadTickDelayProp.CanWrite && loadTickDelayProp.PropertyType == typeof(int))
+                {
+                    loadTickDelayProp.SetValue(instance, ticks, null);
+                    return;
+                }
+
+                // Debug: list all fields if loadTickDelay not found
+                if (instance.GetType().Name == "VillagerSystem")
+                {
+                    helper?.Log("DEBUG: VillagerSystem fields:");
+                    foreach (var field in instance.GetType().GetFields(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public))
+                    {
+                        if (field.FieldType == typeof(int) || field.FieldType == typeof(bool))
+                            helper?.Log($"  Field: {field.Name} ({field.FieldType.Name})");
+                    }
+                    helper?.Log("DEBUG: VillagerSystem properties:");
+                    foreach (var prop in instance.GetType().GetProperties(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public))
+                    {
+                        if (prop.PropertyType == typeof(int) || prop.PropertyType == typeof(bool))
+                            helper?.Log($"  Property: {prop.Name} ({prop.PropertyType.Name})");
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                helper?.Log("SetLoadTickDelay failed for " + instance.GetType().Name + ": " + e.Message);
+            }
+        }
+
+        private static int GetLoadTickDelayOrMinusOne(object instance)
+        {
+            if (instance == null)
+                return -1;
+
+            try
+            {
+                FieldInfo loadTickDelayField = instance.GetType().GetField("loadTickDelay", BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
+                if (loadTickDelayField != null)
+                {
+                    object v = loadTickDelayField.GetValue(instance);
+                    if (v is int)
+                        return (int)v;
+                }
+
+                PropertyInfo loadTickDelayProp = instance.GetType().GetProperty("loadTickDelay", BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
+                if (loadTickDelayProp != null && loadTickDelayProp.CanRead && loadTickDelayProp.PropertyType == typeof(int))
+                {
+                    object pv = loadTickDelayProp.GetValue(instance, null);
+                    if (pv is int)
+                        return (int)pv;
+                }
             }
             catch
             {
             }
+
+            return -1;
+        }
+
+        private static string TryGetGameModeName()
+        {
+            try
+            {
+                if (GameState.inst == null)
+                    return "null";
+
+                var t = GameState.inst.GetType();
+
+                var modeProp = t.GetProperty("mode", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
+                    ?? t.GetProperty("Mode", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
+                    ?? t.GetProperty("CurrentMode", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+
+                if (modeProp != null)
+                {
+                    object m = modeProp.GetValue(GameState.inst, null);
+                    return m != null ? m.GetType().Name : "null";
+                }
+
+                var modeField = t.GetField("mode", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
+                    ?? t.GetField("Mode", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
+                    ?? t.GetField("currentMode", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
+                    ?? t.GetField("currMode", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+
+                if (modeField != null)
+                {
+                    object fm = modeField.GetValue(GameState.inst);
+                    return fm != null ? fm.GetType().Name : "null";
+                }
+            }
+            catch
+            {
+            }
+
+            return "unknown";
         }
 
         public static void RunPostLoadRebuild(string reason)
@@ -171,10 +268,28 @@ namespace KCM
                 try { Player.inst.irrigation.UpdateIrrigation(); } catch (Exception e) { helper?.Log(e.ToString()); }
                 try { Player.inst.CalcMaxResources(null, -1); } catch (Exception e) { helper?.Log(e.ToString()); }
 
+                helper?.Log("Setting loadTickDelay for game systems");
                 SetLoadTickDelay(Player.inst, 1);
                 SetLoadTickDelay(UnitSystem.inst, 1);
                 SetLoadTickDelay(JobSystem.inst, 1);
                 SetLoadTickDelay(VillagerSystem.inst, 1);
+
+                helper?.Log(
+                    "loadTickDelay after set: Player=" + GetLoadTickDelayOrMinusOne(Player.inst) +
+                    " Unit=" + GetLoadTickDelayOrMinusOne(UnitSystem.inst) +
+                    " Job=" + GetLoadTickDelayOrMinusOne(JobSystem.inst) +
+                    " Villager=" + GetLoadTickDelayOrMinusOne(VillagerSystem.inst));
+
+                // Try to enable VillagerSystem if it's disabled
+                if (VillagerSystem.inst != null && !VillagerSystem.inst.enabled)
+                {
+                    helper?.Log("VillagerSystem is disabled, enabling it");
+                    VillagerSystem.inst.enabled = true;
+                }
+                else if (VillagerSystem.inst != null)
+                {
+                    helper?.Log("VillagerSystem.enabled = " + VillagerSystem.inst.enabled);
+                }
             }
             catch (Exception e)
             {
@@ -315,9 +430,143 @@ namespace KCM
         #endregion
 
         public static int FixedUpdateInterval = 0;
+        private static long lastVillagerMoveMs = 0;
+        private static long lastVillagerProbeMs = 0;
+        private static long lastVillagerStallLogMs = 0;
+        private static Guid probedVillagerGuid = Guid.Empty;
+        private static Vector3 probedVillagerLastPos = Vector3.zero;
 
         private void FixedUpdate()
         {
+            try
+            {
+                if (KCClient.client != null &&
+                    KCClient.client.IsConnected &&
+                    Volatile.Read(ref worldReadyRebuildDone) == 0 &&
+                    World.inst != null &&
+                    Player.inst != null &&
+                    VillagerSystem.inst != null)
+                {
+                    if (Interlocked.Exchange(ref worldReadyRebuildDone, 1) == 0)
+                    {
+                        Main.helper.Log("AutoRebuild: world ready; running post-load rebuild");
+                        RunPostLoadRebuild("auto:world-ready");
+                        Main.helper.Log(
+                            "AutoRebuild: timeScale=" + Time.timeScale +
+                            " loadTickDelay(Player/Unit/Job/Villager)=" +
+                            GetLoadTickDelayOrMinusOne(Player.inst) + "/" +
+                            GetLoadTickDelayOrMinusOne(UnitSystem.inst) + "/" +
+                            GetLoadTickDelayOrMinusOne(JobSystem.inst) + "/" +
+                            GetLoadTickDelayOrMinusOne(VillagerSystem.inst));
+                    }
+                }
+            }
+            catch
+            {
+            }
+
+            try
+            {
+                if (KCClient.client != null &&
+                    KCClient.client.IsConnected &&
+                    World.inst != null &&
+                    Time.timeScale > 0f &&
+                    Villager.villagers != null &&
+                    Villager.villagers.Count > 0)
+                {
+                    long now = DateTimeOffset.Now.ToUnixTimeMilliseconds();
+                    if ((now - lastVillagerProbeMs) >= 2000)
+                    {
+                        lastVillagerProbeMs = now;
+
+                        // Proactively check and fix loadTickDelay every 2 seconds
+                        int villagerDelay = GetLoadTickDelayOrMinusOne(VillagerSystem.inst);
+                        int unitDelay = GetLoadTickDelayOrMinusOne(UnitSystem.inst);
+                        int jobDelay = GetLoadTickDelayOrMinusOne(JobSystem.inst);
+                        int playerDelay = GetLoadTickDelayOrMinusOne(Player.inst);
+
+                        if (villagerDelay <= 0 || unitDelay <= 0 || jobDelay <= 0 || playerDelay <= 0)
+                        {
+                            Main.helper.Log("LoadTickDelay refresh: delays were " +
+                                playerDelay + "/" + unitDelay + "/" + jobDelay + "/" + villagerDelay + ", resetting to 1");
+                            SetLoadTickDelay(Player.inst, 1);
+                            SetLoadTickDelay(UnitSystem.inst, 1);
+                            SetLoadTickDelay(JobSystem.inst, 1);
+                            SetLoadTickDelay(VillagerSystem.inst, 1);
+                        }
+
+                        Villager v = null;
+                        try
+                        {
+                            if (probedVillagerGuid != Guid.Empty)
+                                v = Villager.villagers.data.FirstOrDefault(x => x != null && x.guid == probedVillagerGuid);
+                        }
+                        catch
+                        {
+                        }
+
+                        if (v == null)
+                        {
+                            v = Villager.villagers.data.FirstOrDefault(x => x != null);
+                            if (v != null)
+                            {
+                                probedVillagerGuid = v.guid;
+                                probedVillagerLastPos = v.Pos;
+                                lastVillagerMoveMs = now;
+                            }
+                        }
+
+                        if (v != null)
+                        {
+                            float movedSqr = (v.Pos - probedVillagerLastPos).sqrMagnitude;
+                            if (movedSqr > 0.01f)
+                            {
+                                probedVillagerLastPos = v.Pos;
+                                lastVillagerMoveMs = now;
+                            }
+
+                            if ((now - lastVillagerMoveMs) >= 15000 && (now - lastVillagerStallLogMs) >= 15000)
+                            {
+                                lastVillagerStallLogMs = now;
+                                Main.helper.Log(
+                                    "VillagerStallDetect: no movement for " + (now - lastVillagerMoveMs) +
+                                    "ms timeScale=" + Time.timeScale +
+                                    " mode=" + TryGetGameModeName() +
+                                    " villagerSystemEnabled=" + (VillagerSystem.inst != null && VillagerSystem.inst.enabled) +
+                                    " villagers=" + Villager.villagers.Count +
+                                    " sampleGuid=" + probedVillagerGuid +
+                                    " samplePos=" + v.Pos);
+                                Main.helper.Log(
+                                    "VillagerStallDetect: loadTickDelay(Player/Unit/Job/Villager)=" +
+                                    GetLoadTickDelayOrMinusOne(Player.inst) + "/" +
+                                    GetLoadTickDelayOrMinusOne(UnitSystem.inst) + "/" +
+                                    GetLoadTickDelayOrMinusOne(JobSystem.inst) + "/" +
+                                    GetLoadTickDelayOrMinusOne(VillagerSystem.inst));
+
+                                // Try to fix stalled systems by resetting loadTickDelay
+                                int villagerDelay = GetLoadTickDelayOrMinusOne(VillagerSystem.inst);
+                                int unitDelay = GetLoadTickDelayOrMinusOne(UnitSystem.inst);
+                                int jobDelay = GetLoadTickDelayOrMinusOne(JobSystem.inst);
+                                int playerDelay = GetLoadTickDelayOrMinusOne(Player.inst);
+
+                                if (villagerDelay <= 0 || unitDelay <= 0 || jobDelay <= 0 || playerDelay <= 0)
+                                {
+                                    Main.helper.Log("VillagerStallDetect: Attempting to fix stalled systems (delays: " +
+                                        playerDelay + "/" + unitDelay + "/" + jobDelay + "/" + villagerDelay + ")");
+                                    SetLoadTickDelay(Player.inst, 1);
+                                    SetLoadTickDelay(UnitSystem.inst, 1);
+                                    SetLoadTickDelay(JobSystem.inst, 1);
+                                    SetLoadTickDelay(VillagerSystem.inst, 1);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            catch
+            {
+            }
+
             // send batched building placement info
             /*if (PlaceHook.QueuedBuildings.Count > 0 && (FixedUpdateInterval % 25 == 0))
             {
@@ -1156,13 +1405,33 @@ namespace KCM
                      Main.helper.Log($"set speed Called by 2: {new StackFrame(2).GetMethod()} {new StackFrame(2).GetMethod().Name.Contains("HandlePacket")}");
                      Main.helper.Log($"set speed Called by 3: {new StackFrame(3).GetMethod()} {new StackFrame(3).GetMethod().Name.Contains("HandlePacket")}");*/
 
-                    if (new StackFrame(3).GetMethod().Name.Contains("HandlePacket"))
-                        return;
+                    try
+                    {
+                        if (new StackFrame(3).GetMethod().Name.Contains("HandlePacket"))
+                            return;
+                    }
+                    catch
+                    {
+                    }
+
+                    try
+                    {
+                        if (idx > 0 && Time.timeScale == 0f)
+                        {
+                            Time.timeScale = 1f;
+                            Main.helper.Log("TimeScaleFix: restored Time.timeScale=1 on local SetSpeed idx=" + idx);
+                        }
+                    }
+                    catch
+                    {
+                    }
 
                     Main.helper.Log("SpeedControlUI.SetSpeed (local): " + idx);
+                    bool isPaused = (idx == 0);
                     new SetSpeed()
                     {
-                        speed = idx
+                        speed = idx,
+                        isPaused = isPaused
                     }.Send();
 
                     lastTime = DateTimeOffset.Now.ToUnixTimeMilliseconds();
