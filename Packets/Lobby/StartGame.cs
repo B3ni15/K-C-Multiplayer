@@ -25,6 +25,7 @@ namespace KCM.Packets.Lobby
 
             try
             {
+                int desiredSpeed = 1;
                 if (!LobbyManager.loadingSave)
                 {
                     SpeedControlUI.inst.SetSpeed(0);
@@ -39,31 +40,13 @@ namespace KCM.Packets.Lobby
                         Main.helper.Log(ex.ToString());
                     }
 
-                    try
-                    {
-                        GameState.inst.SetNewMode(GameState.inst.playingMode);
-                        Main.helper.Log("StartGame: forced playing mode");
-                    }
-                    catch (Exception ex)
-                    {
-                        Main.helper.Log("StartGame: failed forcing playing mode");
-                        Main.helper.Log(ex.ToString());
-                    }
-
-                    try
-                    {
-                        Main.RunPostLoadRebuild("StartGame");
-                    }
-                    catch
-                    {
-                    }
-
-                    SpeedControlUI.inst.SetSpeed(0);
+                    SpeedControlUI.inst.SetSpeed(desiredSpeed);
                 }
                 else
                 {
                     LobbyManager.loadingSave = false;
                     GameState.inst.SetNewMode(GameState.inst.playingMode);
+                    SpeedControlUI.inst.SetSpeed(desiredSpeed);
                 }
             }
             catch (Exception ex)

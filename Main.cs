@@ -1,4 +1,4 @@
-using Assets.Code;
+﻿using Assets.Code;
 using Assets.Code.UI;
 using Assets.Interface;
 using Harmony;
@@ -58,7 +58,7 @@ namespace KCM
         private static readonly Dictionary<int, long> lastTeamIdLookupLogMs = new Dictionary<int, long>();
         private static int resetInProgress = 0;
         private static int multiplayerSaveLoadInProgress = 0;
-        private static int worldReadyRebuildDone = 0;
+        private static int suppressVillagerTeleportPackets = 0;
 
         public static bool IsMultiplayerSaveLoadInProgress
         {
@@ -68,6 +68,16 @@ namespace KCM
         public static void SetMultiplayerSaveLoadInProgress(bool inProgress)
         {
             Interlocked.Exchange(ref multiplayerSaveLoadInProgress, inProgress ? 1 : 0);
+        }
+
+        private static bool ShouldSuppressVillagerTeleportPackets
+        {
+            get { return Volatile.Read(ref suppressVillagerTeleportPackets) != 0; }
+        }
+
+        private static void SetSuppressVillagerTeleportPackets(bool suppress)
+        {
+            Interlocked.Exchange(ref suppressVillagerTeleportPackets, suppress ? 1 : 0);
         }
 
         public static void ResetMultiplayerState(string reason = null)
@@ -216,45 +226,83 @@ namespace KCM
             catch
             {
             }
-
-            return -1;
         }
 
-        private static string TryGetGameModeName()
+        private static bool TryGetVillagerPosition(Villager villager, out Vector3 position)
         {
+            position = Vector3.zero;
+            if (villager == null)
+                return false;
+
             try
             {
-                if (GameState.inst == null)
-                    return "null";
+                var flags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
+                Type type = villager.GetType();
 
-                var t = GameState.inst.GetType();
-
-                var modeProp = t.GetProperty("mode", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
-                    ?? t.GetProperty("Mode", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
-                    ?? t.GetProperty("CurrentMode", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
-
-                if (modeProp != null)
+                string[] gameObjectNames = new string[] { "gameObject", "go", "Go" };
+                for (int i = 0; i < gameObjectNames.Length; i++)
                 {
-                    object m = modeProp.GetValue(GameState.inst, null);
-                    return m != null ? m.GetType().Name : "null";
+                    string name = gameObjectNames[i];
+
+                    PropertyInfo prop = type.GetProperty(name, flags);
+                    if (prop != null && typeof(GameObject).IsAssignableFrom(prop.PropertyType))
+                    {
+                        GameObject go = prop.GetValue(villager, null) as GameObject;
+                        if (go != null)
+                        {
+                            position = go.transform.position;
+                            return true;
+                        }
+                    }
+
+                    FieldInfo field = type.GetField(name, flags);
+                    if (field != null && typeof(GameObject).IsAssignableFrom(field.FieldType))
+                    {
+                        GameObject go = field.GetValue(villager) as GameObject;
+                        if (go != null)
+                        {
+                            position = go.transform.position;
+                            return true;
+                        }
+                    }
                 }
 
-                var modeField = t.GetField("mode", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
-                    ?? t.GetField("Mode", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
-                    ?? t.GetField("currentMode", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
-                    ?? t.GetField("currMode", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
-
-                if (modeField != null)
+                string[] positionNames = new string[] { "pos", "Pos", "position", "Position" };
+                for (int i = 0; i < positionNames.Length; i++)
                 {
-                    object fm = modeField.GetValue(GameState.inst);
-                    return fm != null ? fm.GetType().Name : "null";
+                    string name = positionNames[i];
+
+                    PropertyInfo prop = type.GetProperty(name, flags);
+                    if (prop != null && prop.PropertyType == typeof(Vector3))
+                    {
+                        position = (Vector3)prop.GetValue(villager, null);
+                        return true;
+                    }
+
+                    FieldInfo field = type.GetField(name, flags);
+                    if (field != null && field.FieldType == typeof(Vector3))
+                    {
+                        position = (Vector3)field.GetValue(villager);
+                        return true;
+                    }
+                }
+
+                string[] getPosNames = new string[] { "GetPos", "GetPosition" };
+                for (int i = 0; i < getPosNames.Length; i++)
+                {
+                    MethodInfo method = type.GetMethod(getPosNames[i], flags, null, new Type[0], null);
+                    if (method != null && method.ReturnType == typeof(Vector3))
+                    {
+                        position = (Vector3)method.Invoke(villager, null);
+                        return true;
+                    }
                 }
             }
             catch
             {
             }
 
-            return "unknown";
+            return false;
         }
 
         public static void RunPostLoadRebuild(string reason)
@@ -268,27 +316,51 @@ namespace KCM
                 try { Player.inst.irrigation.UpdateIrrigation(); } catch (Exception e) { helper?.Log(e.ToString()); }
                 try { Player.inst.CalcMaxResources(null, -1); } catch (Exception e) { helper?.Log(e.ToString()); }
 
-                helper?.Log("Setting loadTickDelay for game systems");
+                try { if (UnitSystem.inst != null) UnitSystem.inst.enabled = true; } catch (Exception e) { helper?.Log(e.ToString()); }
+                try { if (JobSystem.inst != null) JobSystem.inst.enabled = true; } catch (Exception e) { helper?.Log(e.ToString()); }
+                try { if (VillagerSystem.inst != null) VillagerSystem.inst.enabled = true; } catch (Exception e) { helper?.Log(e.ToString()); }
+
                 SetLoadTickDelay(Player.inst, 1);
                 SetLoadTickDelay(UnitSystem.inst, 1);
                 SetLoadTickDelay(JobSystem.inst, 1);
                 SetLoadTickDelay(VillagerSystem.inst, 1);
 
-                helper?.Log(
-                    "loadTickDelay after set: Player=" + GetLoadTickDelayOrMinusOne(Player.inst) +
-                    " Unit=" + GetLoadTickDelayOrMinusOne(UnitSystem.inst) +
-                    " Job=" + GetLoadTickDelayOrMinusOne(JobSystem.inst) +
-                    " Villager=" + GetLoadTickDelayOrMinusOne(VillagerSystem.inst));
+                try
+                {
+                    // A nudge helps recover from cases where villagers have jobs but never begin moving.
+                    SetSuppressVillagerTeleportPackets(true);
+                    foreach (var kcPlayer in kCPlayers.Values)
+                    {
+                        if (kcPlayer == null || kcPlayer.inst == null)
+                            continue;
 
-                // Try to enable VillagerSystem if it's disabled
-                if (VillagerSystem.inst != null && !VillagerSystem.inst.enabled)
-                {
-                    helper?.Log("VillagerSystem is disabled, enabling it");
-                    VillagerSystem.inst.enabled = true;
+                        var workers = kcPlayer.inst.Workers;
+                        for (int i = 0; i < workers.Count; i++)
+                        {
+                            Villager v = workers.data[i];
+                        if (v == null)
+                            continue;
+
+                        try
+                        {
+                            Vector3 pos;
+                            if (TryGetVillagerPosition(v, out pos))
+                                v.TeleportTo(pos);
+                        }
+                        catch
+                        {
+                        }
+                    }
+                    }
                 }
-                else if (VillagerSystem.inst != null)
+                catch (Exception e)
                 {
-                    helper?.Log("VillagerSystem.enabled = " + VillagerSystem.inst.enabled);
+                    helper?.Log("Post-load villager nudge failed");
+                    helper?.Log(e.ToString());
+                }
+                finally
+                {
+                    SetSuppressVillagerTeleportPackets(false);
                 }
             }
             catch (Exception e)
@@ -683,6 +755,26 @@ namespace KCM
 
                 if ((MenuState)newState == MenuState.Menu && (KCClient.client.IsConnected || KCServer.IsRunning))
                     ResetMultiplayerState("Returned to main menu");
+
+                if ((MenuState)newState == (MenuState)200 && KCClient.client.IsConnected)
+                {
+                    try
+                    {
+                        RunPostLoadRebuild("Entered playing mode");
+                    }
+                    catch
+                    {
+                    }
+
+                    try
+                    {
+                        if (SpeedControlUI.inst != null)
+                            SpeedControlUI.inst.SetSpeed(1);
+                    }
+                    catch
+                    {
+                    }
+                }
             }
         }
 
@@ -1041,26 +1133,14 @@ namespace KCM
         [HarmonyPatch(typeof(Player), "AddBuilding")]
         public class PlayerAddBuildingHook
         {
-            static int step = 1;
-            static void LogStep(bool reset = false)
-            {
-                if (reset)
-                    step = 1;
-
-                Main.helper.Log(step.ToString());
-                step++;
-            }
-
             public static bool Prefix(Player __instance, Building b)
             {
                 try
                 {
                     if (KCClient.client.IsConnected)
                     {
-                        LogStep(true);
                         __instance.Buildings.Add(b);
                         IResourceStorage[] storages = b.GetComponents<IResourceStorage>();
-                        LogStep();
                         for (int i = 0; i < storages.Length; i++)
                         {
                             bool flag = !storages[i].IsPrivate();
@@ -1069,50 +1149,38 @@ namespace KCM
                                 FreeResourceManager.inst.AddResourceStorage(storages[i]);
                             }
                         }
-                        LogStep();
                         int landMass = b.LandMass();
                         Home res = b.GetComponent<Home>();
                         bool flag2 = res != null;
-                        LogStep();
                         if (flag2)
                         {
                             __instance.Residentials.Add(res);
                             __instance.ResidentialsPerLandmass[landMass].Add(res);
                         }
                         WagePayer wagePayer = b.GetComponent<WagePayer>();
-                        LogStep();
                         bool flag3 = wagePayer != null;
                         if (flag3)
                         {
                             __instance.WagePayers.Add(wagePayer);
                         }
                         RadiusBonus radiusBonus = b.GetComponent<RadiusBonus>();
-                        LogStep();
                         bool flag4 = radiusBonus != null;
                         if (flag4)
                         {
                             __instance.RadiusBonuses.Add(radiusBonus);
                         }
-                        LogStep();
                         var globalBuildingRegistry = __instance.GetType().GetField("globalBuildingRegistry", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(__instance) as ArrayExt<Player.BuildingRegistry>;
-                        LogStep();
                         var landMassBuildingRegistry = __instance.GetType().GetField("landMassBuildingRegistry", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(__instance) as ArrayExt<Player.LandMassBuildingRegistry>;
-                        LogStep();
                         var unbuiltBuildingsPerLandmass = __instance.GetType().GetField("unbuiltBuildingsPerLandmass", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(__instance) as ArrayExt<ArrayExt<Building>>;
-                        LogStep();
 
                         __instance.AddToRegistry(globalBuildingRegistry, b);
-                        LogStep();
                         __instance.AddToRegistry(landMassBuildingRegistry.data[landMass].registry, b);
-                        LogStep();
                         landMassBuildingRegistry.data[landMass].buildings.Add(b);
-                        LogStep();
                         bool flag5 = !b.IsBuilt();
                         if (flag5)
                         {
                             unbuiltBuildingsPerLandmass.data[landMass].Add(b);
                         }
-                        LogStep();
 
 
                         return false;
@@ -1368,25 +1436,54 @@ namespace KCM
         public class SpeedControlUISetSpeedHook
         {
             private static long lastTime = 0;
+            private static long lastClientBlockLogTime = 0;
+            private static long lastHostPauseTraceLogTime = 0;
+            private static int lastSentSpeed = -1;
 
-            public static bool Prefix(ref bool __state)
+            public static bool Prefix(int idx, ref bool __state)
             {
                 __state = false;
-                if (KCClient.client.IsConnected)
+                if (!KCClient.client.IsConnected)
+                    return true;
+
+                bool calledFromPacket = false;
+                try { calledFromPacket = PacketHandler.IsHandlingPacket; } catch { }
+
+                // In multiplayer, keep time control authoritative to the host to avoid clients pausing/stalling the simulation.
+                if (!KCServer.IsRunning)
                 {
-                    bool calledFromPacket = false;
-                    try
+                    if (calledFromPacket)
+                        return true;
+
+                    long now = DateTimeOffset.Now.ToUnixTimeMilliseconds();
+                    if ((now - lastClientBlockLogTime) >= 2000)
                     {
-                        calledFromPacket = new StackFrame(3).GetMethod().Name.Contains("HandlePacket");
-                    }
-                    catch
-                    {
+                        lastClientBlockLogTime = now;
+                        Main.helper.Log("Blocked SpeedControlUI.SetSpeed on non-host client: " + idx);
                     }
 
-                    if (!calledFromPacket)
+                    return false;
+                }
+
+                if (!calledFromPacket)
+                {
+                    long now = DateTimeOffset.Now.ToUnixTimeMilliseconds();
+                    // Ensure that real speed changes are always propagated, even if they happen in quick succession (eg. pause/unpause).
+                    if (idx != lastSentSpeed || (now - lastTime) >= 250) // Set speed spam fix / hack
+                        __state = true;
+
+                    // Diagnostics for "random pause": log a stack trace when the host hits speed 0 from local code.
+                    if (idx == 0 && (now - lastHostPauseTraceLogTime) >= 2000)
                     {
-                        if ((DateTimeOffset.Now.ToUnixTimeMilliseconds() - lastTime) >= 250) // Set speed spam fix / hack
-                            __state = true;
+                        lastHostPauseTraceLogTime = now;
+                        try
+                        {
+                            Main.helper.Log("Host speed set to 0 (pause). Call stack:");
+                            Main.helper.Log(new StackTrace(2, false).ToString());
+                        }
+                        catch
+                        {
+                        }
                     }
                 }
 
@@ -1400,32 +1497,6 @@ namespace KCM
                     if (!__state)
                         return;
 
-                    /*Main.helper.Log($"set speed Called by 0: {new StackFrame(0).GetMethod()} {new StackFrame(0).GetMethod().Name.Contains("HandlePacket")}");
-                     Main.helper.Log($"set speed Called by 1: {new StackFrame(1).GetMethod()} {new StackFrame(1).GetMethod().Name.Contains("HandlePacket")}");
-                     Main.helper.Log($"set speed Called by 2: {new StackFrame(2).GetMethod()} {new StackFrame(2).GetMethod().Name.Contains("HandlePacket")}");
-                     Main.helper.Log($"set speed Called by 3: {new StackFrame(3).GetMethod()} {new StackFrame(3).GetMethod().Name.Contains("HandlePacket")}");*/
-
-                    try
-                    {
-                        if (new StackFrame(3).GetMethod().Name.Contains("HandlePacket"))
-                            return;
-                    }
-                    catch
-                    {
-                    }
-
-                    try
-                    {
-                        if (idx > 0 && Time.timeScale == 0f)
-                        {
-                            Time.timeScale = 1f;
-                            Main.helper.Log("TimeScaleFix: restored Time.timeScale=1 on local SetSpeed idx=" + idx);
-                        }
-                    }
-                    catch
-                    {
-                    }
-
                     Main.helper.Log("SpeedControlUI.SetSpeed (local): " + idx);
                     bool isPaused = (idx == 0);
                     new SetSpeed()
@@ -1435,6 +1506,7 @@ namespace KCM
                     }.Send();
 
                     lastTime = DateTimeOffset.Now.ToUnixTimeMilliseconds();
+                    lastSentSpeed = idx;
                 }
             }
         }
@@ -1543,7 +1615,12 @@ namespace KCM
             {
                 if (KCClient.client.IsConnected)
                 {
-                    if (new StackFrame(3).GetMethod().Name.Contains("HandlePacket"))
+                    if (ShouldSuppressVillagerTeleportPackets)
+                        return;
+
+                    bool calledFromPacket = false;
+                    try { calledFromPacket = PacketHandler.IsHandlingPacket; } catch { }
+                    if (calledFromPacket)
                         return;
 
                     new VillagerTeleportTo()
@@ -1591,18 +1668,13 @@ namespace KCM
             public static bool Prefix(ref string __result)
             {
                 Main.helper.Log("Get save dir");
-                if (KCClient.client.IsConnected)
+                if (KCServer.IsRunning)
                 {
-                    if (KCServer.IsRunning)
-                    {
-
-                    }
                     __result = Application.persistentDataPath + "/Saves/Multiplayer";
-
                     return false;
                 }
 
-                __result = Application.persistentDataPath + "/Saves"; ;
+                __result = Application.persistentDataPath + "/Saves";
                 return true;
             }
         }
@@ -1680,6 +1752,14 @@ namespace KCM
                         finally
                         {
                             Main.SetMultiplayerSaveLoadInProgress(false);
+                        }
+
+                        try
+                        {
+                            RunPostLoadRebuild("LoadAtPath (multiplayer)");
+                        }
+                        catch
+                        {
                         }
 
                         Broadcast.OnLoadedEvent.Broadcast(new OnLoadedEvent());

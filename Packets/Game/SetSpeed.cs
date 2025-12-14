@@ -81,7 +81,7 @@ namespace KCM.Packets.Game
 
         public override void HandlePacketServer()
         {
-            // Server doesn't need to handle this packet
+            // Server relay is handled automatically by PacketHandler unless [NoServerRelay] is used.
         }
     }
 }
