@@ -125,6 +125,23 @@ namespace KCM.Packets.Game.GameWorld
                 Main.helper.Log("unpack stage 2");
                 structureData.UnpackStage2(building);
 
+                // Update materials/textures for correct display
+                building.UpdateMaterialSelection();
+
+                // Update road rotation for proper visuals
+                Road roadComp = building.GetComponent<Road>();
+                if (roadComp != null)
+                {
+                    roadComp.UpdateRotation();
+                }
+
+                // Update aqueduct rotation
+                Aqueduct aqueductComp = building.GetComponent<Aqueduct>();
+                if (aqueductComp != null)
+                {
+                    aqueductComp.UpdateRotation();
+                }
+
                 building.SetVisibleForFog(false);
 
                 Main.helper.Log("Landmass owner take ownership");
