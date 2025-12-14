@@ -10,14 +10,15 @@
 | Kliens nem lesz kidobva host kilepesekor | Meg nincs elkezdve | Kliens tovabb jatszik miutan host kiment, nem kap ertesitest |
 | Packetek erkeznek menu-ben | Meg nincs elkezdve | Menu-ben is fogadja es feldolgozza a packeteket, ami nem helyes |
 | Rossz kapcsolat, "server disconnected" hibak | Reszben javitva | Event handler duplikacio es session cleanup javitva |
+| StartGame.Start() NullReferenceException | Meg nincs elkezdve | MainMenuMode.StartGame crash-el 2x a logban, TargetInvocationException |
 
-### Building Placement Errors (output.txt-bol)
+### Building Placement Errors (output.txt-bol) - KRITIKUS!
 
 | Hiba | Status | Megjegyzes |
 |------|--------|------------|
-| PlayerAddBuildingHook NullReferenceException | Meg nincs elkezdve | Tobbszor elofordul: "Error in add building hook" + NullRef a Prefix-ben. ~50+ elofordulas a logban |
-| IndexOutOfRangeException WorldPlace-ben | Meg nincs elkezdve | Nehany epulet elhelyezesnel: "Index was outside the bounds of the array" |
-| Epuletek nem jelennek meg kliensnel | Vizsgalat alatt | A fenti hibak miatt sok epulet nem kerul elhelyezesre |
+| **PlayerAddBuildingHook NullReferenceException** | Meg nincs elkezdve | **56 PLACEMENT START, csak 1 PLACEMENT END!** Szinte minden epulet fail-el. A hook 1-11 szamokat printeli majd crash |
+| IndexOutOfRangeException WorldPlace-ben | Meg nincs elkezdve | 9 elofordulas - "Index was outside the bounds of the array" |
+| Epuletek nem jelennek meg kliensnel | Vizsgalat alatt | A fenti hibak miatt 55/56 epulet NEM kerul elhelyezesre! |
 
 ### Host-Client Sync Problems
 
@@ -46,21 +47,31 @@
 
 ## Log Analisis (2024-12-14 15:39-15:56)
 
+### Hibak szamokban
+- **56 BUILDING PLACEMENT START** - epulet elhelyezesi kiserlet
+- **1 BUILDING PLACEMENT END** - sikeres elhelyezes
+- **55 FAIL (98%)** - majdnem minden epulet elbukik!
+- **55 "Error in add building hook"** - NullReferenceException
+- **9 IndexOutOfRangeException** - tomb tulindexeles
+- **2 StartGame.Start() crash** - TargetInvocationException
+- **2 Client disconnect event** - kapcsolat megszakadas
+
 ### Idovonal
 - 15:39: Session start
-- 15:40:03: Exception MainMenuMode.StartGame - NullReferenceException
+- 15:40:03: Exception MainMenuMode.StartGame - NullReferenceException (1.)
 - 15:42:14: Client disconnect events (ketszer)
-- 15:44:11: Ujabb Exception MainMenuMode.StartGame
-- 15:45-15:50: **Sok "Error in add building hook"** - NullReferenceException es IndexOutOfRangeException
+- 15:44:11: Ujabb Exception MainMenuMode.StartGame (2.)
+- 15:45-15:50: **55x "Error in add building hook"** - szinte minden epulet fail
 - 15:52:00: Utolso BuildingStatePacket erkezik client 2-tol, utana csak ServerSettings
 - 15:53:55: **Host kilep menube** ("Menu set to: Menu")
 - 15:53:55-15:56:25: **Server TOVABB FUT** es fogadja a packeteket a klienstol!
 - 15:56:27: Server vegre leall
 
 ### Fo problemak a logbol
-1. **PlayerAddBuildingHook.Prefix** crash-el sokszor - valami null benne
+1. **PlayerAddBuildingHook.Prefix** crash-el 55x - valami null benne (1-11 szamokat printel elotte)
 2. **Server nem all le menu-nel** - 2.5 percig meg fut miutan host kiment
 3. **Kliens nem kap ertesitest** - tovabb kuldi a packeteket
+4. **StartGame exception** - 2x crash jatek inditaskor
 
 ## Recent Changes
 
