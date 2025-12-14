@@ -160,6 +160,7 @@ namespace Riptide.Demos.Steam.PlayerHosted
             Main.helper.Log("clear players");
             Main.kCPlayers.Clear();
             Main.clientSteamIds.Clear();  // Clear client-to-steam ID mapping
+            Main.ClearVillagerPositionCache();  // Clear villager sync cache
             LobbyHandler.ClearPlayerList();
             LobbyHandler.ClearChatEntries();
             Main.helper.Log("end clear players");
