@@ -102,6 +102,7 @@ namespace KCM.Packets.Game.GameWorld
                 Main.helper.Log(building.LandMass().ToString());
                 Main.helper.Log("Player add Building unpacked");
                 player.inst.AddBuilding(building);
+                Main.ApplyPendingBuildingState(building);
 
                 try
                 {

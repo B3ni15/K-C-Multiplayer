@@ -14,6 +14,7 @@ using KCM.Packets.Game.GameWorld;
 using KCM.Packets.Handlers;
 using KCM.Packets.Lobby;
 using KCM.StateManagement.BuildingState;
+using KCM.Packets.State;
 using KCM.StateManagement.Observers;
 using KCM.UI;
 using Newtonsoft.Json;
@@ -53,6 +54,7 @@ namespace KCM
 
         public static Dictionary<string, KCPlayer> kCPlayers = new Dictionary<string, KCPlayer>();
         public static Dictionary<ushort, string> clientSteamIds = new Dictionary<ushort, string>();
+        public static Dictionary<Guid, BuildingStatePacket> pendingBuildingStatePackets = new Dictionary<Guid, BuildingStatePacket>();
 
         public static KCPlayer GetPlayerByClientID(ushort clientId)
         {
@@ -79,6 +81,26 @@ namespace KCM
                 }
             }
             return Player.inst;
+        }
+
+        public static void QueuePendingBuildingState(BuildingStatePacket packet)
+        {
+            if (packet == null)
+                return;
+
+            pendingBuildingStatePackets[packet.guid] = packet;
+        }
+
+        public static void ApplyPendingBuildingState(Building building)
+        {
+            if (building == null)
+                return;
+
+            if (pendingBuildingStatePackets.TryGetValue(building.guid, out var pending))
+            {
+                pending.ApplyToBuilding(building);
+                pendingBuildingStatePackets.Remove(building.guid);
+            }
         }
 
         public static Player GetPlayerByBuilding(Building building)
@@ -1226,8 +1248,22 @@ namespace KCM
                         Stream file = new FileStream(path, FileMode.Open);
                         try
                         {
-                            MultiplayerSaveContainer loadData = (MultiplayerSaveContainer)bf.Deserialize(file);
-                            loadData.Unpack(null);
+                            object deserialized = bf.Deserialize(file);
+
+                            if (deserialized is MultiplayerSaveContainer loadData)
+                            {
+                                loadData.Unpack(null);
+                            }
+                            else if (deserialized is LoadSaveContainer legacyLoadData)
+                            {
+                                Main.helper.Log($"Deserialized fallback save type ({legacyLoadData.GetType().FullName}), applying base container.");
+                                legacyLoadData.Unpack(null);
+                            }
+                            else
+                            {
+                                throw new InvalidCastException($"Unexpected save data type: {deserialized?.GetType().FullName}");
+                            }
+
                             Broadcast.OnLoadedEvent.Broadcast(new OnLoadedEvent());
                         }
                         catch (Exception e)
