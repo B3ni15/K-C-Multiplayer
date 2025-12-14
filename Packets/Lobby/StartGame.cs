@@ -16,40 +16,28 @@ namespace KCM.Packets.Lobby
 
         public void Start()
         {
-            Main.helper.Log(GameState.inst.mainMenuMode.ToString());
-
-            // Hide server lobby
-            Main.TransitionTo((MenuState)200);
-
-            // This is run when user clicks "accept" on choose your map screeen
+            Main.helper.Log("Starting multiplayer game...");
 
             try
             {
-                if (!LobbyManager.loadingSave)
-                {
-                    SpeedControlUI.inst.SetSpeed(0);
+                // For multiplayer, we don't call MainMenuMode.StartGame() because:
+                // 1. Clients never go through the "Choose Your Map" screen
+                // 2. MainMenuMode.StartGame() expects that screen's state to be initialized
+                // 3. Calling it causes NullReferenceException
+                // Instead, we transition directly to playing mode like when loading saves
 
-                    try
-                    {
-                        typeof(MainMenuMode).GetMethod("StartGame", BindingFlags.NonPublic | BindingFlags.Instance).Invoke(GameState.inst.mainMenuMode, null);
-                    }
-                    catch (Exception ex)
-                    {
-                        Main.helper.Log(ex.Message.ToString());
-                        Main.helper.Log(ex.ToString());
-                    }
+                SpeedControlUI.inst.SetSpeed(0);
 
-                    SpeedControlUI.inst.SetSpeed(0);
-                }
-                else
-                {
-                    LobbyManager.loadingSave = false;
-                    GameState.inst.SetNewMode(GameState.inst.playingMode);
-                }
+                // Transition to playing mode
+                GameState.inst.SetNewMode(GameState.inst.playingMode);
+
+                SpeedControlUI.inst.SetSpeed(0);
+
+                Main.helper.Log("Successfully started multiplayer game");
             }
             catch (Exception ex)
             {
-                // Handle exception here
+                Main.helper.Log("Error starting multiplayer game:");
                 Main.helper.Log(ex.Message.ToString());
                 Main.helper.Log(ex.ToString());
             }
