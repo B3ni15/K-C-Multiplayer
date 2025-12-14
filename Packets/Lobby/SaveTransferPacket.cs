@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using KCM.StateManagement.Observers;
 using static KCM.Main;
 
 namespace KCM.Packets.Lobby
@@ -18,14 +17,6 @@ namespace KCM.Packets.Lobby
         public static bool loadingSave = false;
         public static int received = 0;
 
-        public static void ResetTransferState()
-        {
-            loadingSave = false;
-            received = 0;
-            saveData = new byte[1];
-            chunksReceived = new bool[1];
-        }
-
 
         public int chunkId { get; set; }
         public int chunkSize { get; set; }
@@ -38,56 +29,38 @@ namespace KCM.Packets.Lobby
 
         public override void HandlePacketClient()
         {
-            bool initialisingTransfer = !loadingSave ||
-                                       saveData == null ||
-                                       saveData.Length != saveSize ||
-                                       chunksReceived == null ||
-                                       chunksReceived.Length != totalChunks;
+            float savePercent = (float)received / (float)saveSize;
 
-            if (initialisingTransfer)
+            // Initialize saveData and chunksReceived on the first packet received
+            if (saveData.Length == 1)
             {
+
                 Main.helper.Log("Save Transfer started!");
                 loadingSave = true;
-                received = 0;
 
-                StateObserver.ClearAll();
+                ServerLobbyScript.LoadingSave.SetActive(true);
+
+                // save percentage
+
 
                 saveData = new byte[saveSize];
                 chunksReceived = new bool[totalChunks];
-
-                if (ServerLobbyScript.LoadingSave != null)
-                    ServerLobbyScript.LoadingSave.SetActive(true);
             }
 
-            if (chunkId < 0 || chunkId >= totalChunks)
-            {
-                Main.helper.Log($"Invalid save chunk id: {chunkId} / {totalChunks}");
-                return;
-            }
 
-            if (saveDataChunk == null)
-            {
-                Main.helper.Log($"Null save chunk data for chunk: {chunkId}");
-                return;
-            }
-
-            if (saveDataIndex < 0 || saveDataIndex + saveDataChunk.Length > saveData.Length)
-            {
-                Main.helper.Log($"Invalid save chunk write range: index={saveDataIndex} len={saveDataChunk.Length} size={saveData.Length}");
-                return;
-            }
-
+            // Copy the chunk data into the correct position in saveData
             Array.Copy(saveDataChunk, 0, saveData, saveDataIndex, saveDataChunk.Length);
+
+            // Mark this chunk as received
             chunksReceived[chunkId] = true;
+
+            // Seek to the next position to write to
             received += chunkSize;
 
-            float savePercent = saveSize > 0 ? (float)received / (float)saveSize : 0f;
-            if (ServerLobbyScript.ProgressBar != null)
-                ServerLobbyScript.ProgressBar.fillAmount = savePercent;
-            if (ServerLobbyScript.ProgressBarText != null)
-                ServerLobbyScript.ProgressBarText.text = (savePercent * 100).ToString("0.00") + "%";
-            if (ServerLobbyScript.ProgressText != null)
-                ServerLobbyScript.ProgressText.text = $"{((float)(received / 1000)).ToString("0.00")} KB / {((float)(saveSize / 1000)).ToString("0.00")} KB";
+
+            ServerLobbyScript.ProgressBar.fillAmount = savePercent;
+            ServerLobbyScript.ProgressBarText.text = (savePercent * 100).ToString("0.00") + "%";
+            ServerLobbyScript.ProgressText.text = $"{((float)(received / 1000)).ToString("0.00")} KB / {((float)(saveSize / 1000)).ToString("0.00")} KB";
 
 
             if (chunkId + 1 == totalChunks)
@@ -108,40 +81,11 @@ namespace KCM.Packets.Lobby
 
                 LoadSave.Load();
 
-                try
-                {
-                    Main.SetMultiplayerSaveLoadInProgress(true);
-                    LoadSaveLoadHook.saveContainer.Unpack(null);
-                }
-                finally
-                {
-                    Main.SetMultiplayerSaveLoadInProgress(false);
-                }
 
-                try
-                {
-                    RunPostLoadRebuild("Save transfer complete");
-                }
-                catch
-                {
-                }
+                LoadSaveLoadHook.saveContainer.Unpack(null);
                 Broadcast.OnLoadedEvent.Broadcast(new OnLoadedEvent());
 
-                try
-                {
-                    new KCM.Packets.Network.ResyncRequestPacket { reason = "post-load" }.Send();
-                }
-                catch
-                {
-                }
-
-                if (ServerLobbyScript.LoadingSave != null)
-                    ServerLobbyScript.LoadingSave.SetActive(false);
-
-                loadingSave = false;
-                received = 0;
-                saveData = new byte[1];
-                chunksReceived = new bool[1];
+                ServerLobbyScript.LoadingSave.SetActive(false);
             }
         }
 

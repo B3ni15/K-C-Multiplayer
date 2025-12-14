@@ -1,4 +1,4 @@
-using KCM.Packets;
+﻿using KCM.Packets;
 using KCM.Packets.State;
 using KCM.StateManagement.Observers;
 using System;
@@ -6,7 +6,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using UnityEngine;
 using static KCM.StateManagement.Observers.Observer;
 
 namespace KCM.StateManagement.BuildingState
@@ -23,72 +22,27 @@ namespace KCM.StateManagement.BuildingState
         {
             try
             {
-                Observer observer = sender as Observer;
-                if (observer == null)
-                    return;
+                Observer observer = (Observer)sender;
 
-                Building building = observer.state as Building;
-                if (building == null)
-                    return;
+                Building building = (Building)observer.state;
 
                 //Main.helper.Log("Should send building network update for: " + building.UniqueName);
-
-                var t = building.transform;
-                if (t == null)
-                    return;
-
-                Quaternion rotation = t.rotation;
-                Vector3 globalPosition = t.position;
-                Vector3 localPosition = t.localPosition;
-
-                if (t.childCount > 0)
-                {
-                    try
-                    {
-                        var child = t.GetChild(0);
-                        if (child != null)
-                        {
-                            rotation = child.rotation;
-                            localPosition = child.localPosition;
-                        }
-                    }
-                    catch
-                    {
-                    }
-                }
-
-                float resourceProgress = 0f;
-                try
-                {
-                    var field = building.GetType().GetField("resourceProgress", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
-                    if (field != null)
-                    {
-                        object value = field.GetValue(building);
-                        if (value is float)
-                            resourceProgress = (float)value;
-                        else if (value != null)
-                            resourceProgress = Convert.ToSingle(value);
-                    }
-                }
-                catch
-                {
-                }
 
                 new BuildingStatePacket()
                 {
                     customName = building.customName,
                     guid = building.guid,
                     uniqueName = building.UniqueName,
-                    rotation = rotation,
-                    globalPosition = globalPosition,
-                    localPosition = localPosition,
+                    rotation = building.transform.GetChild(0).rotation,
+                    globalPosition = building.transform.position,
+                    localPosition = building.transform.GetChild(0).localPosition,
                     built = building.IsBuilt(),
                     placed = building.IsPlaced(),
                     open = building.Open,
                     doBuildAnimation = building.doBuildAnimation,
                     constructionPaused = building.constructionPaused,
                     constructionProgress = building.constructionProgress,
-                    resourceProgress = resourceProgress,
+                    resourceProgress = (float)building.GetType().GetField("resourceProgress", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance).GetValue(building),
                     life = building.Life,
                     ModifiedMaxLife = building.ModifiedMaxLife,
                     yearBuilt = building.YearBuilt,

@@ -18,21 +18,22 @@ namespace KCM
 {
     public class KCServer : MonoBehaviour
     {
-        public static Server server = new Server(Main.steamServer);
+        public static Server server = null;
         public static bool started = false;
-
-        private static readonly Dictionary<ushort, Queue<SaveTransferPacket>> saveTransferQueues = new Dictionary<ushort, Queue<SaveTransferPacket>>();
-        private const int SaveTransferPacketsPerUpdatePerClient = 10;
-
-        static KCServer()
-        {
-            //server.registerMessageHandler(typeof(KCServer).GetMethod("ClientJoined"));
-
-            server.MessageReceived += PacketHandler.HandlePacketServer;
-        }
 
         public static void StartServer()
         {
+            // Stop and cleanup existing server if running
+            if (server != null)
+            {
+                if (server.IsRunning)
+                {
+                    server.Stop();
+                }
+                // Unsubscribe old event handlers to prevent memory leaks
+                server.MessageReceived -= PacketHandler.HandlePacketServer;
+            }
+
             server = new Server(Main.steamServer);
             server.MessageReceived += PacketHandler.HandlePacketServer;
 
@@ -53,7 +54,6 @@ namespace KCM
                 }
 
                 ev.Client.CanQualityDisconnect = false;
-                ev.Client.MaxSendAttempts = 50;
 
                 Main.helper.Log("Client ID is: " + ev.Client.Id);
 
@@ -62,42 +62,15 @@ namespace KCM
 
             server.ClientDisconnected += (obj, ev) =>
             {
-                try
+                new ChatSystemMessage()
                 {
-                    var playerName = $"Client {ev.Client.Id}";
-                    string steamId;
-                    if (Main.clientSteamIds.TryGetValue(ev.Client.Id, out steamId) && !string.IsNullOrEmpty(steamId))
-                    {
-                        KCPlayer player;
-                        if (Main.kCPlayers.TryGetValue(steamId, out player) && player != null && !string.IsNullOrEmpty(player.name))
-                            playerName = player.name;
+                    Message = $"{Main.GetPlayerByClientID(ev.Client.Id).name} has left the server.",
+                }.SendToAll();
 
-                        Main.kCPlayers.Remove(steamId);
-                    }
+                Main.kCPlayers.Remove(Main.GetPlayerByClientID(ev.Client.Id).steamId);
+                Destroy(LobbyHandler.playerEntries.Select(x => x.GetComponent<PlayerEntryScript>()).Where(x => x.Client == ev.Client.Id).FirstOrDefault().gameObject);
 
-                    Main.clientSteamIds.Remove(ev.Client.Id);
-
-                    new ChatSystemMessage()
-                    {
-                        Message = $"{playerName} has left the server.",
-                    }.SendToAll();
-
-                    var entry = LobbyHandler.playerEntries
-                        .Select(x => x != null ? x.GetComponent<PlayerEntryScript>() : null)
-                        .FirstOrDefault(x => x != null && x.Client == ev.Client.Id);
-
-                    if (entry != null)
-                        Destroy(entry.gameObject);
-
-                    saveTransferQueues.Remove(ev.Client.Id);
-
-                    Main.helper.Log($"Client disconnected. {ev.Reason}");
-                }
-                catch (Exception ex)
-                {
-                    Main.helper.Log("Error handling client disconnect");
-                    Main.helper.Log(ex.ToString());
-                }
+                Main.helper.Log($"Client disconnected. {ev.Reason}");
             };
 
             Main.helper.Log($"Listening on port 7777. Max {LobbyHandler.ServerSettings.MaxPlayers} clients.");
@@ -126,79 +99,18 @@ namespace KCM
             }
         }*/
 
-        public static bool IsRunning { get { return server.IsRunning; } }
+        public static bool IsRunning { get { return server != null && server.IsRunning; } }
 
         private void Update()
         {
-            server.Update();
-            ProcessSaveTransfers();
-            KCM.StateManagement.Sync.SyncManager.ServerUpdate();
-        }
-
-        private static void ProcessSaveTransfers()
-        {
-            if (!KCServer.IsRunning)
-                return;
-
-            if (saveTransferQueues.Count == 0)
-                return;
-
-            var clients = saveTransferQueues.Keys.ToList();
-            foreach (var clientId in clients)
-            {
-                Queue<SaveTransferPacket> queue;
-                if (!saveTransferQueues.TryGetValue(clientId, out queue) || queue == null)
-                    continue;
-
-                int sentThisUpdate = 0;
-                while (sentThisUpdate < SaveTransferPacketsPerUpdatePerClient && queue.Count > 0)
-                {
-                    var packet = queue.Dequeue();
-                    packet.Send(clientId);
-                    sentThisUpdate++;
-                }
-
-                if (queue.Count == 0)
-                    saveTransferQueues.Remove(clientId);
-            }
-        }
-
-        public static void EnqueueSaveTransfer(ushort toClient, byte[] bytes)
-        {
-            if (bytes == null)
-                return;
-
-            int chunkSize = 900;
-            int sent = 0;
-            int totalChunks = (int)Math.Ceiling((double)bytes.Length / chunkSize);
-
-            var queue = new Queue<SaveTransferPacket>(totalChunks);
-            for (int i = 0; i < totalChunks; i++)
-            {
-                int currentChunkSize = Math.Min(chunkSize, bytes.Length - sent);
-                var chunk = new byte[currentChunkSize];
-                Array.Copy(bytes, sent, chunk, 0, currentChunkSize);
-
-                queue.Enqueue(new SaveTransferPacket()
-                {
-                    saveSize = bytes.Length,
-                    saveDataChunk = chunk,
-                    chunkId = i,
-                    chunkSize = chunk.Length,
-                    saveDataIndex = sent,
-                    totalChunks = totalChunks
-                });
-
-                sent += currentChunkSize;
-            }
-
-            saveTransferQueues[toClient] = queue;
-            Main.helper.Log($"Queued {totalChunks} save data chunks for client {toClient}");
+            if (server != null)
+                server.Update();
         }
 
         private void OnApplicationQuit()
         {
-            server.Stop();
+            if (server != null && server.IsRunning)
+                server.Stop();
         }
 
         private void Preload(KCModHelper helper)

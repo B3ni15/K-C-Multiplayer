@@ -1,6 +1,5 @@
 ﻿using Assets.Code;
 using Assets.Code.UI;
-using Assets.Interface;
 using Harmony;
 using KCM.Enums;
 using KCM.LoadSaveOverrides;
@@ -55,389 +54,30 @@ namespace KCM
         public static Dictionary<string, KCPlayer> kCPlayers = new Dictionary<string, KCPlayer>();
         public static Dictionary<ushort, string> clientSteamIds = new Dictionary<ushort, string>();
 
-        private static readonly Dictionary<int, long> lastTeamIdLookupLogMs = new Dictionary<int, long>();
-        private static int resetInProgress = 0;
-        private static int multiplayerSaveLoadInProgress = 0;
-        private static int suppressVillagerTeleportPackets = 0;
-
-        public static bool IsMultiplayerSaveLoadInProgress
-        {
-            get { return Volatile.Read(ref multiplayerSaveLoadInProgress) != 0; }
-        }
-
-        public static void SetMultiplayerSaveLoadInProgress(bool inProgress)
-        {
-            Interlocked.Exchange(ref multiplayerSaveLoadInProgress, inProgress ? 1 : 0);
-        }
-
-        private static bool ShouldSuppressVillagerTeleportPackets
-        {
-            get { return Volatile.Read(ref suppressVillagerTeleportPackets) != 0; }
-        }
-
-        private static void SetSuppressVillagerTeleportPackets(bool suppress)
-        {
-            Interlocked.Exchange(ref suppressVillagerTeleportPackets, suppress ? 1 : 0);
-        }
-
-        public static void ResetMultiplayerState(string reason = null)
-        {
-            if (Interlocked.Exchange(ref resetInProgress, 1) == 1)
-                return;
-
-            try
-            {
-                if (!string.IsNullOrEmpty(reason))
-                    helper?.Log($"ResetMultiplayerState: {reason}");
-
-                try { StateObserver.ClearAll(); } catch { }
-                try { SaveTransferPacket.ResetTransferState(); } catch { }
-
-                try
-                {
-                    LoadSaveLoadHook.memoryStreamHook = false;
-                    LoadSaveLoadHook.saveBytes = new byte[0];
-                    LoadSaveLoadHook.saveContainer = null;
-                }
-                catch { }
-
-                try { LoadSaveLoadAtPathHook.saveData = new byte[0]; } catch { }
-
-                try { LobbyManager.loadingSave = false; } catch { }
-                try { SetMultiplayerSaveLoadInProgress(false); } catch { }
-                try { Interlocked.Exchange(ref worldReadyRebuildDone, 0); } catch { }
-
-                try
-                {
-                    foreach (var player in kCPlayers.Values)
-                    {
-                        if (player?.gameObject != null && player.gameObject.name != null && player.gameObject.name.Contains("Client Player"))
-                            UnityEngine.Object.Destroy(player.gameObject);
-                    }
-                }
-                catch { }
-
-                try { LobbyHandler.ClearChatEntries(); } catch { }
-                try { LobbyHandler.ClearPlayerList(); } catch { }
-
-                try
-                {
-                    kCPlayers.Clear();
-                    clientSteamIds.Clear();
-                }
-                catch { }
-
-                try { lastTeamIdLookupLogMs.Clear(); } catch { }
-
-                try
-                {
-                    if (KCClient.client != null && KCClient.client.IsConnected)
-                        KCClient.client.Disconnect();
-                }
-                catch { }
-
-                try
-                {
-                    if (KCServer.IsRunning)
-                        KCServer.server.Stop();
-                }
-                catch { }
-
-                try { ServerBrowser.registerServer = false; } catch { }
-            }
-            finally
-            {
-                Interlocked.Exchange(ref resetInProgress, 0);
-            }
-        }
-
         public static KCPlayer GetPlayerByClientID(ushort clientId)
         {
             return kCPlayers[clientSteamIds[clientId]];
         }
 
-        private static void SetLoadTickDelay(object instance, int ticks)
-        {
-            if (instance == null)
-                return;
-
-            try
-            {
-                FieldInfo loadTickDelayField = instance.GetType().GetField("loadTickDelay", BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
-                if (loadTickDelayField != null)
-                {
-                    loadTickDelayField.SetValue(instance, ticks);
-                    return;
-                }
-
-                PropertyInfo loadTickDelayProp = instance.GetType().GetProperty("loadTickDelay", BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
-                if (loadTickDelayProp != null && loadTickDelayProp.CanWrite && loadTickDelayProp.PropertyType == typeof(int))
-                {
-                    loadTickDelayProp.SetValue(instance, ticks, null);
-                    return;
-                }
-
-                // Debug: list all fields if loadTickDelay not found
-                if (instance.GetType().Name == "VillagerSystem")
-                {
-                    helper?.Log("DEBUG: VillagerSystem fields:");
-                    foreach (var field in instance.GetType().GetFields(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public))
-                    {
-                        if (field.FieldType == typeof(int) || field.FieldType == typeof(bool))
-                            helper?.Log($"  Field: {field.Name} ({field.FieldType.Name})");
-                    }
-                    helper?.Log("DEBUG: VillagerSystem properties:");
-                    foreach (var prop in instance.GetType().GetProperties(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public))
-                    {
-                        if (prop.PropertyType == typeof(int) || prop.PropertyType == typeof(bool))
-                            helper?.Log($"  Property: {prop.Name} ({prop.PropertyType.Name})");
-                    }
-                }
-            }
-            catch (Exception e)
-            {
-                helper?.Log("SetLoadTickDelay failed for " + instance.GetType().Name + ": " + e.Message);
-            }
-        }
-
-        private static int GetLoadTickDelayOrMinusOne(object instance)
-        {
-            if (instance == null)
-                return -1;
-
-            try
-            {
-                FieldInfo loadTickDelayField = instance.GetType().GetField("loadTickDelay", BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
-                if (loadTickDelayField != null)
-                {
-                    object v = loadTickDelayField.GetValue(instance);
-                    if (v is int)
-                        return (int)v;
-                }
-
-                PropertyInfo loadTickDelayProp = instance.GetType().GetProperty("loadTickDelay", BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
-                if (loadTickDelayProp != null && loadTickDelayProp.CanRead && loadTickDelayProp.PropertyType == typeof(int))
-                {
-                    object pv = loadTickDelayProp.GetValue(instance, null);
-                    if (pv is int)
-                        return (int)pv;
-                }
-            }
-            catch
-            {
-            }
-
-            return -1;
-        }
-
-        private static string TryGetGameModeName()
-        {
-            try
-            {
-                if (GameState.inst == null)
-                    return "null";
-
-                var t = GameState.inst.GetType();
-
-                var modeProp = t.GetProperty("mode", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
-                    ?? t.GetProperty("Mode", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
-                    ?? t.GetProperty("CurrentMode", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
-
-                if (modeProp != null)
-                {
-                    object m = modeProp.GetValue(GameState.inst, null);
-                    return m != null ? m.GetType().Name : "null";
-                }
-
-                var modeField = t.GetField("mode", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
-                    ?? t.GetField("Mode", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
-                    ?? t.GetField("currentMode", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
-                    ?? t.GetField("currMode", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
-
-                if (modeField != null)
-                {
-                    object fm = modeField.GetValue(GameState.inst);
-                    return fm != null ? fm.GetType().Name : "null";
-                }
-            }
-            catch
-            {
-            }
-
-            return "unknown";
-        }
-
-        private static bool TryGetVillagerPosition(Villager villager, out Vector3 position)
-        {
-            position = Vector3.zero;
-            if (villager == null)
-                return false;
-
-            try
-            {
-                var flags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
-                Type type = villager.GetType();
-
-                string[] gameObjectNames = new string[] { "gameObject", "go", "Go" };
-                for (int i = 0; i < gameObjectNames.Length; i++)
-                {
-                    string name = gameObjectNames[i];
-
-                    PropertyInfo prop = type.GetProperty(name, flags);
-                    if (prop != null && typeof(GameObject).IsAssignableFrom(prop.PropertyType))
-                    {
-                        GameObject go = prop.GetValue(villager, null) as GameObject;
-                        if (go != null)
-                        {
-                            position = go.transform.position;
-                            return true;
-                        }
-                    }
-
-                    FieldInfo field = type.GetField(name, flags);
-                    if (field != null && typeof(GameObject).IsAssignableFrom(field.FieldType))
-                    {
-                        GameObject go = field.GetValue(villager) as GameObject;
-                        if (go != null)
-                        {
-                            position = go.transform.position;
-                            return true;
-                        }
-                    }
-                }
-
-                string[] positionNames = new string[] { "pos", "Pos", "position", "Position" };
-                for (int i = 0; i < positionNames.Length; i++)
-                {
-                    string name = positionNames[i];
-
-                    PropertyInfo prop = type.GetProperty(name, flags);
-                    if (prop != null && prop.PropertyType == typeof(Vector3))
-                    {
-                        position = (Vector3)prop.GetValue(villager, null);
-                        return true;
-                    }
-
-                    FieldInfo field = type.GetField(name, flags);
-                    if (field != null && field.FieldType == typeof(Vector3))
-                    {
-                        position = (Vector3)field.GetValue(villager);
-                        return true;
-                    }
-                }
-
-                string[] getPosNames = new string[] { "GetPos", "GetPosition" };
-                for (int i = 0; i < getPosNames.Length; i++)
-                {
-                    MethodInfo method = type.GetMethod(getPosNames[i], flags, null, new Type[0], null);
-                    if (method != null && method.ReturnType == typeof(Vector3))
-                    {
-                        position = (Vector3)method.Invoke(villager, null);
-                        return true;
-                    }
-                }
-            }
-            catch
-            {
-            }
-
-            return false;
-        }
-
-        public static void RunPostLoadRebuild(string reason)
-        {
-            try
-            {
-                helper?.Log("Post-load rebuild: " + (reason ?? string.Empty));
-
-                try { World.inst.SetupInitialPathCosts(); } catch (Exception e) { helper?.Log(e.ToString()); }
-                try { World.inst.RebuildVillagerGrid(); } catch (Exception e) { helper?.Log(e.ToString()); }
-                try { Player.inst.irrigation.UpdateIrrigation(); } catch (Exception e) { helper?.Log(e.ToString()); }
-                try { Player.inst.CalcMaxResources(null, -1); } catch (Exception e) { helper?.Log(e.ToString()); }
-
-                try { if (UnitSystem.inst != null) UnitSystem.inst.enabled = true; } catch (Exception e) { helper?.Log(e.ToString()); }
-                try { if (JobSystem.inst != null) JobSystem.inst.enabled = true; } catch (Exception e) { helper?.Log(e.ToString()); }
-                try { if (VillagerSystem.inst != null) VillagerSystem.inst.enabled = true; } catch (Exception e) { helper?.Log(e.ToString()); }
-
-                SetLoadTickDelay(Player.inst, 1);
-                SetLoadTickDelay(UnitSystem.inst, 1);
-                SetLoadTickDelay(JobSystem.inst, 1);
-                SetLoadTickDelay(VillagerSystem.inst, 1);
-
-                try
-                {
-                    // A nudge helps recover from cases where villagers have jobs but never begin moving.
-                    SetSuppressVillagerTeleportPackets(true);
-                    foreach (var kcPlayer in kCPlayers.Values)
-                    {
-                        if (kcPlayer == null || kcPlayer.inst == null)
-                            continue;
-
-                        var workers = kcPlayer.inst.Workers;
-                        for (int i = 0; i < workers.Count; i++)
-                        {
-                            Villager v = workers.data[i];
-                        if (v == null)
-                            continue;
-
-                        try
-                        {
-                            Vector3 pos;
-                            if (TryGetVillagerPosition(v, out pos))
-                                v.TeleportTo(pos);
-                        }
-                        catch
-                        {
-                        }
-                    }
-                    }
-                }
-                catch (Exception e)
-                {
-                    helper?.Log("Post-load villager nudge failed");
-                    helper?.Log(e.ToString());
-                }
-                finally
-                {
-                    SetSuppressVillagerTeleportPackets(false);
-                }
-            }
-            catch (Exception e)
-            {
-                helper?.Log("Post-load rebuild failed");
-                helper?.Log(e.ToString());
-            }
-        }
-
         public static Player GetPlayerByTeamID(int teamId) // Need to replace building / production types so that the correct player is used. IResourceStorage and IResourceProvider, and jobs
         {
-            KCPlayer match = kCPlayers.Values.FirstOrDefault(p =>
-                p != null &&
-                p.inst != null &&
-                p.inst.PlayerLandmassOwner != null &&
-                p.inst.PlayerLandmassOwner.teamId == teamId);
-
-            if (match != null && match.inst != null)
-                return match.inst;
-
-            if (KCServer.IsRunning || KCClient.client.IsConnected)
+            try
             {
-                long now = DateTimeOffset.Now.ToUnixTimeMilliseconds();
-                long last;
-                if (!lastTeamIdLookupLogMs.TryGetValue(teamId, out last) || (now - last) > 2000)
+                var player = kCPlayers.Values.FirstOrDefault(p => p.inst.PlayerLandmassOwner.teamId == teamId).inst;
+
+                return player;
+            }
+            catch (Exception e)
+            {
+                if (KCServer.IsRunning || KCClient.client.IsConnected)
                 {
-                    lastTeamIdLookupLogMs[teamId] = now;
-
-                    string myTeamId = (Player.inst != null && Player.inst.PlayerLandmassOwner != null)
-                        ? Player.inst.PlayerLandmassOwner.teamId.ToString()
-                        : "unknown";
-
-                    Main.helper.Log("Failed finding player by teamID: " + teamId + " My teamID is: " + myTeamId);
+                    Main.helper.Log("Failed finding player by teamID: " + teamId + " My teamID is: " + Player.inst.PlayerLandmassOwner.teamId);
                     Main.helper.Log(kCPlayers.Count.ToString());
-                    Main.helper.Log(string.Join(", ", kCPlayers.Values.Where(p => p != null && p.inst != null && p.inst.PlayerLandmassOwner != null).Select(p => p.inst.PlayerLandmassOwner.teamId.ToString())));
+                    Main.helper.Log(string.Join(", ", kCPlayers.Values.Select(p => p.inst.PlayerLandmassOwner.teamId.ToString())));
+                    Main.helper.Log(e.Message);
+                    Main.helper.Log(e.StackTrace);
                 }
             }
-
             return Player.inst;
         }
 
@@ -541,178 +181,14 @@ namespace KCM
         #endregion
 
         public static int FixedUpdateInterval = 0;
-        private static int worldReadyRebuildDone = 0;
-        private static long lastVillagerMoveMs = 0;
-        private static long lastVillagerProbeMs = 0;
-        private static long lastVillagerStallLogMs = 0;
-        private static Guid probedVillagerGuid = Guid.Empty;
-        private static Vector3 probedVillagerLastPos = Vector3.zero;
+
+        public static void ClearVillagerPositionCache()
+        {
+            // Kept for API compatibility with LobbyManager
+        }
 
         private void FixedUpdate()
         {
-            try
-            {
-                if (KCClient.client != null &&
-                    KCClient.client.IsConnected &&
-                    Volatile.Read(ref worldReadyRebuildDone) == 0 &&
-                    World.inst != null &&
-                    Player.inst != null &&
-                    VillagerSystem.inst != null)
-                {
-                    if (Interlocked.Exchange(ref worldReadyRebuildDone, 1) == 0)
-                    {
-                        Main.helper.Log("AutoRebuild: world ready; running post-load rebuild");
-                        RunPostLoadRebuild("auto:world-ready");
-                        Main.helper.Log(
-                            "AutoRebuild: timeScale=" + Time.timeScale +
-                            " loadTickDelay(Player/Unit/Job/Villager)=" +
-                            GetLoadTickDelayOrMinusOne(Player.inst) + "/" +
-                            GetLoadTickDelayOrMinusOne(UnitSystem.inst) + "/" +
-                            GetLoadTickDelayOrMinusOne(JobSystem.inst) + "/" +
-                            GetLoadTickDelayOrMinusOne(VillagerSystem.inst));
-                    }
-                }
-            }
-            catch
-            {
-            }
-
-            try
-            {
-                if (KCClient.client != null &&
-                    KCClient.client.IsConnected &&
-                    World.inst != null &&
-                    Time.timeScale > 0f &&
-                    Villager.villagers != null &&
-                    Villager.villagers.Count > 0)
-                {
-                    long now = DateTimeOffset.Now.ToUnixTimeMilliseconds();
-                    if ((now - lastVillagerProbeMs) >= 2000)
-                    {
-                        lastVillagerProbeMs = now;
-
-                        // Proactively check and fix loadTickDelay every 2 seconds
-                        int villagerDelay = GetLoadTickDelayOrMinusOne(VillagerSystem.inst);
-                        int unitDelay = GetLoadTickDelayOrMinusOne(UnitSystem.inst);
-                        int jobDelay = GetLoadTickDelayOrMinusOne(JobSystem.inst);
-                        int playerDelay = GetLoadTickDelayOrMinusOne(Player.inst);
-
-                        if (villagerDelay <= 0 || unitDelay <= 0 || jobDelay <= 0 || playerDelay <= 0)
-                        {
-                            Main.helper.Log("LoadTickDelay refresh: delays were " +
-                                playerDelay + "/" + unitDelay + "/" + jobDelay + "/" + villagerDelay + ", resetting to 1");
-                            SetLoadTickDelay(Player.inst, 1);
-                            SetLoadTickDelay(UnitSystem.inst, 1);
-                            SetLoadTickDelay(JobSystem.inst, 1);
-                            SetLoadTickDelay(VillagerSystem.inst, 1);
-                        }
-
-                        Villager v = null;
-                        try
-                        {
-                            if (probedVillagerGuid != Guid.Empty)
-                                v = Villager.villagers.data.FirstOrDefault(x => x != null && x.guid == probedVillagerGuid);
-                        }
-                        catch
-                        {
-                        }
-
-                        if (v == null)
-                        {
-                            v = Villager.villagers.data.FirstOrDefault(x => x != null);
-                            if (v != null)
-                            {
-                                probedVillagerGuid = v.guid;
-                                probedVillagerLastPos = v.Pos;
-                                lastVillagerMoveMs = now;
-                            }
-                        }
-
-                        if (v != null)
-                        {
-                            float movedSqr = (v.Pos - probedVillagerLastPos).sqrMagnitude;
-                            if (movedSqr > 0.01f)
-                            {
-                                probedVillagerLastPos = v.Pos;
-                                lastVillagerMoveMs = now;
-                            }
-
-                            // Note: We now have proactive loadTickDelay refresh above, so villager stall detection
-                            // is less critical. Only log if there's an actual extended stall with bad delay values.
-                            if ((now - lastVillagerMoveMs) >= 30000 && (now - lastVillagerStallLogMs) >= 30000)
-                            {
-                                lastVillagerStallLogMs = now;
-                                Main.helper.Log(
-                                    "VillagerStallDetect: no movement for " + (now - lastVillagerMoveMs) +
-                                    "ms timeScale=" + Time.timeScale +
-                                    " mode=" + TryGetGameModeName() +
-                                    " villagerSystemEnabled=" + (VillagerSystem.inst != null && VillagerSystem.inst.enabled) +
-                                    " villagers=" + Villager.villagers.Count +
-                                    " sampleGuid=" + probedVillagerGuid +
-                                    " samplePos=" + v.Pos);
-                                Main.helper.Log(
-                                    "VillagerStallDetect: loadTickDelay(Player/Unit/Job/Villager)=" +
-                                    GetLoadTickDelayOrMinusOne(Player.inst) + "/" +
-                                    GetLoadTickDelayOrMinusOne(UnitSystem.inst) + "/" +
-                                    GetLoadTickDelayOrMinusOne(JobSystem.inst) + "/" +
-                                    GetLoadTickDelayOrMinusOne(VillagerSystem.inst));
-
-                                // Try to fix stalled systems by resetting loadTickDelay
-                                // Reuse the delay variables from earlier in this scope
-                                villagerDelay = GetLoadTickDelayOrMinusOne(VillagerSystem.inst);
-                                unitDelay = GetLoadTickDelayOrMinusOne(UnitSystem.inst);
-                                jobDelay = GetLoadTickDelayOrMinusOne(JobSystem.inst);
-                                playerDelay = GetLoadTickDelayOrMinusOne(Player.inst);
-
-                                if (villagerDelay <= 0 || unitDelay <= 0 || jobDelay <= 0 || playerDelay <= 0)
-                                {
-                                    Main.helper.Log("VillagerStallDetect: Attempting to fix stalled systems (delays: " +
-                                        playerDelay + "/" + unitDelay + "/" + jobDelay + "/" + villagerDelay + ")");
-                                    SetLoadTickDelay(Player.inst, 1);
-                                    SetLoadTickDelay(UnitSystem.inst, 1);
-                                    SetLoadTickDelay(JobSystem.inst, 1);
-                                    SetLoadTickDelay(VillagerSystem.inst, 1);
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            catch
-            {
-            }
-
-            // send batched building placement info
-            /*if (PlaceHook.QueuedBuildings.Count > 0 && (FixedUpdateInterval % 25 == 0))
-            {
-                foreach (Building building in PlaceHook.QueuedBuildings)
-                {
-                    new WorldPlace()
-                    {
-                        uniqueName = building.UniqueName,
-                        customName = building.customName,
-                        guid = building.guid,
-                        rotation = building.transform.GetChild(0).rotation,
-                        globalPosition = building.transform.position,
-                        localPosition = building.transform.GetChild(0).localPosition,
-                        built = building.IsBuilt(),
-                        placed = building.IsPlaced(),
-                        open = building.Open,
-                        doBuildAnimation = building.doBuildAnimation,
-                        constructionPaused = building.constructionPaused,
-                        constructionProgress = building.constructionProgress,
-                        life = building.Life,
-                        ModifiedMaxLife = building.ModifiedMaxLife,
-                        //CollectForBuild = CollectForBuild,
-                        yearBuilt = building.YearBuilt,
-                        decayProtection = building.decayProtection,
-                        seenByPlayer = building.seenByPlayer
-                    }.Send();
-                }
-
-                PlaceHook.QueuedBuildings.Clear();
-            }*/
-
             FixedUpdateInterval++;
         }
 
@@ -795,29 +271,6 @@ namespace KCM
 
                 if (newState != MainMenuMode.State.Uninitialized)
                     Main.menuState = (MenuState)newState;
-
-                if ((MenuState)newState == MenuState.Menu && (KCClient.client.IsConnected || KCServer.IsRunning))
-                    ResetMultiplayerState("Returned to main menu");
-
-                if ((MenuState)newState == (MenuState)200 && KCClient.client.IsConnected)
-                {
-                    try
-                    {
-                        RunPostLoadRebuild("Entered playing mode");
-                    }
-                    catch
-                    {
-                    }
-
-                    try
-                    {
-                        if (SpeedControlUI.inst != null)
-                            SpeedControlUI.inst.SetSpeed(1);
-                    }
-                    catch
-                    {
-                    }
-                }
             }
         }
 
@@ -912,7 +365,10 @@ namespace KCM
         {
             public static void Postfix()
             {
+                // Your code here
+
                 // Get the name of the last method that called OnPlayerPlacement
+                string callTree = "";
                 List<string> strings = new List<string>();
 
                 for (int i = 1; i < 10; i++)
@@ -1058,12 +514,7 @@ namespace KCM
         {
             public static bool Prefix(Player __instance)
             {
-                var localPlayer = Player.inst;
-                if (KCClient.client.IsConnected &&
-                    __instance != null &&
-                    (localPlayer == null || __instance != localPlayer) &&
-                    __instance.gameObject != null &&
-                    __instance.gameObject.name.Contains("Client Player"))
+                if (KCClient.client.IsConnected && __instance.gameObject.name.Contains("Client Player") && !LobbyManager.loadingSave)
                 {
                     try
                     {
@@ -1176,55 +627,81 @@ namespace KCM
         [HarmonyPatch(typeof(Player), "AddBuilding")]
         public class PlayerAddBuildingHook
         {
+            static int step = 1;
+            static void LogStep(bool reset = false)
+            {
+                if (reset)
+                    step = 1;
+
+                Main.helper.Log(step.ToString());
+                step++;
+            }
+
             public static bool Prefix(Player __instance, Building b)
             {
                 try
                 {
                     if (KCClient.client.IsConnected)
                     {
-                        __instance.Buildings.Add(b);
-                        IResourceStorage[] storages = b.GetComponents<IResourceStorage>();
-                        for (int i = 0; i < storages.Length; i++)
+                        LogStep(true);
+                    __instance.Buildings.Add(b);
+                    Component[] storages = ResourceStorageHelper.GetStorages(b);
+                    LogStep();
+                    for (int i = 0; i < storages.Length; i++)
+                    {
+                        bool flag = !ResourceStorageHelper.IsPrivate(storages[i]);
+                        if (flag)
                         {
-                            bool flag = !storages[i].IsPrivate();
-                            if (flag)
-                            {
-                                FreeResourceManager.inst.AddResourceStorage(storages[i]);
-                            }
+                            ResourceStorageHelper.Register(storages[i]);
                         }
+                    }
+                        LogStep();
                         int landMass = b.LandMass();
                         Home res = b.GetComponent<Home>();
                         bool flag2 = res != null;
+                        LogStep();
                         if (flag2)
                         {
                             __instance.Residentials.Add(res);
                             __instance.ResidentialsPerLandmass[landMass].Add(res);
                         }
                         WagePayer wagePayer = b.GetComponent<WagePayer>();
+                        LogStep();
                         bool flag3 = wagePayer != null;
                         if (flag3)
                         {
                             __instance.WagePayers.Add(wagePayer);
                         }
                         RadiusBonus radiusBonus = b.GetComponent<RadiusBonus>();
+                        LogStep();
                         bool flag4 = radiusBonus != null;
                         if (flag4)
                         {
                             __instance.RadiusBonuses.Add(radiusBonus);
                         }
+                        LogStep();
                         var globalBuildingRegistry = __instance.GetType().GetField("globalBuildingRegistry", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(__instance) as ArrayExt<Player.BuildingRegistry>;
+                        LogStep();
                         var landMassBuildingRegistry = __instance.GetType().GetField("landMassBuildingRegistry", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(__instance) as ArrayExt<Player.LandMassBuildingRegistry>;
+                        LogStep();
                         var unbuiltBuildingsPerLandmass = __instance.GetType().GetField("unbuiltBuildingsPerLandmass", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(__instance) as ArrayExt<ArrayExt<Building>>;
+                        LogStep();
 
                         __instance.AddToRegistry(globalBuildingRegistry, b);
+                        LogStep();
                         __instance.AddToRegistry(landMassBuildingRegistry.data[landMass].registry, b);
+                        LogStep();
                         landMassBuildingRegistry.data[landMass].buildings.Add(b);
+                        LogStep();
                         bool flag5 = !b.IsBuilt();
                         if (flag5)
                         {
                             unbuiltBuildingsPerLandmass.data[landMass].Add(b);
                         }
+                        LogStep();
 
+                        // CRITICAL: Bake pathing for villager movement!
+                        b.BakePathing();
 
                         return false;
                     }
@@ -1278,6 +755,7 @@ namespace KCM
                         new AddVillagerPacket()
                         {
                             guid = __result.guid,
+                            position = pos,  // Include villager spawn position
                         }.Send();
                     }
                     catch (Exception e)
@@ -1479,77 +957,39 @@ namespace KCM
         public class SpeedControlUISetSpeedHook
         {
             private static long lastTime = 0;
-            private static long lastClientBlockLogTime = 0;
-            private static long lastHostPauseTraceLogTime = 0;
-            private static int lastSentSpeed = -1;
 
-            public static bool Prefix(int idx, ref bool __state)
+            public static bool Prefix()
             {
-                __state = false;
-                if (!KCClient.client.IsConnected)
-                    return true;
-
-                bool calledFromPacket = false;
-                try { calledFromPacket = PacketHandler.IsHandlingPacket; } catch { }
-
-                // In multiplayer, keep time control authoritative to the host to avoid clients pausing/stalling the simulation.
-                if (!KCServer.IsRunning)
+                if (KCClient.client.IsConnected)
                 {
-                    if (calledFromPacket)
-                        return true;
+                    if ((DateTimeOffset.Now.ToUnixTimeMilliseconds() - lastTime) < 250) // Set speed spam fix / hack
+                        return false;
 
-                    long now = DateTimeOffset.Now.ToUnixTimeMilliseconds();
-                    if ((now - lastClientBlockLogTime) >= 2000)
-                    {
-                        lastClientBlockLogTime = now;
-                        Main.helper.Log("Blocked SpeedControlUI.SetSpeed on non-host client: " + idx);
-                    }
-
-                    return false;
-                }
-
-                if (!calledFromPacket)
-                {
-                    long now = DateTimeOffset.Now.ToUnixTimeMilliseconds();
-                    // Ensure that real speed changes are always propagated, even if they happen in quick succession (eg. pause/unpause).
-                    if (idx != lastSentSpeed || (now - lastTime) >= 250) // Set speed spam fix / hack
-                        __state = true;
-
-                    // Diagnostics for "random pause": log a stack trace when the host hits speed 0 from local code.
-                    if (idx == 0 && (now - lastHostPauseTraceLogTime) >= 2000)
-                    {
-                        lastHostPauseTraceLogTime = now;
-                        try
-                        {
-                            Main.helper.Log("Host speed set to 0 (pause). Call stack:");
-                            Main.helper.Log(new StackTrace(2, false).ToString());
-                        }
-                        catch
-                        {
-                        }
-                    }
+                    if (!new StackFrame(3).GetMethod().Name.Contains("HandlePacket"))
+                        return false;
                 }
 
                 return true;
             }
 
-            public static void Postfix(int idx, bool skipNextSfx, bool __state)
+            public static void Postfix(int idx, bool skipNextSfx)
             {
                 if (KCClient.client.IsConnected)
                 {
-                    if (!__state)
+                    /*Main.helper.Log($"set speed Called by 0: {new StackFrame(0).GetMethod()} {new StackFrame(0).GetMethod().Name.Contains("HandlePacket")}");
+                    Main.helper.Log($"set speed Called by 1: {new StackFrame(1).GetMethod()} {new StackFrame(1).GetMethod().Name.Contains("HandlePacket")}");
+                    Main.helper.Log($"set speed Called by 2: {new StackFrame(2).GetMethod()} {new StackFrame(2).GetMethod().Name.Contains("HandlePacket")}");
+                    Main.helper.Log($"set speed Called by 3: {new StackFrame(3).GetMethod()} {new StackFrame(3).GetMethod().Name.Contains("HandlePacket")}");*/
+
+                    if (new StackFrame(3).GetMethod().Name.Contains("HandlePacket"))
                         return;
 
-                    Main.helper.Log("SpeedControlUI.SetSpeed (local): " + idx);
-                    bool isPaused = (idx == 0);
                     new SetSpeed()
                     {
-                        speed = idx,
-                        isPaused = isPaused
+                        speed = idx
                     }.Send();
 
                     lastTime = DateTimeOffset.Now.ToUnixTimeMilliseconds();
-                    lastSentSpeed = idx;
                 }
             }
         }
@@ -1658,12 +1098,7 @@ namespace KCM
             {
                 if (KCClient.client.IsConnected)
                 {
-                    if (ShouldSuppressVillagerTeleportPackets)
-                        return;
-
-                    bool calledFromPacket = false;
-                    try { calledFromPacket = PacketHandler.IsHandlingPacket; } catch { }
-                    if (calledFromPacket)
+                    if (new StackFrame(3).GetMethod().Name.Contains("HandlePacket"))
                         return;
 
                     new VillagerTeleportTo()
@@ -1672,6 +1107,56 @@ namespace KCM
                         pos = newPos
                     }.Send();
                 }
+            }
+        }
+
+        [HarmonyPatch(typeof(Villager), "Update")]
+        public class VillagerMovementSync
+        {
+            private struct MovementSnapshot
+            {
+                public Vector3 position;
+                public float timestamp;
+            }
+
+            private static readonly Dictionary<Guid, MovementSnapshot> lastSnapshots = new Dictionary<Guid, MovementSnapshot>();
+            private const float MovementThreshold = 0.3f;
+            private const float ForceSendInterval = 0.5f;
+
+            public static void Postfix(Villager __instance)
+            {
+                if (!KCServer.IsRunning || KCServer.server == null)
+                    return;
+
+                if (__instance == null)
+                    return;
+
+                Guid guid = __instance.guid;
+                Component villagerComponent = (Component)(object)__instance;
+                if (villagerComponent == null)
+                    return;
+
+                Vector3 currentPosition = villagerComponent.transform.position;
+                float now = Time.time;
+
+                if (lastSnapshots.TryGetValue(guid, out MovementSnapshot snapshot))
+                {
+                    float distance = Vector3.Distance(snapshot.position, currentPosition);
+                    if (distance < MovementThreshold && (now - snapshot.timestamp) < ForceSendInterval)
+                        return;
+                }
+
+                lastSnapshots[guid] = new MovementSnapshot
+                {
+                    position = currentPosition,
+                    timestamp = now
+                };
+
+                new VillagerTeleportTo()
+                {
+                    guid = guid,
+                    pos = currentPosition
+                }.SendToAll();
             }
         }
         #endregion
@@ -1711,13 +1196,18 @@ namespace KCM
             public static bool Prefix(ref string __result)
             {
                 Main.helper.Log("Get save dir");
-                if (KCServer.IsRunning)
+                if (KCClient.client.IsConnected)
                 {
+                    if (KCServer.IsRunning)
+                    {
+
+                    }
                     __result = Application.persistentDataPath + "/Saves/Multiplayer";
+
                     return false;
                 }
 
-                __result = Application.persistentDataPath + "/Saves";
+                __result = Application.persistentDataPath + "/Saves"; ;
                 return true;
             }
         }
@@ -1728,13 +1218,11 @@ namespace KCM
             //public static string saveFile = "";
             public static byte[] saveData = new byte[0];
 
-            public static bool Prefix(string path, string filename, bool visitedWorld, ref bool __state)
+            public static bool Prefix(string path, string filename, bool visitedWorld)
             {
-                __state = false;
                 if (KCServer.IsRunning)
                 {
                     Main.helper.Log("Trying to load multiplayer save");
-                    KCM.StateManagement.Observers.StateObserver.ClearAll();
                     LoadSave.LastLoadDirectory = path;
                     path = path + "/" + filename;
 
@@ -1744,18 +1232,13 @@ namespace KCM
                     {
                         BinaryFormatter bf = new BinaryFormatter();
                         bf.Binder = new MultiplayerSaveDeserializationBinder();
-                        Stream file = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
-                        MultiplayerSaveContainer loadData = null;
+                        saveData = File.ReadAllBytes(path);
+                        Stream file = new FileStream(path, FileMode.Open);
                         try
                         {
-                            object deserialized = bf.Deserialize(file);
-                            loadData = deserialized as MultiplayerSaveContainer;
-                            if (loadData == null)
-                            {
-                                Main.helper.Log("Selected save is not a MultiplayerSaveContainer; falling back to vanilla load.");
-                                saveData = new byte[0];
-                                return true;
-                            }
+                            MultiplayerSaveContainer loadData = (MultiplayerSaveContainer)bf.Deserialize(file);
+                            loadData.Unpack(null);
+                            Broadcast.OnLoadedEvent.Broadcast(new OnLoadedEvent());
                         }
                         catch (Exception e)
                         {
@@ -1774,55 +1257,12 @@ namespace KCM
                                 file.Dispose();
                             }
                         }
-
-                        try
-                        {
-                            saveData = File.ReadAllBytes(path);
-                        }
-                        catch (Exception e)
-                        {
-                            saveData = new byte[0];
-                            Main.helper.Log("Failed reading save bytes for transfer; clients will not be able to load this save.");
-                            Main.helper.Log(e.ToString());
-                        }
-
-                        try
-                        {
-                            Main.SetMultiplayerSaveLoadInProgress(true);
-                            __state = true;
-                            loadData.Unpack(null);
-                        }
-                        finally
-                        {
-                            Main.SetMultiplayerSaveLoadInProgress(false);
-                        }
-
-                        try
-                        {
-                            RunPostLoadRebuild("LoadAtPath (multiplayer)");
-                        }
-                        catch
-                        {
-                        }
-
-                        Broadcast.OnLoadedEvent.Broadcast(new OnLoadedEvent());
                     }
 
                     return false;
                 }
 
                 return true;
-            }
-
-            public static void Postfix(string path, string filename, bool visitedWorld, bool __state)
-            {
-                if (!KCClient.client.IsConnected)
-                    return;
-
-                if (__state)
-                    return;
-
-                RunPostLoadRebuild("LoadAtPath (vanilla)");
             }
         }
 
@@ -1906,33 +1346,19 @@ namespace KCM
                 {
                     Directory.CreateDirectory(LoadSave.GetSaveDir());
                     Guid guid = Guid.NewGuid();
-                    bool hasOverride = !string.IsNullOrWhiteSpace(pathOverride);
-                    string path = hasOverride ? pathOverride : Path.Combine(LoadSave.GetSaveDir(), guid.ToString());
-                    if (hasOverride && !Path.IsPathRooted(path))
-                        path = Path.Combine(LoadSave.GetSaveDir(), pathOverride);
+                    string path = (pathOverride != "") ? pathOverride : (LoadSave.GetSaveDir() + "/" + guid);
                     Directory.CreateDirectory(path);
                     Thread thread;
                     try
                     {
                         thread = new Thread(new ParameterizedThreadStart(OutToFile));
 
-                        MultiplayerSaveContainer packedData;
-                        try
-                        {
-                            packedData = new MultiplayerSaveContainer().Pack(null);
-                        }
-                        catch (Exception ex)
-                        {
-                            Main.helper.Log("Failed to pack multiplayer save data; falling back to vanilla save.");
-                            Main.helper.Log(ex.ToString());
-                            __result = null;
-                            return true;
-                        }
+                        MultiplayerSaveContainer packedData = new MultiplayerSaveContainer().Pack(null);
                         Broadcast.OnSaveEvent.Broadcast(new OnSaveEvent());
                         thread.Start(new OutData
                         {
                             LoadSaveContainer = packedData,
-                            Path = Path.Combine(path, "world")
+                            Path = path + "/world"
                         });
                     }
                     catch (Exception e)
@@ -1964,7 +1390,7 @@ namespace KCM
 
                     try
                     {
-                        World.inst.TakeScreenshot(Path.Combine(path, "cover"), new Func<int, int, Texture2D>(World.inst.Func_CaptureWorldShot), onCompleteCallback);
+                        World.inst.TakeScreenshot(path + "/cover", new Func<int, int, Texture2D>(World.inst.Func_CaptureWorldShot), onCompleteCallback);
                     }
                     catch (Exception e3)
                     {
@@ -2015,48 +1441,57 @@ namespace KCM
         {
             public static bool Prefix(Building.BuildingSaveData structureData, Player p, ref Building __result)
             {
-                if (KCClient.client.IsConnected && Main.IsMultiplayerSaveLoadInProgress)
+                if (KCClient.client.IsConnected)
                 {
+                    Main.helper.Log($"[ProcessBuilding] START - {structureData.uniqueName}");
 
-                    Building Building = GameState.inst.GetPlaceableByUniqueName(structureData.uniqueName);
-                    bool flag = Building;
-                    if (flag)
+                    try
                     {
-                        Building building = UnityEngine.Object.Instantiate<Building>(Building);
-                        building.transform.position = structureData.globalPosition;
-                        building.Init();
-                        building.transform.SetParent(p.buildingContainer.transform, true);
-                        structureData.Unpack(building);
-                        p.AddBuilding(building);
+                        Building Building = GameState.inst.GetPlaceableByUniqueName(structureData.uniqueName);
+                        Main.helper.Log($"[ProcessBuilding] GetPlaceable: {(Building != null ? "OK" : "NULL")}");
 
-                        Main.helper.Log($"Loading player id: {p.PlayerLandmassOwner.teamId}");
-                        Main.helper.Log($"loading building: {building.FriendlyName}");
-                        Main.helper.Log($" (teamid: {building.TeamID()})");
-                        Main.helper.Log(p.ToString());
+                        if (Building)
+                        {
+                            Building building = UnityEngine.Object.Instantiate<Building>(Building);
+                            Main.helper.Log($"[ProcessBuilding] Instantiated");
 
-                        try
-                        {
-                            p.PlayerLandmassOwner.TakeOwnership(building.LandMass());
-                        }
-                        catch (Exception e)
-                        {
-                            Main.helper.Log("Failed setting landmass ownership during load");
-                            Main.helper.Log(e.Message);
-                        }
+                            building.transform.position = structureData.globalPosition;
+                            Main.helper.Log($"[ProcessBuilding] Position set: {structureData.globalPosition}");
 
-                        var keep = building.GetComponent<Keep>();
-                        bool shouldSetKeep = keep != null && p.keep == null;
-                        Main.helper.Log("Set keep? " + shouldSetKeep);
-                        if (shouldSetKeep)
-                        {
-                            p.keep = keep;
-                            Main.helper.Log(p.keep.ToString());
+                            building.Init();
+                            Main.helper.Log($"[ProcessBuilding] Init done");
+
+                            building.transform.SetParent(p.buildingContainer.transform, true);
+                            Main.helper.Log($"[ProcessBuilding] SetParent done");
+
+                            structureData.Unpack(building);
+                            Main.helper.Log($"[ProcessBuilding] Unpack done");
+
+                            // NOTE: AddBuilding, PlaceFromLoad and UnpackStage2 are called by the original
+                            // PlayerSaveData.Unpack method after ProcessBuilding returns
+                            Main.helper.Log($"[ProcessBuilding] Returning building to Unpack");
+
+                            bool isKeep = building.GetComponent<Keep>() != null && building.TeamID() == p.PlayerLandmassOwner.teamId;
+                            if (isKeep)
+                            {
+                                p.keep = building.GetComponent<Keep>();
+                                Main.helper.Log($"[ProcessBuilding] Keep set");
+                            }
+
+                            __result = building;
+                            Main.helper.Log($"[ProcessBuilding] SUCCESS - {structureData.uniqueName}");
                         }
-                        __result = building;
+                        else
+                        {
+                            Main.helper.Log($"[ProcessBuilding] FAILED - {structureData.uniqueName} not found in GameState");
+                            __result = null;
+                        }
                     }
-                    else
+                    catch (Exception e)
                     {
-                        Main.helper.Log(structureData.uniqueName + " failed to load correctly");
+                        Main.helper.Log($"[ProcessBuilding] EXCEPTION: {structureData.uniqueName}");
+                        Main.helper.Log($"[ProcessBuilding] Error: {e.Message}");
+                        Main.helper.Log($"[ProcessBuilding] Stack: {e.StackTrace}");
                         __result = null;
                     }
 
@@ -2075,12 +1510,6 @@ namespace KCM
                 if (KCClient.client.IsConnected)
                 {
                     var bindingFlags = BindingFlags.Instance | BindingFlags.NonPublic;
-                    var landmassOwner = p.PlayerLandmassOwner;
-                    if (landmassOwner == null)
-                    {
-                        Main.helper.Log("PlayerLandmassOwner was null during PlayerSaveData.Pack; using vanilla save pack.");
-                        return true;
-                    }
 
                     Main.helper.Log("Running patched player pack method");
                     Main.helper.Log("Saving banner system");
@@ -2088,12 +1517,22 @@ namespace KCM
                     Main.helper.Log("Saving player creativeMode");
                     __instance.creativeMode = p.creativeMode;
 
+                    //cmo options not used for saving or loading in multiplayer
+                    /**for (int i = 0; i < p.cmoOptionsOn.Length; i++)
+                    {
+                        bool flag = p.cmoOptionsOn[i];
+                        if (flag)
+                        {
+                            __instance.cmoOptions.Add((Player.CreativeOptions)i);
+                        }
+                    }**/
+
                     Main.helper.Log("Saving player upgrades");
                     __instance.GetType().GetField("upgrades", bindingFlags).SetValue(__instance, new List<Player.UpgradeType>());
 
 
-                     Main.helper.Log("Saving player bannerIdx");
-                    __instance.bannerIdx = landmassOwner.bannerIdx;
+                    Main.helper.Log("Saving player bannerIdx");
+                    __instance.bannerIdx = p.PlayerLandmassOwner.bannerIdx;
 
                     Main.helper.Log("Saving player WorkersArray");
                     __instance.WorkersArray = new Villager.VillagerSaveData[p.Workers.Count];
@@ -2106,13 +1545,11 @@ namespace KCM
                         }
                     }
 
-                     Main.helper.Log("Saving player HomelessData");
+                    Main.helper.Log("Saving player HomelessData");
                     __instance.HomelessData = new List<Guid>();
                     for (int k = 0; k < p.Homeless.Count; k++)
                     {
-                        var homeless = p.Homeless.data[k];
-                        if (homeless != null)
-                            __instance.HomelessData.Add(homeless.guid);
+                        __instance.HomelessData.Add(p.Homeless.data[k].guid);
                     }
                     __instance.structures = new List<Building.BuildingSaveData[]>();
                     __instance.subStructures = new List<Building.BuildingSaveData[]>();
@@ -2120,35 +1557,17 @@ namespace KCM
                     Main.helper.Log("Saving player structures");
                     World.inst.ForEachTile(0, 0, World.inst.GridWidth, World.inst.GridHeight, delegate (int x, int z, Cell cell)
                     {
-                        if (cell == null)
-                            return;
-
-                        bool flag4 = cell.OccupyingStructure != null && cell.OccupyingStructure.Count > 0;
+                        bool flag4 = cell.OccupyingStructure.Count > 0;
                         if (flag4)
                         {
                             List<Building.BuildingSaveData> occupyingStructureData = new List<Building.BuildingSaveData>();
                             for (int i3 = 0; i3 < cell.OccupyingStructure.Count; i3++)
                             {
                                 var building = cell.OccupyingStructure[i3];
-                                if (building == null)
-                                    continue;
-
-                                var buildingTransform = building.transform;
-                                if (buildingTransform == null)
-                                    continue;
-
-                                bool flag5 = Vector3.Distance(buildingTransform.position.xz(), cell.Position.xz()) <= 1E-05f;
-                                if (flag5 && building.TeamID() == landmassOwner.teamId)
+                                bool flag5 = Vector3.Distance(cell.OccupyingStructure[i3].transform.position.xz(), cell.Position.xz()) <= 1E-05f;
+                                if (flag5 && building.TeamID() == p.PlayerLandmassOwner.teamId)
                                 {
-                                    try
-                                    {
-                                        occupyingStructureData.Add(new Building.BuildingSaveData().Pack(building));
-                                    }
-                                    catch (Exception ex)
-                                    {
-                                        Main.helper.Log("Error packing structure for save: " + (building.UniqueName ?? string.Empty));
-                                        Main.helper.Log(ex.ToString());
-                                    }
+                                    occupyingStructureData.Add(new Building.BuildingSaveData().Pack(cell.OccupyingStructure[i3]));
                                 }
                             }
                             bool flag6 = occupyingStructureData.Count > 0;
@@ -2157,32 +1576,17 @@ namespace KCM
                                 __instance.structures.Add(occupyingStructureData.ToArray());
                             }
                         }
-                        bool flag7 = cell.SubStructure != null && cell.SubStructure.Count > 0;
+                        bool flag7 = cell.SubStructure.Count > 0;
                         if (flag7)
                         {
                             List<Building.BuildingSaveData> subStructureData = new List<Building.BuildingSaveData>();
                             for (int i4 = 0; i4 < cell.SubStructure.Count; i4++)
                             {
                                 var building = cell.SubStructure[i4];
-                                if (building == null)
-                                    continue;
-
-                                var buildingTransform = building.transform;
-                                if (buildingTransform == null)
-                                    continue;
-
-                                bool flag8 = Vector3.Distance(buildingTransform.position.xz(), cell.Position.xz()) <= 1E-05f;
-                                if (flag8 && building.TeamID() == landmassOwner.teamId)
+                                bool flag8 = Vector3.Distance(cell.SubStructure[i4].transform.position.xz(), cell.Position.xz()) <= 1E-05f;
+                                if (flag8 && building.TeamID() == p.PlayerLandmassOwner.teamId)
                                 {
-                                    try
-                                    {
-                                        subStructureData.Add(new Building.BuildingSaveData().Pack(building));
-                                    }
-                                    catch (Exception ex)
-                                    {
-                                        Main.helper.Log("Error packing sub-structure for save: " + (building.UniqueName ?? string.Empty));
-                                        Main.helper.Log(ex.ToString());
-                                    }
+                                    subStructureData.Add(new Building.BuildingSaveData().Pack(cell.SubStructure[i4]));
                                 }
                             }
                             bool flag9 = subStructureData.Count > 0;
@@ -2776,19 +2180,7 @@ namespace KCM
             {
                 Assembly assembly = typeof(Building).Assembly;
 
-                Type[] allTypes;
-                try
-                {
-                    allTypes = assembly.GetTypes();
-                }
-                catch (ReflectionTypeLoadException e)
-                {
-                    allTypes = e.Types.Where(t => t != null).ToArray();
-                }
-
-                var types = allTypes
-                    .Where(t => t != null && typeof(Building).IsAssignableFrom(t) && !t.IsAbstract)
-                    .ToArray();
+                Type[] types = new Type[] { typeof(Building) };
 
                 var methodsInNamespace = types
                     .SelectMany(t => t.GetMethods(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly).Where(m => !m.IsAbstract))
@@ -2828,56 +2220,6 @@ namespace KCM
 
                 if (PlayerInstCount > 0)
                     Main.helper.Log($"Found {PlayerInstCount} static building Player.inst references in {method.Name}");
-
-                return codes.AsEnumerable();
-            }
-        }
-
-        [HarmonyPatch]
-        public class FieldSystemPlayerReferencePatch
-        {
-            static FieldInfo playerField;
-
-            static IEnumerable<MethodBase> TargetMethods()
-            {
-                var methodsInNamespace = typeof(FieldSystem)
-                    .GetMethods(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly)
-                    .Where(m => !m.IsAbstract)
-                    .ToList();
-
-                helper.Log("Methods in namespace: " + methodsInNamespace.Count);
-
-                return methodsInNamespace.ToArray().Cast<MethodBase>();
-            }
-
-            static IEnumerable<CodeInstruction> Transpiler(MethodBase method, IEnumerable<CodeInstruction> instructions)
-            {
-                if (playerField == null)
-                {
-                    var bindingFlags = BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance;
-                    playerField = typeof(FieldSystem).GetFields(bindingFlags).FirstOrDefault(f => f.FieldType == typeof(Player));
-                }
-
-                if (playerField == null)
-                    return instructions;
-
-                int playerInstCount = 0;
-
-                var codes = new List<CodeInstruction>(instructions);
-                for (var i = 0; i < codes.Count; i++)
-                {
-                    if (codes[i].opcode == OpCodes.Ldsfld && codes[i].operand.ToString() == "Player inst")
-                    {
-                        playerInstCount++;
-
-                        codes[i].opcode = OpCodes.Ldarg_0;
-                        codes[i].operand = null;
-                        codes.Insert(++i, new CodeInstruction(OpCodes.Ldfld, playerField));
-                    }
-                }
-
-                if (playerInstCount > 0)
-                    Main.helper.Log($"Found {playerInstCount} static FieldSystem Player.inst references in {method.Name}");
 
                 return codes.AsEnumerable();
             }

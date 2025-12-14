@@ -39,8 +39,6 @@ namespace KCM
             Main.helper.Log("Client disconnected event start");
             try
             {
-                Main.ResetMultiplayerState("Client disconnected");
-
                 if (e.Message != null)
                 {
                     Main.helper.Log(e.Message.ToString());
@@ -78,19 +76,7 @@ namespace KCM
 
         private static void Client_Connected(object sender, EventArgs e)
         {
-            try
-            {
-                if (client != null && client.Connection != null)
-                {
-                    client.Connection.CanQualityDisconnect = false;
-                    client.Connection.MaxSendAttempts = 50;
-                }
-            }
-            catch (Exception ex)
-            {
-                Main.helper.Log("Error configuring client connection");
-                Main.helper.Log(ex.ToString());
-            }
+
 
         }
 
@@ -102,7 +88,6 @@ namespace KCM
         public static void Connect(string ip)
         {
             Main.helper.Log("Trying to connect to: " + ip);
-            try { Application.runInBackground = true; } catch { }
             client.Connect(ip, useMessageHandlers: false);
         }
 

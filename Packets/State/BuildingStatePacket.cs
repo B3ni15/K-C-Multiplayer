@@ -11,7 +11,6 @@ namespace KCM.Packets.State
     public class BuildingStatePacket : Packet
     {
         public override ushort packetId => (ushort)Enums.Packets.BuildingStatePacket;
-        public override Riptide.MessageSendMode sendMode => Riptide.MessageSendMode.Unreliable;
 
         public string customName { get; set; }
         public Guid guid { get; set; }

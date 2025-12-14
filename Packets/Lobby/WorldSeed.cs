@@ -33,14 +33,6 @@ namespace KCM.Packets.Lobby
                 World.inst.Generate(Seed);
                 Vector3 center = World.inst.GetCellData(World.inst.GridWidth / 2, World.inst.GridHeight / 2).Center;
                 Cam.inst.SetTrackingPos(center);
-
-                try
-                {
-                    new KCM.Packets.Network.ResyncRequestPacket { reason = "post-world-seed" }.Send();
-                }
-                catch
-                {
-                }
             }
             catch (Exception e)
             {

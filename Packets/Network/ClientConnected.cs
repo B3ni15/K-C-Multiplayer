@@ -51,20 +51,6 @@ namespace KCM.Packets.Network
         {
             Main.helper.Log("Server Player Connected: " + Name + " Id: " + clientId + " SteamID: " + SteamId);
 
-            KCPlayer player;
-            if (Main.kCPlayers.TryGetValue(SteamId, out player))
-            {
-                player.id = clientId;
-                player.name = Name;
-                player.steamId = SteamId;
-            }
-            else
-            {
-                Main.kCPlayers[SteamId] = new KCPlayer(Name, clientId, SteamId);
-            }
-
-            Main.clientSteamIds[clientId] = SteamId;
-
             List<KCPlayer> list = Main.kCPlayers.Select(x => x.Value).OrderBy(x => x.id).ToList();
 
             if (list.Count > 0)
@@ -92,7 +78,36 @@ namespace KCM.Packets.Network
                     return;
 
                 byte[] bytes = LoadSaveLoadAtPathHook.saveData;
-                KCServer.EnqueueSaveTransfer(clientId, bytes);
+                int chunkSize = 900; // 900 bytes per chunk to fit within packet size limit
+
+                List<byte[]> chunks = SplitByteArrayIntoChunks(bytes, chunkSize);
+                Main.helper.Log("Save Transfer started!");
+
+                int sent = 0;
+                int packetsSent = 0;
+
+                for (int i = 0; i < chunks.Count; i++)
+                {
+                    var chunk = chunks[i];
+
+
+                    new SaveTransferPacket()
+                    {
+                        saveSize = bytes.Length,
+                        saveDataChunk = chunk,
+                        chunkId = i,
+                        chunkSize = chunk.Length,
+                        saveDataIndex = sent,
+                        totalChunks = chunks.Count
+                    }.Send(clientId);
+
+                    Main.helper.Log(" ");
+
+                    packetsSent++;
+                    sent += chunk.Length;
+                }
+
+                Main.helper.Log($"Sent {packetsSent} save data chunks to client");
             }
             else
             {

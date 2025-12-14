@@ -1,4 +1,4 @@
-using Assets.Code;
+﻿using Assets.Code;
 using Riptide;
 using Riptide.Transports;
 using Steamworks;
@@ -8,7 +8,6 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
-using UnityEngine;
 
 namespace KCM.LoadSaveOverrides
 {
@@ -27,39 +26,12 @@ namespace KCM.LoadSaveOverrides
 
             foreach (var player in Main.kCPlayers.Values)
             {
-                try
-                {
-                    if (player == null)
-                        continue;
+                Main.helper.Log($"Attempting to pack data for: " + player.name + $"({player.steamId})");
+                Main.helper.Log($"{player.inst.ToString()} {player.inst?.gameObject.name}");
+                this.players.Add(player.steamId, new Player.PlayerSaveData().Pack(player.inst));
+                kingdomNames.Add(player.steamId, player.kingdomName);
 
-                    if (string.IsNullOrWhiteSpace(player.steamId))
-                    {
-                        Main.helper.Log($"Skipping save for player with missing steamId (name={player.name ?? string.Empty})");
-                        continue;
-                    }
-
-                    if (player.inst == null)
-                    {
-                        Main.helper.Log($"Skipping save for player {player.name ?? string.Empty} ({player.steamId}) because Player.inst is null");
-                        continue;
-                    }
-
-                    Main.helper.Log($"Attempting to pack data for: {player.name} ({player.steamId})");
-                    string playerGoName = (player.inst.gameObject != null) ? player.inst.gameObject.name : string.Empty;
-                    Main.helper.Log($"Player object: {player.inst} {playerGoName}");
-
-                    this.players[player.steamId] = new Player.PlayerSaveData().Pack(player.inst);
-                    kingdomNames[player.steamId] = player.kingdomName ?? " ";
-
-                    Main.helper.Log($"{players[player.steamId] == null}");
-                }
-                catch (Exception ex)
-                {
-                    string steamId = (player != null && player.steamId != null) ? player.steamId : string.Empty;
-                    string name = (player != null && player.name != null) ? player.name : string.Empty;
-                    Main.helper.Log($"Error packing player data for save (steamId={steamId}, name={name})");
-                    Main.helper.Log(ex.ToString());
-                }
+                Main.helper.Log($"{players[player.steamId] == null}");
             }
 
             this.WorldSaveData = new World.WorldSaveData().Pack(World.inst);
@@ -71,25 +43,7 @@ namespace KCM.LoadSaveOverrides
             this.DragonSpawnSaveData = new DragonSpawn.DragonSpawnSaveData().Pack(DragonSpawn.inst);
             this.UnitSystemSaveData = new UnitSystem.UnitSystemSaveData().Pack(UnitSystem.inst);
             this.RaidSystemSaveData2 = new RaiderSystem.RaiderSystemSaveData2().Pack(RaiderSystem.inst);
-
-            if (ShipSystem.inst != null)
-            {
-                try
-                {
-                    this.ShipSystemSaveData = new ShipSystem.ShipSystemSaveData().Pack(ShipSystem.inst);
-                }
-                catch (Exception ex)
-                {
-                    Main.helper.Log("Error packing ShipSystem for save; skipping ShipSystemSaveData.");
-                    Main.helper.Log(ex.ToString());
-                    this.ShipSystemSaveData = null;
-                }
-            }
-            else
-            {
-                this.ShipSystemSaveData = null;
-            }
-
+            this.ShipSystemSaveData = new ShipSystem.ShipSystemSaveData().Pack(ShipSystem.inst);
             this.AIBrainsSaveData = new AIBrainsContainer.SaveData().Pack(AIBrainsContainer.inst);
             this.SiegeMonsterSaveData = new SiegeMonster.SiegeMonsterSaveData().Pack(null);
             this.CartSystemSaveData = new CartSystem.CartSystemSaveData().Pack(CartSystem.inst);
@@ -104,6 +58,7 @@ namespace KCM.LoadSaveOverrides
         {
             foreach (var kvp in players)
             {
+
                 KCPlayer player;
 
                 if (!Main.kCPlayers.TryGetValue(kvp.Key, out player))
@@ -118,6 +73,7 @@ namespace KCM.LoadSaveOverrides
             foreach (var player in Main.kCPlayers.Values)
                 player.inst.Reset();
 
+
             AIBrainsContainer.inst.ClearAIs();
             this.CameraSaveData.Unpack(Cam.inst);
             this.WorldSaveData.Unpack(World.inst);
@@ -128,6 +84,9 @@ namespace KCM.LoadSaveOverrides
                 this.FishSystemSaveData.Unpack(FishSystem.inst);
             }
             this.TownNameSaveData.Unpack(TownNameUI.inst);
+
+
+            TownNameUI.inst.SetTownName(kingdomNames[Main.PlayerSteamID]);
 
             Main.helper.Log("Unpacking player data");
 
@@ -142,8 +101,9 @@ namespace KCM.LoadSaveOverrides
                     clientPlayerData = kvp.Value;
                 }
                 else
-                {
+                { // Maybe ??
                     Main.helper.Log("Loading player data: " + kvp.Key);
+
 
                     KCPlayer player;
 
@@ -157,63 +117,39 @@ namespace KCM.LoadSaveOverrides
                     Player.inst = player.inst;
                     Main.helper.Log($"Number of landmasses: {World.inst.NumLandMasses}");
 
+                    //Reset was here before unpack
                     kvp.Value.Unpack(player.inst);
 
                     Player.inst = oldPlayer;
+
 
                     player.banner = player.inst.PlayerLandmassOwner.bannerIdx;
                     player.kingdomName = TownNameUI.inst.townName;
                 }
             }
 
-            clientPlayerData.Unpack(Player.inst);
+            clientPlayerData.Unpack(Player.inst); // Unpack the current client player last so that loading of villagers works correctly.
 
             Main.helper.Log("unpacked player data");
             Main.helper.Log("Setting banner and name");
 
             var client = Main.kCPlayers[SteamUser.GetSteamID().ToString()];
 
+
             client.banner = Player.inst.PlayerLandmassOwner.bannerIdx;
             client.kingdomName = TownNameUI.inst.townName;
 
             Main.helper.Log("Finished unpacking player data");
 
-            Main.helper.Log("Unpacking AI brains");
-            bool flag10 = this.AIBrainsSaveData != null;
-            if (flag10)
+            /*
+             *  Not even going to bother fixing AI brains save data yet, not in short-term roadmap
+             */
+
+            /*bool flag2 = this.AIBrainsSaveData != null;
+            if (flag2)
             {
-                try
-                {
-                    this.AIBrainsSaveData.Unpack(AIBrainsContainer.inst);
-                    Main.helper.Log("AI brains unpacked successfully");
-                }
-                catch (Exception e)
-                {
-                    Main.helper.Log("Error unpacking AI brains: " + e.Message);
-                    Main.helper.Log("Attempting to reinitialize AI systems");
-                    try
-                    {
-                        AIBrainsContainer.inst.ClearAIs();
-                        Main.helper.Log("AI systems reinitialized");
-                    }
-                    catch (Exception ex)
-                    {
-                        Main.helper.Log("Failed to reinitialize AI systems: " + ex.Message);
-                    }
-                }
-            }
-            else
-            {
-                Main.helper.Log("No AI brains save data found, initializing fresh AI");
-                try
-                {
-                    Main.helper.Log("Fresh AI initialization completed");
-                }
-                catch (Exception e)
-                {
-                    Main.helper.Log("Failed fresh AI initialization: " + e.Message);
-                }
-            }
+                this.AIBrainsSaveData.UnpackPrePlayer(AIBrainsContainer.inst);
+            }*/
 
             Main.helper.Log("Unpacking free resource manager");
             this.FreeResourceManagerSaveData.Unpack(FreeResourceManager.inst);
@@ -268,6 +204,7 @@ namespace KCM.LoadSaveOverrides
                 this.OrdersManagerSaveData.Unpack(OrdersManager.inst);
             }
             Main.helper.Log("Unpacking AI brains");
+            bool flag10 = this.AIBrainsSaveData != null;
             if (flag10)
             {
                 this.AIBrainsSaveData.Unpack(AIBrainsContainer.inst);
@@ -280,19 +217,6 @@ namespace KCM.LoadSaveOverrides
             }
             Main.helper.Log("Unpacking done");
 
-            try
-            {
-                Main.helper.Log("Post-load: rebuilding path costs + villager grid");
-                try { World.inst.SetupInitialPathCosts(); } catch (Exception e) { Main.helper.Log(e.ToString()); }
-                try { World.inst.RebuildVillagerGrid(); } catch (Exception e) { Main.helper.Log(e.ToString()); }
-                try { Player.inst.irrigation.UpdateIrrigation(); } catch (Exception e) { Main.helper.Log(e.ToString()); }
-                try { Player.inst.CalcMaxResources(null, -1); } catch (Exception e) { Main.helper.Log(e.ToString()); }
-            }
-            catch (Exception e)
-            {
-                Main.helper.Log("Post-load rebuild failed");
-                Main.helper.Log(e.ToString());
-            }
 
             World.inst.UpscaleFeatures();
             Player.inst.RefreshVisibility(true);
@@ -301,36 +225,73 @@ namespace KCM.LoadSaveOverrides
                 Player.inst.Buildings.data[i].UpdateMaterialSelection();
             }
 
+            // Player.inst.loadTickDelay = 1;
             Type playerType = typeof(Player);
             FieldInfo loadTickDelayField = playerType.GetField("loadTickDelay", BindingFlags.Instance | BindingFlags.NonPublic);
             if (loadTickDelayField != null)
             {
-                loadTickDelayField.SetValue(Player.inst, 3);
+                loadTickDelayField.SetValue(Player.inst, 1);
             }
 
+            // UnitSystem.inst.loadTickDelay = 1;
             Type unitSystemType = typeof(UnitSystem);
             loadTickDelayField = unitSystemType.GetField("loadTickDelay", BindingFlags.Instance | BindingFlags.NonPublic);
             if (loadTickDelayField != null)
             {
-                loadTickDelayField.SetValue(UnitSystem.inst, 3);
+                loadTickDelayField.SetValue(UnitSystem.inst, 1);
             }
 
+            // JobSystem.inst.loadTickDelay = 1;
             Type jobSystemType = typeof(JobSystem);
             loadTickDelayField = jobSystemType.GetField("loadTickDelay", BindingFlags.Instance | BindingFlags.NonPublic);
             if (loadTickDelayField != null)
             {
-                loadTickDelayField.SetValue(JobSystem.inst, 3);
-            }
-
-            Type villagerSystemType = typeof(VillagerSystem);
-            loadTickDelayField = villagerSystemType.GetField("loadTickDelay", BindingFlags.Instance | BindingFlags.NonPublic);
-            if (loadTickDelayField != null)
-            {
-                loadTickDelayField.SetValue(VillagerSystem.inst, 3);
+                loadTickDelayField.SetValue(JobSystem.inst, 1);
             }
 
             Main.helper.Log($"Setting kingdom name to: {kingdomNames[Main.PlayerSteamID]}");
             TownNameUI.inst.SetTownName(kingdomNames[Main.PlayerSteamID]);
+
+            // Post-load fixes for multiplayer
+            Main.helper.Log("Running post-load multiplayer fixes...");
+
+            // Fix 1: Re-register all resource storages for all players
+            Main.helper.Log("Re-registering resource storages...");
+            foreach (var kcPlayer in Main.kCPlayers.Values)
+            {
+                if (kcPlayer.inst == null) continue;
+
+                foreach (var building in kcPlayer.inst.Buildings.data)
+                {
+                    if (building == null) continue;
+
+                    // Re-register resource storages
+                    var storages = KCM.ResourceStorageHelper.GetStorages(building);
+                    foreach (var storage in storages)
+                    {
+                        if (storage != null && !KCM.ResourceStorageHelper.IsPrivate(storage))
+                        {
+                            try
+                            {
+                                KCM.ResourceStorageHelper.Register(storage);
+                            }
+                            catch (Exception e)
+                            {
+                                Main.helper.Log($"Error re-registering storage for {building.UniqueName}: {e.Message}");
+                            }
+                        }
+                    }
+
+                    // Refresh building pathing
+                    try
+                    {
+                        building.BakePathing();
+                    }
+                    catch { }
+                }
+            }
+
+            Main.helper.Log("Post-load multiplayer fixes complete.");
 
             return obj;
         }

@@ -33,13 +33,21 @@ namespace KCM.Packets.Network
             CloudSystem.inst.BaseFreq = 4.5f;
             Weather.inst.SetSeason(Weather.Season.Summer);
 
-            //inst = new KCClient(KCServer.IsRunning ? "Ryan" : "Orion");
             KCClient.inst = new KCClient(SteamFriends.GetPersonaName());
 
             Main.helper.Log("Sending client connected. Client ID is: " + clientId);
 
-            Main.kCPlayers[Main.PlayerSteamID] = new KCPlayer(KCClient.inst.Name, clientId, Main.PlayerSteamID);
-            Main.clientSteamIds[clientId] = Main.PlayerSteamID;
+            KCPlayer localPlayer;
+            if (!Main.kCPlayers.TryGetValue(Main.PlayerSteamID, out localPlayer))
+            {
+                localPlayer = new KCPlayer(KCClient.inst.Name, clientId, Main.PlayerSteamID);
+                Main.kCPlayers.Add(Main.PlayerSteamID, localPlayer);
+            }
+            else
+            {
+                localPlayer.id = clientId;
+                localPlayer.name = KCClient.inst.Name;
+            }
 
             Player.inst.PlayerLandmassOwner.teamId = clientId * 10 + 2;
 
