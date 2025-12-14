@@ -275,3 +275,9 @@ A három hiba összefügg:
 1. **#2 - PlayerAddBuildingHook** (LEGFONTOSABB) - Ez okozza a cascade failure-t
 2. **#3 - WorldPlace IndexOutOfRange** - Védekező kód hozzáadása
 3. **#1 - Server leállítás** - UX javítás, erőforrás kezelés
+
+### Következő lépések
+
+1. Ellenőrizni, hogy a `PlayerAddBuildingHook` null-ellenőrzései végig lefutnak, mielőtt az adatokat használjuk.
+2. Biztosítani, hogy a `Server.Stop()` meghívódik, amikor a játékos visszalép a menübe (`TransitionToHook`).
+3. Bővíteni a `WorldPlace` és a `LandMassNames` tömbök védelmét, hogy ne okozzon indexhiba az épület-telepítés során.
