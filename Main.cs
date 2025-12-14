@@ -1,6 +1,5 @@
 ﻿using Assets.Code;
 using Assets.Code.UI;
-using Assets.Interface;
 using Harmony;
 using KCM.Enums;
 using KCM.LoadSaveOverrides;
@@ -645,17 +644,17 @@ namespace KCM
                     if (KCClient.client.IsConnected)
                     {
                         LogStep(true);
-                        __instance.Buildings.Add(b);
-                        IResourceStorage[] storages = b.GetComponents<IResourceStorage>();
-                        LogStep();
-                        for (int i = 0; i < storages.Length; i++)
+                    __instance.Buildings.Add(b);
+                    Component[] storages = ResourceStorageHelper.GetStorages(b);
+                    LogStep();
+                    for (int i = 0; i < storages.Length; i++)
+                    {
+                        bool flag = !ResourceStorageHelper.IsPrivate(storages[i]);
+                        if (flag)
                         {
-                            bool flag = !storages[i].IsPrivate();
-                            if (flag)
-                            {
-                                FreeResourceManager.inst.AddResourceStorage(storages[i]);
-                            }
+                            ResourceStorageHelper.Register(storages[i]);
                         }
+                    }
                         LogStep();
                         int landMass = b.LandMass();
                         Home res = b.GetComponent<Home>();

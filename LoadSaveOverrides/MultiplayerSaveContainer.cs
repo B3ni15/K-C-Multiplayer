@@ -1,5 +1,4 @@
 ﻿using Assets.Code;
-using Assets.Interface;
 using Riptide;
 using Riptide.Transports;
 using Steamworks;
@@ -25,7 +24,6 @@ namespace KCM.LoadSaveOverrides
 
             Main.helper.Log($"Saving data for {Main.kCPlayers.Count} ({KCServer.server.ClientCount}) players.");
 
-            //this.PlayerSaveData = new PlayerSaveDataOverride().Pack(Player.inst);
             foreach (var player in Main.kCPlayers.Values)
             {
                 Main.helper.Log($"Attempting to pack data for: " + player.name + $"({player.steamId})");
@@ -58,7 +56,6 @@ namespace KCM.LoadSaveOverrides
 
         public override object Unpack(object obj)
         {
-            //original Player reset was up here
             foreach (var kvp in players)
             {
 
@@ -89,7 +86,6 @@ namespace KCM.LoadSaveOverrides
             this.TownNameSaveData.Unpack(TownNameUI.inst);
 
 
-            //TownNameUI.inst.townName = kingdomNames[Main.PlayerSteamID];
             TownNameUI.inst.SetTownName(kingdomNames[Main.PlayerSteamID]);
 
             Main.helper.Log("Unpacking player data");
@@ -270,14 +266,14 @@ namespace KCM.LoadSaveOverrides
                     if (building == null) continue;
 
                     // Re-register resource storages
-                    var storages = building.GetComponents<IResourceStorage>();
+                    var storages = KCM.ResourceStorageHelper.GetStorages(building);
                     foreach (var storage in storages)
                     {
-                        if (storage != null && !storage.IsPrivate())
+                        if (storage != null && !KCM.ResourceStorageHelper.IsPrivate(storage))
                         {
                             try
                             {
-                                FreeResourceManager.inst.AddResourceStorage(storage);
+                                KCM.ResourceStorageHelper.Register(storage);
                             }
                             catch (Exception e)
                             {
