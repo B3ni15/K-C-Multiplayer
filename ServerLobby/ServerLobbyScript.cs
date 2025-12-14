@@ -201,7 +201,7 @@ namespace KCM
                             }
                             else
                             {
-                                Main.helper.LogWarning($"Invalid seed '{WorldSeed.text}' entered. Generating a random seed.");
+                                Main.helper.Log($"Invalid seed '{WorldSeed.text}' entered. Generating a random seed.");
                                 World.inst.Generate();
                                 definitiveSeed = World.inst.seed;
                             }
