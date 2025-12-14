@@ -18,38 +18,26 @@ namespace KCM.Packets.Lobby
         {
             Main.helper.Log(GameState.inst.mainMenuMode.ToString());
 
-            // Hide server lobby
             Main.TransitionTo((MenuState)200);
-
-            // This is run when user clicks "accept" on choose your map screeen
 
             try
             {
-                if (!LobbyManager.loadingSave)
-                {
-                    SpeedControlUI.inst.SetSpeed(0);
+                SpeedControlUI.inst.SetSpeed(0);
 
-                    try
-                    {
-                        typeof(MainMenuMode).GetMethod("StartGame", BindingFlags.NonPublic | BindingFlags.Instance).Invoke(GameState.inst.mainMenuMode, null);
-                    }
-                    catch (Exception ex)
-                    {
-                        Main.helper.Log(ex.Message.ToString());
-                        Main.helper.Log(ex.ToString());
-                    }
-
-                    SpeedControlUI.inst.SetSpeed(0);
-                }
-                else
+                try
                 {
-                    LobbyManager.loadingSave = false;
-                    GameState.inst.SetNewMode(GameState.inst.playingMode);
+                    typeof(MainMenuMode).GetMethod("StartGame", BindingFlags.NonPublic | BindingFlags.Instance).Invoke(GameState.inst.mainMenuMode, null);
                 }
+                catch (Exception ex)
+                {
+                    Main.helper.Log(ex.Message.ToString());
+                    Main.helper.Log(ex.ToString());
+                }
+
+                SpeedControlUI.inst.SetSpeed(0);
             }
             catch (Exception ex)
             {
-                // Handle exception here
                 Main.helper.Log(ex.Message.ToString());
                 Main.helper.Log(ex.ToString());
             }
@@ -63,51 +51,12 @@ namespace KCM.Packets.Lobby
             }
             else
             {
-                // If loading a save, just ensure the game is in the correct UI state for loading.
-                // The actual game start will happen after save data is unpacked in SaveTransferPacket.HandlePacketClient().
-                // This prevents MainMenuMode.StartGame() from being called prematurely and causing NullReferenceExceptions.
-                GameState.inst.SetNewMode(GameState.inst.playingMode);
+                ServerLobbyScript.LoadingSave.SetActive(true);
             }
         }
 
         public override void HandlePacketServer()
         {
-            //Start();
-
-
-            /*AIBrainsContainer.PreStartAIConfig aiConfig = new AIBrainsContainer.PreStartAIConfig();
-            int count = 0;
-            for (int i = 0; i < RivalKingdomSettingsUI.inst.rivalItems.Length; i++)
-            {
-                RivalItemUI r = RivalKingdomSettingsUI.inst.rivalItems[i];
-                bool flag = r.Enabled && !r.Locked;
-                if (flag)
-                {
-                    count++;
-                }
-            }
-            int idx = 0;
-            aiConfig.startData = new AIBrainsContainer.PreStartAIConfig.AIStartData[count];
-            for (int j = 0; j < RivalKingdomSettingsUI.inst.rivalItems.Length; j++)
-            {
-                RivalItemUI item = RivalKingdomSettingsUI.inst.rivalItems[j];
-                bool flag2 = item.Enabled && !item.Locked;
-                if (flag2)
-                {
-                    aiConfig.startData[idx] = new AIBrainsContainer.PreStartAIConfig.AIStartData();
-                    aiConfig.startData[idx].landmass = item.flag.landmass;
-                    aiConfig.startData[idx].bioCode = item.bannerIdx;
-                    aiConfig.startData[idx].personalityKey = PersonalityCollection.aiPersonalityKeys[0];
-                    aiConfig.startData[idx].skillLevel = item.GetSkillLevel();
-                    idx++;
-                }
-            }
-            AIBrainsContainer.inst.aiStartInfo = aiConfig;
-            bool isControllerActive = GamepadControl.inst.isControllerActive;
-            if (isControllerActive)
-            {
-                ConsoleCursorMenu.inst.PrepForGamepad();
-            }*/
         }
     }
 }

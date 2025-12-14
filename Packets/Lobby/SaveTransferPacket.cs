@@ -29,32 +29,25 @@ namespace KCM.Packets.Lobby
 
         public override void HandlePacketClient()
         {
-            // Initialize saveData and chunksReceived on the first packet received
-            // And reset static variables for a new transfer
-            if (chunkId == 0) // This is the first chunk of a new transfer
+            if (chunkId == 0)
             {
                 Main.helper.Log("Save Transfer started! Resetting static transfer state.");
-                loadingSave = true; // This is SaveTransferPacket.loadingSave
+                loadingSave = true;
 
-                // Reset static transfer variables
                 saveData = new byte[saveSize];
                 chunksReceived = new bool[totalChunks];
-                received = 0; // Reset received bytes counter
+                received = 0;
 
                 ServerLobbyScript.LoadingSave.SetActive(true);
             }
 
 
-            // Copy the chunk data into the correct position in saveData
             Array.Copy(saveDataChunk, 0, saveData, saveDataIndex, saveDataChunk.Length);
 
-            // Mark this chunk as received
             chunksReceived[chunkId] = true;
 
-            // Seek to the next position to write to
             received += chunkSize;
 
-            // Recalculate savePercent AFTER 'received' is updated
             if (saveSize > 0)
             {
                 float savePercent = (float)received / (float)saveSize;
@@ -81,10 +74,8 @@ namespace KCM.Packets.Lobby
                 Main.helper.Log(WhichIsNotComplete());
             }
 
-            // Check if all chunks have been received
             if (IsTransferComplete())
             {
-                // Handle completed transfer here
                 Main.helper.Log("Save Transfer complete!");
 
                 LoadSaveLoadHook.saveBytes = saveData;
@@ -92,8 +83,9 @@ namespace KCM.Packets.Lobby
 
                 LoadSave.Load();
 
+                GameState.inst.SetNewMode(GameState.inst.playingMode);
+                LobbyManager.loadingSave = false;
 
-                LoadSaveLoadHook.saveContainer.Unpack(null);
                 Broadcast.OnLoadedEvent.Broadcast(new OnLoadedEvent());
 
                 ServerLobbyScript.LoadingSave.SetActive(false);
