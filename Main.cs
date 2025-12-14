@@ -616,10 +616,11 @@ namespace KCM
                                     GetLoadTickDelayOrMinusOne(VillagerSystem.inst));
 
                                 // Try to fix stalled systems by resetting loadTickDelay
-                                int villagerDelay = GetLoadTickDelayOrMinusOne(VillagerSystem.inst);
-                                int unitDelay = GetLoadTickDelayOrMinusOne(UnitSystem.inst);
-                                int jobDelay = GetLoadTickDelayOrMinusOne(JobSystem.inst);
-                                int playerDelay = GetLoadTickDelayOrMinusOne(Player.inst);
+                                // Reuse the delay variables from earlier in this scope
+                                villagerDelay = GetLoadTickDelayOrMinusOne(VillagerSystem.inst);
+                                unitDelay = GetLoadTickDelayOrMinusOne(UnitSystem.inst);
+                                jobDelay = GetLoadTickDelayOrMinusOne(JobSystem.inst);
+                                playerDelay = GetLoadTickDelayOrMinusOne(Player.inst);
 
                                 if (villagerDelay <= 0 || unitDelay <= 0 || jobDelay <= 0 || playerDelay <= 0)
                                 {
