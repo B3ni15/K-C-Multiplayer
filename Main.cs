@@ -1109,6 +1109,52 @@ namespace KCM
                 }
             }
         }
+
+        [HarmonyPatch(typeof(Villager), "Update")]
+        public class VillagerMovementSync
+        {
+            private struct MovementSnapshot
+            {
+                public Vector3 position;
+                public float timestamp;
+            }
+
+            private static readonly Dictionary<Guid, MovementSnapshot> lastSnapshots = new Dictionary<Guid, MovementSnapshot>();
+            private const float MovementThreshold = 0.3f;
+            private const float ForceSendInterval = 0.5f;
+
+            public static void Postfix(Villager __instance)
+            {
+                if (!KCServer.IsRunning || KCServer.server == null)
+                    return;
+
+                if (__instance == null)
+                    return;
+
+                Guid guid = __instance.guid;
+                Vector3 currentPosition = __instance.transform.position;
+                float now = Time.time;
+
+                if (lastSnapshots.TryGetValue(guid, out MovementSnapshot snapshot))
+                {
+                    float distance = Vector3.Distance(snapshot.position, currentPosition);
+                    if (distance < MovementThreshold && (now - snapshot.timestamp) < ForceSendInterval)
+                        return;
+                }
+
+                lastSnapshots[guid] = new MovementSnapshot
+                {
+                    position = currentPosition,
+                    timestamp = now
+                };
+
+                new VillagerTeleportTo()
+                {
+                    guid = guid,
+                    pos = currentPosition
+                }.SendToAll();
+            }
+        }
         #endregion
 
         #region "Job Hooks"
