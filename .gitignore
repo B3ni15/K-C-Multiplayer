@@ -1,7 +1,5 @@
 # Logs / local debug output
-output*.txt
 *.log
-/log.txt
 
 # OS junk
 .DS_Store
