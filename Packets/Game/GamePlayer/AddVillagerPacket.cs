@@ -21,7 +21,7 @@ namespace KCM.Packets.Game.GamePlayer
                 if (KCClient.client.Id == clientId) return;
 
                 // Check for duplicate villager by guid
-                var existingVillager = player.inst.Workers.data.FirstOrDefault(v => v != null && v.guid == guid);
+                var existingVillager = player.inst.Workers.data.FirstOrDefault(w => w != null && w.guid == guid);
                 if (existingVillager != null)
                 {
                     Main.helper.Log($"Villager with guid {guid} already exists, skipping duplicate");
@@ -30,17 +30,17 @@ namespace KCM.Packets.Game.GamePlayer
 
                 Main.helper.Log("Received add villager packet from " + player.name + $"({player.id})");
 
-                Villager v = Villager.CreateVillager();
-                v.guid = guid;
+                Villager newVillager = Villager.CreateVillager();
+                newVillager.guid = guid;
 
                 // Set villager position
                 if (position != Vector3.zero)
                 {
-                    v.TeleportTo(position);
+                    newVillager.TeleportTo(position);
                 }
 
-                player.inst.Workers.Add(v);
-                player.inst.Homeless.Add(v);
+                player.inst.Workers.Add(newVillager);
+                player.inst.Homeless.Add(newVillager);
 
             }
             catch (Exception e)
