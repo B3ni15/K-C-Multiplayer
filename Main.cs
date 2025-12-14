@@ -181,6 +181,10 @@ namespace KCM
         #endregion
 
         public static int FixedUpdateInterval = 0;
+        private readonly Dictionary<Guid, Vector3> villagerPositionCache = new Dictionary<Guid, Vector3>();
+        private float villagerBroadcastAccumulator = 0f;
+        private const float VillagerBroadcastInterval = 0.25f;
+        private const float VillagerMovementThreshold = 0.3f;
 
         public static void ClearVillagerPositionCache()
         {
@@ -190,6 +194,46 @@ namespace KCM
         private void FixedUpdate()
         {
             FixedUpdateInterval++;
+            BroadcastVillagerMovements();
+        }
+
+        private void BroadcastVillagerMovements()
+        {
+            if (!KCServer.IsRunning || KCServer.server == null)
+                return;
+
+            villagerBroadcastAccumulator += Time.fixedDeltaTime;
+            if (villagerBroadcastAccumulator < VillagerBroadcastInterval)
+                return;
+
+            villagerBroadcastAccumulator = 0f;
+            if (Villager.villagers == null)
+                return;
+
+            foreach (var villager in Villager.villagers.data)
+            {
+                if (villager == null)
+                    continue;
+
+                Guid guid = villager.guid;
+                Component villagerComponent = (Component)(object)villager;
+                if (villagerComponent == null)
+                    continue;
+
+                Vector3 currentPosition = villagerComponent.transform.position;
+                if (villagerPositionCache.TryGetValue(guid, out Vector3 lastPosition)
+                    && Vector3.Distance(lastPosition, currentPosition) < VillagerMovementThreshold)
+                {
+                    continue;
+                }
+
+                villagerPositionCache[guid] = currentPosition;
+                new VillagerTeleportTo()
+                {
+                    guid = guid,
+                    pos = currentPosition
+                }.SendToAll();
+            }
         }
 
         #region "TransitionTo"
@@ -1107,56 +1151,6 @@ namespace KCM
                         pos = newPos
                     }.Send();
                 }
-            }
-        }
-
-        [HarmonyPatch(typeof(Villager), nameof(Villager.Update), new Type[0])]
-        public class VillagerMovementSync
-        {
-            private struct MovementSnapshot
-            {
-                public Vector3 position;
-                public float timestamp;
-            }
-
-            private static readonly Dictionary<Guid, MovementSnapshot> lastSnapshots = new Dictionary<Guid, MovementSnapshot>();
-            private const float MovementThreshold = 0.3f;
-            private const float ForceSendInterval = 0.5f;
-
-            public static void Postfix(Villager __instance)
-            {
-                if (!KCServer.IsRunning || KCServer.server == null)
-                    return;
-
-                if (__instance == null)
-                    return;
-
-                Guid guid = __instance.guid;
-                Component villagerComponent = (Component)(object)__instance;
-                if (villagerComponent == null)
-                    return;
-
-                Vector3 currentPosition = villagerComponent.transform.position;
-                float now = Time.time;
-
-                if (lastSnapshots.TryGetValue(guid, out MovementSnapshot snapshot))
-                {
-                    float distance = Vector3.Distance(snapshot.position, currentPosition);
-                    if (distance < MovementThreshold && (now - snapshot.timestamp) < ForceSendInterval)
-                        return;
-                }
-
-                lastSnapshots[guid] = new MovementSnapshot
-                {
-                    position = currentPosition,
-                    timestamp = now
-                };
-
-                new VillagerTeleportTo()
-                {
-                    guid = guid,
-                    pos = currentPosition
-                }.SendToAll();
             }
         }
         #endregion
