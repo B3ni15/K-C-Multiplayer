@@ -218,7 +218,14 @@ namespace KCM
                 }
                 Main.helper.Log($"Found button container at: {buttonContainer.name}");
 
-                KaC_Button serverBrowser = new KaC_Button(buttonContainer.parent)
+                var templateButton = buttonContainer.GetComponent<Button>();
+                if (templateButton == null)
+                {
+                    Main.helper.Log("Template button on container is missing Button component.");
+                    return;
+                }
+
+                KaC_Button serverBrowser = new KaC_Button(templateButton, buttonContainer.parent)
                 {
                     Name = "Multiplayer",
                     Text = "Multiplayer",
@@ -231,7 +238,8 @@ namespace KCM
                 };
                 serverBrowser.Transform.SetSiblingIndex(2);
 
-                var kingdomShare = Constants.MainMenuUI_T.Find("TopLevelUICanvas/TopLevel/Body/ButtonContainer/Kingdom Share");
+                var kingdomShare = Constants.MainMenuUI_T.Find("MainMenu/TopLevel/Body/ButtonContainer/Kingdom Share")
+                    ?? Constants.MainMenuUI_T.Find("TopLevelUICanvas/TopLevel/Body/ButtonContainer/Kingdom Share");
                 if (kingdomShare != null)
                 {
                     Destroy(kingdomShare.gameObject);

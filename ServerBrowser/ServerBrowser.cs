@@ -305,10 +305,11 @@ namespace KCM
                     return;
                 }
 
-                var topLevelCanvas = Constants.MainMenuUI_T.Find("TopLevelUICanvas");
+                var topLevelCanvas = Constants.MainMenuUI_T.Find("MainMenu/TopLevel")
+                    ?? Constants.MainMenuUI_T.Find("TopLevelUICanvas");
                 if (topLevelCanvas == null)
                 {
-                    Main.helper.Log("TopLevelUICanvas not found in ServerBrowser");
+                    Main.helper.Log("TopLevel/TopLevelUICanvas not found in ServerBrowser");
                     return;
                 }
 

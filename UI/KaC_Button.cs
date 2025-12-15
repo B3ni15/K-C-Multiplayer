@@ -15,6 +15,11 @@ namespace KCM.UI
     class KaC_Button
     {
         public Button Button = null;
+        private static readonly string[] ButtonPaths =
+        {
+            "MainMenu/TopLevel/Body/ButtonContainer/New",
+            "TopLevelUICanvas/TopLevel/Body/ButtonContainer/New" // legacy path fallback
+        };
 
         public string Name
         {
@@ -84,14 +89,18 @@ namespace KCM.UI
             set => Transform.SetSiblingIndex(value);
         }
 
-        public KaC_Button(Transform parent = null)
-        {
-            Button b = Constants.MainMenuUI_T.Find("TopLevelUICanvas/TopLevel/Body/ButtonContainer/New").GetComponent<Button>();
+        public KaC_Button(Transform parent = null) : this(null, parent) { }
 
-            if (parent == null)
-                Button = GameObject.Instantiate(b);
-            else
-                Button = GameObject.Instantiate(b, parent);
+        public KaC_Button(Button b, Transform parent = null)
+        {
+            var templateButton = ResolveTemplateButton(b);
+
+            if (templateButton == null)
+                throw new InvalidOperationException("Template button not found in main menu UI.");
+
+            Button = parent == null
+                ? GameObject.Instantiate(templateButton)
+                : GameObject.Instantiate(templateButton, parent);
 
             foreach (Localize Localize in Button.GetComponentsInChildren<Localize>())
                 GameObject.Destroy(Localize);
@@ -99,20 +108,27 @@ namespace KCM.UI
             Button.onClick = new Button.ButtonClickedEvent();
         }
 
-        public KaC_Button(Button b, Transform parent = null)
+        private static Button ResolveTemplateButton(Button providedButton)
         {
-            if (b == null)
-                b = Constants.MainMenuUI_T.Find("TopLevelUICanvas/TopLevel/Body/ButtonContainer/New").GetComponent<Button>();
+            if (providedButton != null)
+                return providedButton;
 
-            if (parent == null)
-                Button = GameObject.Instantiate(b);
-            else
-                Button = GameObject.Instantiate(b, parent);
+            foreach (var path in ButtonPaths)
+            {
+                var transform = Constants.MainMenuUI_T?.Find(path);
+                if (transform == null)
+                    continue;
 
-            foreach (Localize Localize in Button.GetComponentsInChildren<Localize>())
-                GameObject.Destroy(Localize);
+                var button = transform.GetComponent<Button>();
+                if (button != null)
+                {
+                    Main.helper?.Log($"Using menu button template at '{path}'.");
+                    return button;
+                }
+            }
 
-            Button.onClick = new Button.ButtonClickedEvent();
+            Main.helper?.Log("Failed to find menu button template for KaC_Button.");
+            return null;
         }
 
         public override string ToString()
