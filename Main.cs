@@ -209,21 +209,11 @@ namespace KCM
                     }
                 }
 
-                // Try different paths to find the button container
-                var buttonContainer = Constants.MainMenuUI_T.Find("TopLevelUICanvas/TopLevel/Body/ButtonContainer/New");
+                // Correct path based on debug output: MainMenuUI -> MainMenu -> TopLevel -> Body -> ButtonContainer -> New
+                var buttonContainer = Constants.MainMenuUI_T.Find("MainMenu/TopLevel/Body/ButtonContainer/New");
                 if (buttonContainer == null)
                 {
-                    // Try without TopLevelUICanvas prefix
-                    buttonContainer = Constants.MainMenuUI_T.Find("TopLevel/Body/ButtonContainer/New");
-                }
-                if (buttonContainer == null)
-                {
-                    // Try direct path
-                    buttonContainer = Constants.MainMenuUI_T.Find("Body/ButtonContainer/New");
-                }
-                if (buttonContainer == null)
-                {
-                    Main.helper.Log("Button container not found in any path");
+                    Main.helper.Log("Button container not found at MainMenu/TopLevel/Body/ButtonContainer/New");
                     return;
                 }
                 Main.helper.Log($"Found button container at: {buttonContainer.name}");
