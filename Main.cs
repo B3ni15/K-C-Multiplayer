@@ -196,12 +196,37 @@ namespace KCM
                     return;
                 }
 
+                // Debug: Log the UI structure to find the correct path
+                Main.helper.Log($"MainMenuUI_T name: {Constants.MainMenuUI_T.name}");
+                Main.helper.Log($"MainMenuUI_T children count: {Constants.MainMenuUI_T.childCount}");
+                for (int i = 0; i < Constants.MainMenuUI_T.childCount; i++)
+                {
+                    var child = Constants.MainMenuUI_T.GetChild(i);
+                    Main.helper.Log($"  Child {i}: {child.name}");
+                    for (int j = 0; j < child.childCount; j++)
+                    {
+                        Main.helper.Log($"    SubChild {j}: {child.GetChild(j).name}");
+                    }
+                }
+
+                // Try different paths to find the button container
                 var buttonContainer = Constants.MainMenuUI_T.Find("TopLevelUICanvas/TopLevel/Body/ButtonContainer/New");
                 if (buttonContainer == null)
                 {
-                    Main.helper.Log("Button container not found");
+                    // Try without TopLevelUICanvas prefix
+                    buttonContainer = Constants.MainMenuUI_T.Find("TopLevel/Body/ButtonContainer/New");
+                }
+                if (buttonContainer == null)
+                {
+                    // Try direct path
+                    buttonContainer = Constants.MainMenuUI_T.Find("Body/ButtonContainer/New");
+                }
+                if (buttonContainer == null)
+                {
+                    Main.helper.Log("Button container not found in any path");
                     return;
                 }
+                Main.helper.Log($"Found button container at: {buttonContainer.name}");
 
                 KaC_Button serverBrowser = new KaC_Button(buttonContainer.parent)
                 {
@@ -287,11 +312,18 @@ namespace KCM
         {
             try
             {
-                ServerBrowser.serverBrowserRef.SetActive(state == MenuState.ServerBrowser);
-                ServerBrowser.serverLobbyRef.SetActive(state == MenuState.ServerLobby);
+                // Null checks for ServerBrowser references
+                if (ServerBrowser.serverBrowserRef != null)
+                    ServerBrowser.serverBrowserRef.SetActive(state == MenuState.ServerBrowser);
 
-                ServerBrowser.KCMUICanvas.gameObject.SetActive((int)state > 21);
-                helper.Log(((int)state > 21).ToString());
+                if (ServerBrowser.serverLobbyRef != null)
+                    ServerBrowser.serverLobbyRef.SetActive(state == MenuState.ServerLobby);
+
+                if (ServerBrowser.KCMUICanvas != null)
+                {
+                    ServerBrowser.KCMUICanvas.gameObject.SetActive((int)state > 21);
+                    helper.Log(((int)state > 21).ToString());
+                }
 
                 GameState.inst.mainMenuMode.TransitionTo((MainMenuMode.State)state);
             }
