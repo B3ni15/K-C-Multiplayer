@@ -1,4 +1,6 @@
 using System;
+using System.Reflection;
+using UnityEngine;
 
 namespace KCM.Packets.Game.GameBuilding
 {
@@ -44,7 +46,7 @@ namespace KCM.Packets.Game.GameBuilding
                 isProcessingPacket = true;
 
                 // Set Player.inst to the correct player for this building
-                // This ensures Remove() modifies the correct player's job lists
+                // This ensures the removal modifies the correct player's job lists
                 Player originalPlayer = Player.inst;
                 Player correctPlayer = Main.GetPlayerByBuilding(building);
                 if (correctPlayer != null)
@@ -52,7 +54,19 @@ namespace KCM.Packets.Game.GameBuilding
                     Player.inst = correctPlayer;
                 }
 
-                building.Remove();
+                // Use reflection to call the Remove method from the game assembly
+                MethodInfo removeMethod = typeof(Building).GetMethod("Remove", BindingFlags.Public | BindingFlags.Instance);
+                if (removeMethod != null)
+                {
+                    removeMethod.Invoke(building, null);
+                }
+                else
+                {
+                    // Fallback: destroy the building GameObject directly
+                    Main.helper.Log("Remove method not found, using Destroy fallback");
+                    building.destroyedWhileInPlay = true;
+                    UnityEngine.Object.Destroy(building.gameObject);
+                }
 
                 // Restore original Player.inst
                 Player.inst = originalPlayer;
