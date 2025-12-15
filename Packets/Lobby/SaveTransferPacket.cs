@@ -30,9 +30,11 @@ namespace KCM.Packets.Lobby
 
         public override void HandlePacketClient()
         {
-            if (chunkId == 0)
+            // Initialize on first chunk OR if arrays aren't properly sized yet
+            // This handles out-of-order packet delivery
+            if (!loadingSave || saveData.Length != saveSize || chunksReceived.Length != totalChunks)
             {
-                Main.helper.Log("Save Transfer started! Resetting static transfer state.");
+                Main.helper.Log($"Save Transfer initializing. saveSize={saveSize}, totalChunks={totalChunks}");
                 loadingSave = true;
 
                 saveData = new byte[saveSize];
@@ -42,6 +44,12 @@ namespace KCM.Packets.Lobby
                 ServerLobbyScript.LoadingSave.SetActive(true);
             }
 
+            // Skip if we already received this chunk (duplicate packet)
+            if (chunksReceived[chunkId])
+            {
+                Main.helper.Log($"[SaveTransfer] Duplicate chunk {chunkId} received, skipping.");
+                return;
+            }
 
             Array.Copy(saveDataChunk, 0, saveData, saveDataIndex, saveDataChunk.Length);
 
@@ -51,6 +59,7 @@ namespace KCM.Packets.Lobby
 
             Main.helper.Log($"[SaveTransfer] Processed chunk {chunkId}/{totalChunks}. Received: {received} bytes of {saveSize}.");
 
+            // Update progress bar
             if (saveSize > 0)
             {
                 float savePercent = (float)received / (float)saveSize;
@@ -68,25 +77,12 @@ namespace KCM.Packets.Lobby
                 ServerLobbyScript.ProgressText.text = "0.00 KB / 0.00 KB";
             }
 
-            if (!IsTransferComplete())
-            {
-                Main.helper.Log($"[SaveTransfer] Transfer not yet complete after chunk {chunkId}. Missing: {WhichIsNotComplete()}");
-            }
-
-            if (chunkId + 1 == totalChunks)
-            {
-                Main.helper.Log($"Received last save transfer packet. Final check: IsComplete={IsTransferComplete()}");
-
-                if (!IsTransferComplete())
-                {
-                    Main.helper.Log($"[SaveTransfer] WARNING: Transfer is NOT complete even after last chunk. Missing: {WhichIsNotComplete()}");
-                }
-            }
-
-
             if (IsTransferComplete())
             {
                 Main.helper.Log("Save Transfer complete!");
+
+                // Reset the loading state before processing
+                loadingSave = false;
 
                 LoadSaveLoadHook.saveBytes = saveData;
                 LoadSaveLoadHook.memoryStreamHook = true;
@@ -99,25 +95,23 @@ namespace KCM.Packets.Lobby
                 Broadcast.OnLoadedEvent.Broadcast(new OnLoadedEvent());
 
                 ServerLobbyScript.LoadingSave.SetActive(false);
+
+                // Reset static state for next transfer
+                ResetTransferState();
             }
+        }
+
+        public static void ResetTransferState()
+        {
+            saveData = new byte[1];
+            chunksReceived = new bool[1];
+            loadingSave = false;
+            received = 0;
         }
 
         public static bool IsTransferComplete()
         {
             return chunksReceived.All(x => x == true);
-        }
-
-        public static string WhichIsNotComplete()
-        {
-            string notComplete = "";
-            for (int i = 0; i < chunksReceived.Length; i++)
-            {
-                if (!chunksReceived[i])
-                {
-                    notComplete += i + ", ";
-                }
-            }
-            return notComplete;
         }
 
         public override void HandlePacketServer()

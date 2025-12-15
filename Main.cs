@@ -1015,6 +1015,39 @@ namespace KCM
             }
         }
 
+        [HarmonyPatch(typeof(Building), "Remove")]
+        public class BuildingRemoveHook
+        {
+            public static void Prefix(Building __instance)
+            {
+                try
+                {
+                    // Skip if we're processing a remove packet (prevents infinite loop)
+                    if (Packets.Game.GameBuilding.BuildingRemovePacket.isProcessingPacket)
+                        return;
+
+                    if (KCClient.client.IsConnected)
+                    {
+                        // Only send packet if this building belongs to a player
+                        if (__instance.TeamID() >= 0)
+                        {
+                            Main.helper.Log($"Building {__instance.UniqueName} (guid: {__instance.guid}) being removed, sending packet");
+
+                            new Packets.Game.GameBuilding.BuildingRemovePacket()
+                            {
+                                guid = __instance.guid
+                            }.Send();
+                        }
+                    }
+                }
+                catch (Exception e)
+                {
+                    helper.Log($"Error in BuildingRemoveHook: {e.Message}");
+                    helper.Log(e.StackTrace);
+                }
+            }
+        }
+
         #endregion
 
         #region "Time Hooks"
