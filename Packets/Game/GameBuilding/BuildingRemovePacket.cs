@@ -1,13 +1,12 @@
 using System;
 using System.Reflection;
 using UnityEngine;
-using KCM.Enums;
 
 namespace KCM.Packets.Game.GameBuilding
 {
     public class BuildingRemovePacket : Packet
     {
-        public override ushort packetId => (ushort)Packets.BuildingRemove;
+        public override ushort packetId => (ushort)KCM.Enums.Packets.BuildingRemove;
 
         // Flag to prevent infinite loop when removing buildings from packet
         public static bool isProcessingPacket = false;
