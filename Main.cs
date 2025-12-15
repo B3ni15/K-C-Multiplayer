@@ -1018,6 +1018,9 @@ namespace KCM
         [HarmonyPatch(typeof(Building), "Remove")]
         public class BuildingRemoveHook
         {
+            // Store original Player.inst to restore after Remove
+            private static Player originalPlayerInst = null;
+
             public static void Prefix(Building __instance)
             {
                 try
@@ -1038,11 +1041,38 @@ namespace KCM
                                 guid = __instance.guid
                             }.Send();
                         }
+
+                        // Set Player.inst to the correct player for this building
+                        // This ensures Remove() modifies the correct player's job lists
+                        originalPlayerInst = Player.inst;
+                        Player correctPlayer = GetPlayerByBuilding(__instance);
+                        if (correctPlayer != null && correctPlayer != Player.inst)
+                        {
+                            Player.inst = correctPlayer;
+                        }
                     }
                 }
                 catch (Exception e)
                 {
-                    helper.Log($"Error in BuildingRemoveHook: {e.Message}");
+                    helper.Log($"Error in BuildingRemoveHook Prefix: {e.Message}");
+                    helper.Log(e.StackTrace);
+                }
+            }
+
+            public static void Postfix(Building __instance)
+            {
+                try
+                {
+                    // Restore original Player.inst after Remove completes
+                    if (KCClient.client.IsConnected && originalPlayerInst != null)
+                    {
+                        Player.inst = originalPlayerInst;
+                        originalPlayerInst = null;
+                    }
+                }
+                catch (Exception e)
+                {
+                    helper.Log($"Error in BuildingRemoveHook Postfix: {e.Message}");
                     helper.Log(e.StackTrace);
                 }
             }

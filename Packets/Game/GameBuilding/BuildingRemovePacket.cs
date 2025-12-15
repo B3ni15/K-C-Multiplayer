@@ -42,7 +42,20 @@ namespace KCM.Packets.Game.GameBuilding
 
                 // Set flag to prevent sending packet back
                 isProcessingPacket = true;
+
+                // Set Player.inst to the correct player for this building
+                // This ensures Remove() modifies the correct player's job lists
+                Player originalPlayer = Player.inst;
+                Player correctPlayer = Main.GetPlayerByBuilding(building);
+                if (correctPlayer != null)
+                {
+                    Player.inst = correctPlayer;
+                }
+
                 building.Remove();
+
+                // Restore original Player.inst
+                Player.inst = originalPlayer;
                 isProcessingPacket = false;
             }
             catch (Exception e)
