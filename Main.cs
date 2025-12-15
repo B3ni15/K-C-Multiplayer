@@ -57,7 +57,21 @@ namespace KCM
 
         public static KCPlayer GetPlayerByClientID(ushort clientId)
         {
-            return kCPlayers[clientSteamIds[clientId]];
+            if (TryGetPlayerByClientID(clientId, out KCPlayer player))
+            {
+                return player;
+            }
+            return null;
+        }
+
+        public static bool TryGetPlayerByClientID(ushort clientId, out KCPlayer player)
+        {
+            player = null;
+            if (clientSteamIds.TryGetValue(clientId, out string steamId))
+            {
+                return kCPlayers.TryGetValue(steamId, out player);
+            }
+            return false;
         }
 
         public static Player GetPlayerByTeamID(int teamId) // Need to replace building / production types so that the correct player is used. IResourceStorage and IResourceProvider, and jobs
@@ -166,11 +180,6 @@ namespace KCM
             lobbyManager = new GameObject("LobbyManager").AddComponent<LobbyManager>();
             DontDestroyOnLoad(lobbyManager);
 
-            //SteamFriends.InviteUserToGame(new CSteamID(76561198036307537), "test");
-            //SteamMatchmaking.lobby
-
-            //Main.helper.Log($"Timer duration for hazardpay {Player.inst.hazardPayWarmup.Duration}");
-
             try
             {
 
@@ -187,10 +196,7 @@ namespace KCM
                     FirstSibling = true,
                     OnClick = () =>
                     {
-                        //Constants.MainMenuUI_T.Find("TopLevelUICanvas/TopLevel").gameObject.SetActive(false);
                         SfxSystem.PlayUiSelect();
-
-                        //ServerBrowser.serverBrowserRef.SetActive(true);
                         TransitionTo(MenuState.ServerBrowser);
                     }
                 };
@@ -298,9 +304,6 @@ namespace KCM
             helper.Log("Preload start in main");
             try
             {
-
-
-                //MainMenuPatches.Patch();
                 Main.helper = helper;
                 helper.Log(helper.modPath);
 
@@ -1294,14 +1297,35 @@ namespace KCM
                 {
                     Main.helper.Log("Attempting to load save from server");
 
-                    using (MemoryStream ms = new MemoryStream(saveBytes))
+                    try
                     {
-                        BinaryFormatter bf = new BinaryFormatter();
-                        bf.Binder = new MultiplayerSaveDeserializationBinder();
-                        saveContainer = (MultiplayerSaveContainer)bf.Deserialize(ms);
+                        using (MemoryStream ms = new MemoryStream(saveBytes))
+                        {
+                            BinaryFormatter bf = new BinaryFormatter();
+                            bf.Binder = new MultiplayerSaveDeserializationBinder();
+                            saveContainer = (MultiplayerSaveContainer)bf.Deserialize(ms);
+                        }
+
+                        Main.helper.Log("Deserialize complete, calling Unpack...");
+                        saveContainer.Unpack(null);
+                        Main.helper.Log("Unpack complete!");
+                    }
+                    catch (Exception e)
+                    {
+                        Main.helper.Log("Error loading save from server");
+                        Main.helper.Log(e.Message);
+                        Main.helper.Log(e.StackTrace);
+                        if (e.InnerException != null)
+                        {
+                            Main.helper.Log("Inner exception: " + e.InnerException.Message);
+                            Main.helper.Log(e.InnerException.StackTrace);
+                        }
+                    }
+                    finally
+                    {
+                        memoryStreamHook = false;
                     }
 
-                    memoryStreamHook = false;
                     return false;
                 }
 

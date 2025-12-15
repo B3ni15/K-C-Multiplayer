@@ -37,13 +37,20 @@ namespace KCM.ServerLobby
         {
             try
             {
-                KCPlayer player;
-                Main.kCPlayers.TryGetValue(Main.GetPlayerByClientID(Client).steamId, out player);
+                // First check if the client still exists
+                if (!Main.TryGetPlayerByClientID(Client, out KCPlayer player) || player == null)
+                {
+                    // Client no longer exists, stop the repeating invoke and destroy this entry
+                    CancelInvoke("SetValues");
+                    Destroy(gameObject);
+                    return;
+                }
+
                 transform.Find("PlayerName").GetComponent<TextMeshProUGUI>().text = player.name;
                 transform.Find("Ready").gameObject.SetActive(player.ready);
 
                 var bannerTexture = World.inst.liverySets[player.banner].banners;
-                
+
                 banner.texture = bannerTexture;
             }
             catch (Exception ex)
