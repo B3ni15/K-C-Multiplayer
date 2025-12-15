@@ -463,10 +463,10 @@ namespace KCM
         {
             string[] candidatePaths =
             {
-                "MainMenu/TopLevel/TopLevelUICanvas",
-                "MainMenu/TopLevel",
                 "TopLevelUICanvas",
-                "TopLevel"
+                "TopLevel",
+                "MainMenu/TopLevel/TopLevelUICanvas",
+                "MainMenu/TopLevel"
             };
 
             foreach (var path in candidatePaths)

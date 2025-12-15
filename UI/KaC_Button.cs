@@ -17,8 +17,8 @@ namespace KCM.UI
         public Button Button = null;
         private static readonly string[] ButtonPaths =
         {
-            "MainMenu/TopLevel/Body/ButtonContainer/New",
-            "TopLevelUICanvas/TopLevel/Body/ButtonContainer/New" // legacy path fallback
+            "TopLevelUICanvas/TopLevel/Body/ButtonContainer/New",
+            "MainMenu/TopLevel/Body/ButtonContainer/New" // fallback for older versions
         };
 
         public string Name

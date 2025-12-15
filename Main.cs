@@ -209,11 +209,11 @@ namespace KCM
                     }
                 }
 
-                // Correct path based on debug output: MainMenuUI -> MainMenu -> TopLevel -> Body -> ButtonContainer -> New
-                var buttonContainer = Constants.MainMenuUI_T.Find("MainMenu/TopLevel/Body/ButtonContainer/New");
+                // Correct path based on debug output: MainMenuUI -> TopLevelUICanvas -> TopLevel -> Body -> ButtonContainer -> New
+                var buttonContainer = Constants.MainMenuUI_T.Find("TopLevelUICanvas/TopLevel/Body/ButtonContainer/New");
                 if (buttonContainer == null)
                 {
-                    Main.helper.Log("Button container not found at MainMenu/TopLevel/Body/ButtonContainer/New");
+                    Main.helper.Log("Button container not found at TopLevelUICanvas/TopLevel/Body/ButtonContainer/New");
                     return;
                 }
                 Main.helper.Log($"Found button container at: {buttonContainer.name}");
@@ -239,8 +239,8 @@ namespace KCM
                 };
                 serverBrowser.Transform.SetSiblingIndex(2);
 
-                var kingdomShare = Constants.MainMenuUI_T.Find("MainMenu/TopLevel/Body/ButtonContainer/Kingdom Share")
-                    ?? Constants.MainMenuUI_T.Find("TopLevelUICanvas/TopLevel/Body/ButtonContainer/Kingdom Share");
+                var kingdomShare = Constants.MainMenuUI_T.Find("TopLevelUICanvas/TopLevel/Body/ButtonContainer/Kingdom Share")
+                    ?? Constants.MainMenuUI_T.Find("MainMenu/TopLevel/Body/ButtonContainer/Kingdom Share");
                 if (kingdomShare != null)
                 {
                     Destroy(kingdomShare.gameObject);
