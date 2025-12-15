@@ -189,7 +189,21 @@ namespace KCM
 
                 Main.helper.Log(JsonConvert.SerializeObject(World.inst.mapSizeDefs, Formatting.Indented));
 
-                KaC_Button serverBrowser = new KaC_Button(Constants.MainMenuUI_T.Find("TopLevelUICanvas/TopLevel/Body/ButtonContainer/New").parent)
+                // Check if MainMenuUI_T is available
+                if (Constants.MainMenuUI_T == null)
+                {
+                    Main.helper.Log("MainMenuUI_T is null, cannot create Multiplayer button");
+                    return;
+                }
+
+                var buttonContainer = Constants.MainMenuUI_T.Find("TopLevelUICanvas/TopLevel/Body/ButtonContainer/New");
+                if (buttonContainer == null)
+                {
+                    Main.helper.Log("Button container not found");
+                    return;
+                }
+
+                KaC_Button serverBrowser = new KaC_Button(buttonContainer.parent)
                 {
                     Name = "Multiplayer",
                     Text = "Multiplayer",
@@ -202,8 +216,11 @@ namespace KCM
                 };
                 serverBrowser.Transform.SetSiblingIndex(2);
 
-
-                Destroy(Constants.MainMenuUI_T.Find("TopLevelUICanvas/TopLevel/Body/ButtonContainer/Kingdom Share").gameObject);
+                var kingdomShare = Constants.MainMenuUI_T.Find("TopLevelUICanvas/TopLevel/Body/ButtonContainer/Kingdom Share");
+                if (kingdomShare != null)
+                {
+                    Destroy(kingdomShare.gameObject);
+                }
             }
             catch (Exception ex)
             {
