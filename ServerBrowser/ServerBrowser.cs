@@ -305,11 +305,10 @@ namespace KCM
                     return;
                 }
 
-                var topLevelCanvas = Constants.MainMenuUI_T.Find("MainMenu/TopLevel")
-                    ?? Constants.MainMenuUI_T.Find("TopLevelUICanvas");
+                var topLevelCanvas = ResolveMenuCanvas();
                 if (topLevelCanvas == null)
                 {
-                    Main.helper.Log("TopLevel/TopLevelUICanvas not found in ServerBrowser");
+                    Main.helper.Log("Failed to resolve top-level menu canvas in ServerBrowser");
                     return;
                 }
 
@@ -319,7 +318,16 @@ namespace KCM
                     Destroy(kcmUICanvas.transform.GetChild(i).gameObject);
 
                 kcmUICanvas.name = "KCMUICanvas";
-                kcmUICanvas.transform.SetParent(Constants.MainMenuUI_T);
+                kcmUICanvas.transform.SetParent(Constants.MainMenuUI_T, false);
+                kcmUICanvas.transform.SetAsLastSibling();
+                kcmUICanvas.SetActive(false);
+
+                var canvasComponent = kcmUICanvas.GetComponent<Canvas>();
+                if (canvasComponent != null)
+                {
+                    canvasComponent.overrideSorting = true;
+                    canvasComponent.sortingOrder = 999;
+                }
 
                 KCMUICanvas = kcmUICanvas.transform;
 
@@ -336,6 +344,8 @@ namespace KCM
                 serverLobbyPlayerRef = serverLobbyRef.transform.Find("Container/PlayerList/Viewport/Content");
                 serverLobbyChatRef = serverLobbyRef.transform.Find("Container/PlayerChat/Viewport/Content");
                 serverLobbyRef.SetActive(false);
+                serverBrowserRef.transform.SetAsLastSibling();
+                serverLobbyRef.transform.SetAsLastSibling();
                 //browser.transform.position = new Vector3(0, 0, 0);
 
 
@@ -447,6 +457,29 @@ namespace KCM
                     Main.helper.Log(ex.InnerException.StackTrace);
                 }
             }
+        }
+
+        private Transform ResolveMenuCanvas()
+        {
+            string[] candidatePaths =
+            {
+                "MainMenu/TopLevel/TopLevelUICanvas",
+                "MainMenu/TopLevel",
+                "TopLevelUICanvas",
+                "TopLevel"
+            };
+
+            foreach (var path in candidatePaths)
+            {
+                var transform = Constants.MainMenuUI_T.Find(path);
+                if (transform != null)
+                {
+                    Main.helper.Log($"ServerBrowser: using canvas path '{path}'.");
+                    return transform;
+                }
+            }
+
+            return null;
         }
 
         private void Preload(KCModHelper helper)

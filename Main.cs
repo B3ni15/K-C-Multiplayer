@@ -232,6 +232,7 @@ namespace KCM
                     FirstSibling = true,
                     OnClick = () =>
                     {
+                        Main.helper?.Log("Multiplayer button clicked");
                         SfxSystem.PlayUiSelect();
                         TransitionTo(MenuState.ServerBrowser);
                     }
@@ -320,6 +321,10 @@ namespace KCM
                 if (ServerBrowser.KCMUICanvas != null)
                 {
                     ServerBrowser.KCMUICanvas.gameObject.SetActive((int)state > 21);
+                    if (state == MenuState.ServerBrowser)
+                    {
+                        Main.helper?.Log($"TransitionTo ServerBrowser: browserRef={(ServerBrowser.serverBrowserRef != null ? "ready" : "null")}, canvas={(ServerBrowser.KCMUICanvas != null ? "ready" : "null")}");
+                    }
                     helper.Log(((int)state > 21).ToString());
                 }
 
