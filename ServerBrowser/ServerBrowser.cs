@@ -299,7 +299,20 @@ namespace KCM
 
             try
             {
-                GameObject kcmUICanvas = Instantiate(Constants.MainMenuUI_T.Find("TopLevelUICanvas").gameObject);
+                if (Constants.MainMenuUI_T == null)
+                {
+                    Main.helper.Log("MainMenuUI_T is null in ServerBrowser");
+                    return;
+                }
+
+                var topLevelCanvas = Constants.MainMenuUI_T.Find("TopLevelUICanvas");
+                if (topLevelCanvas == null)
+                {
+                    Main.helper.Log("TopLevelUICanvas not found in ServerBrowser");
+                    return;
+                }
+
+                GameObject kcmUICanvas = Instantiate(topLevelCanvas.gameObject);
 
                 for (int i = 0; i < kcmUICanvas.transform.childCount; i++)
                     Destroy(kcmUICanvas.transform.GetChild(i).gameObject);
