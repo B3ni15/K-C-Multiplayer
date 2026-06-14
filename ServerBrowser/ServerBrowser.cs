@@ -54,6 +54,9 @@ namespace KCM
         public static bool registerServer = false;
         int interval = 0;
 
+        // Servers heartbeat roughly every 16s; treat anything older as a dead lobby.
+        private const double StaleServerThresholdSeconds = 60.0;
+
         IEnumerator LobbyHeartbeat()
         {
             while (true)
@@ -113,6 +116,12 @@ namespace KCM
 
                     foreach (ServerEntry serverEntry in ServerResponse.Documents)
                     {
+                        // Skip stale servers: the host heartbeats every ~16s, so anything
+                        // older than the threshold is a dead/crashed lobby left in the DB.
+                        double secondsSinceHeartbeat = (DateTime.UtcNow - serverEntry.Heartbeat.ToUniversalTime()).TotalSeconds;
+                        if (secondsSinceHeartbeat > StaleServerThresholdSeconds)
+                            continue;
+
                         GameObject entry = Instantiate(PrefabManager.serverEntryItemPrefab, serverBrowserContentRef);
                         var s = entry.AddComponent<ServerEntryScript>();
 
