@@ -148,6 +148,10 @@ namespace KCM
         // Diagnostics: once per in-game year, dump per-player villager counts so we can pinpoint when
         // a kingdom's villagers stop being processed (e.g. shutdown-but-still-referenced "ghosts").
         public static int lastVillagerLogYear = -1;
+        // Villager.shutdown is internal to Assembly-CSharp, so it can't be referenced directly
+        // from the mod assembly. Read it via cached reflection instead.
+        private static readonly FieldInfo VillagerShutdownField =
+            typeof(Villager).GetField("shutdown", BindingFlags.Instance | BindingFlags.NonPublic);
         public static void LogVillagerStateOnYearChange(Player localPlayer)
         {
             try
@@ -176,7 +180,7 @@ namespace KCM
                         {
                             var v = p.Workers.data[i];
                             if (v == null) nullWorkers++;
-                            else if (v.shutdown) shutdownWorkers++;
+                            else if (VillagerShutdownField != null && (bool)VillagerShutdownField.GetValue(v)) shutdownWorkers++;
                         }
                     }
 
