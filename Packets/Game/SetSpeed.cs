@@ -17,7 +17,17 @@ namespace KCM.Packets.Game
             if (clientId == KCClient.client.Id) // Prevent speed softlock
                 return;
 
-            SpeedControlUI.inst.SetSpeed(speed);
+            // Flag the change as remote-originated so the SetSpeed Harmony postfix
+            // applies it locally without rebroadcasting it (avoids a feedback loop).
+            Main.SpeedControlUISetSpeedHook.applyingRemoteSpeed = true;
+            try
+            {
+                SpeedControlUI.inst.SetSpeed(speed);
+            }
+            finally
+            {
+                Main.SpeedControlUISetSpeedHook.applyingRemoteSpeed = false;
+            }
         }
 
         public override void HandlePacketServer()

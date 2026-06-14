@@ -1154,41 +1154,25 @@ namespace KCM
         [HarmonyPatch(typeof(SpeedControlUI), "SetSpeed")]
         public class SpeedControlUISetSpeedHook
         {
-            private static long lastTime = 0;
-
-            public static bool Prefix()
-            {
-                if (KCClient.client.IsConnected)
-                {
-                    if ((DateTimeOffset.Now.ToUnixTimeMilliseconds() - lastTime) < 250) // Set speed spam fix / hack
-                        return false;
-
-                    if (!new StackFrame(3).GetMethod().Name.Contains("HandlePacket"))
-                        return false;
-                }
-
-                return true;
-            }
+            // Set while we are applying a speed change that arrived over the network,
+            // so the postfix doesn't echo it straight back and create a feedback loop.
+            // Previously this was inferred from a hardcoded StackFrame(3) depth, which
+            // broke whenever Harmony's wrapper or inlining shifted the call stack.
+            public static bool applyingRemoteSpeed = false;
 
             public static void Postfix(int idx, bool skipNextSfx)
             {
-                if (KCClient.client.IsConnected)
+                if (!KCClient.client.IsConnected)
+                    return;
+
+                // Don't rebroadcast a speed change that originated from a remote packet.
+                if (applyingRemoteSpeed)
+                    return;
+
+                new SetSpeed()
                 {
-                    /*Main.helper.Log($"set speed Called by 0: {new StackFrame(0).GetMethod()} {new StackFrame(0).GetMethod().Name.Contains("HandlePacket")}");
-                    Main.helper.Log($"set speed Called by 1: {new StackFrame(1).GetMethod()} {new StackFrame(1).GetMethod().Name.Contains("HandlePacket")}");
-                    Main.helper.Log($"set speed Called by 2: {new StackFrame(2).GetMethod()} {new StackFrame(2).GetMethod().Name.Contains("HandlePacket")}");
-                    Main.helper.Log($"set speed Called by 3: {new StackFrame(3).GetMethod()} {new StackFrame(3).GetMethod().Name.Contains("HandlePacket")}");*/
-
-                    if (new StackFrame(3).GetMethod().Name.Contains("HandlePacket"))
-                        return;
-
-                    new SetSpeed()
-                    {
-                        speed = idx
-                    }.Send();
-
-                    lastTime = DateTimeOffset.Now.ToUnixTimeMilliseconds();
-                }
+                    speed = idx
+                }.Send();
             }
         }
         #endregion
