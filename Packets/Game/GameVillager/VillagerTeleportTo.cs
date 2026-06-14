@@ -20,7 +20,15 @@ namespace KCM.Packets.Game.GameVillager
 
             try
             {
-                Villager.villagers.data.Where(x => x.guid == guid).FirstOrDefault().TeleportTo(pos);
+                Villager villager = Villager.villagers.data.FirstOrDefault(x => x != null && x.guid == guid);
+
+                if (villager == null)
+                {
+                    Main.helper.Log($"VillagerTeleportTo: no villager found with guid {guid}");
+                    return;
+                }
+
+                villager.TeleportTo(pos);
 
                 Main.helper.Log($"Teleporting villager to {pos.ToString()}");
             }

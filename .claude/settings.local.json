@@ -6,7 +6,10 @@
       "Bash(ls:*)",
       "Bash(git add:*)",
       "Bash(git commit:*)",
-      "Bash(tail:*)"
+      "Bash(tail:*)",
+      "Read(//c/Users/user/.claude/projects/e--Steam-steamapps-workshop-content-569480-3105755541/**)",
+      "Bash(ls -la)",
+      "Bash(cat MEMORY.md)"
     ]
   }
 }

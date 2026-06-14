@@ -117,6 +117,82 @@ namespace KCM
             return Player.inst;
         }
 
+        // Resolves the Player instance that actually owns a villager, instead of the global Player.inst
+        // singleton. Mirrors GetPlayerByBuilding; used to make villager/job code multi-player aware.
+        public static Player GetPlayerByVillager(Villager villager)
+        {
+            try
+            {
+                if (villager == null)
+                    return Player.inst;
+
+                foreach (var kcp in kCPlayers.Values)
+                {
+                    var p = kcp?.inst;
+                    if (p == null)
+                        continue;
+
+                    if ((p.Workers != null && p.Workers.Contains(villager)) ||
+                        (p.Homeless != null && p.Homeless.Contains(villager)))
+                        return p;
+                }
+            }
+            catch (Exception e)
+            {
+                Main.helper.Log("Failed finding player by villager: " + e.Message);
+                Main.helper.Log(e.StackTrace);
+            }
+            return Player.inst;
+        }
+
+        // Diagnostics: once per in-game year, dump per-player villager counts so we can pinpoint when
+        // a kingdom's villagers stop being processed (e.g. shutdown-but-still-referenced "ghosts").
+        public static int lastVillagerLogYear = -1;
+        public static void LogVillagerStateOnYearChange(Player localPlayer)
+        {
+            try
+            {
+                if (localPlayer == null)
+                    return;
+
+                int year = localPlayer.CurrYear;
+                if (year == lastVillagerLogYear)
+                    return;
+                lastVillagerLogYear = year;
+
+                Main.helper.Log($"===== Villager state snapshot @ year {year} =====");
+                foreach (var kcp in kCPlayers.Values)
+                {
+                    var p = kcp?.inst;
+                    if (p == null)
+                        continue;
+
+                    int workers = p.Workers != null ? p.Workers.Count : -1;
+                    int homeless = p.Homeless != null ? p.Homeless.Count : -1;
+                    int shutdownWorkers = 0, nullWorkers = 0;
+                    if (p.Workers != null)
+                    {
+                        for (int i = 0; i < p.Workers.Count; i++)
+                        {
+                            var v = p.Workers.data[i];
+                            if (v == null) nullWorkers++;
+                            else if (v.shutdown) shutdownWorkers++;
+                        }
+                    }
+
+                    string tag = p.gameObject.name.Contains("Client Player") ? "REMOTE" : "LOCAL";
+                    int teamId = p.PlayerLandmassOwner != null ? p.PlayerLandmassOwner.teamId : -1;
+                    Main.helper.Log($"  [{tag}] team {teamId} '{kcp.name}': workers={workers} homeless={homeless} shutdownWorkers={shutdownWorkers} nullWorkers={nullWorkers} currYear={p.CurrYear}");
+                }
+                Main.helper.Log("================================================");
+            }
+            catch (Exception e)
+            {
+                Main.helper.Log("Error logging villager state snapshot: " + e.Message);
+                Main.helper.Log(e.StackTrace);
+            }
+        }
+
         public static string PlayerSteamID = SteamUser.GetSteamID().ToString();
 
         public static KCMSteamManager KCMSteamManager = null;
@@ -2376,6 +2452,8 @@ namespace KCM
                                 "timeAtFailHappiness", "hasUsedCheats", "nameForOldAgeDeath", "deathsThisYear", /*"poorHealthGracePeriod",*/
                             });
 
+                            LogVillagerStateOnYearChange(__instance);
+
                             //StateObserver.Update(__instance);
                         }
                     }
@@ -2471,9 +2549,18 @@ namespace KCM
         {
             public static void Prefix(Exception exception)
             {
-                //Main.helper.Log($"UNITY 3D DEBUG LOG EXCEPTION");
-                //Main.helper.Log(exception.Message);
-                //Main.helper.Log(exception.StackTrace);
+                if (!(KCServer.IsRunning || KCClient.client.IsConnected) || exception == null)
+                    return;
+
+                Main.helper.Log("----------------------- UNITY 3D DEBUG LOG EXCEPTION -----------------------");
+                Main.helper.Log(exception.ToString());
+                Main.helper.Log(exception.StackTrace);
+                if (exception.InnerException != null)
+                {
+                    Main.helper.Log("----------------------- Inner exception -----------------------");
+                    Main.helper.Log(exception.InnerException.ToString());
+                    Main.helper.Log(exception.InnerException.StackTrace);
+                }
             }
         }
 
@@ -2482,9 +2569,18 @@ namespace KCM
         {
             public static void Prefix(Exception exception, UnityEngine.Object context)
             {
-                //Main.helper.Log($"UNITY 3D DEBUG LOG EXCEPTION");
-                //Main.helper.Log(exception.Message);
-                //Main.helper.Log(exception.StackTrace);
+                if (!(KCServer.IsRunning || KCClient.client.IsConnected) || exception == null)
+                    return;
+
+                Main.helper.Log("----------------------- UNITY 3D DEBUG LOG EXCEPTION -----------------------");
+                Main.helper.Log(exception.ToString());
+                Main.helper.Log(exception.StackTrace);
+                if (exception.InnerException != null)
+                {
+                    Main.helper.Log("----------------------- Inner exception -----------------------");
+                    Main.helper.Log(exception.InnerException.ToString());
+                    Main.helper.Log(exception.InnerException.StackTrace);
+                }
             }
         }
 

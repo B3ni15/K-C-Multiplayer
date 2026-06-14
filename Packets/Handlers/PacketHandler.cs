@@ -209,9 +209,25 @@ namespace KCM.Packets.Handlers
                 // Main.helper.Log($"{(KCServer.IsRunning ? "Server" : "Client")} Received packet {id} {packet.GetType().kingdomName}");
                 //Main.helper.Log($"Found handler: {(handler != null).ToString()}");
             }
-            catch
+            catch (Exception ex)
             {
+                Main.helper.Log("Error in HandlePacket (client) outer handler");
 
+                Main.helper.Log("----------------------- Main exception -----------------------");
+                Main.helper.Log(ex.ToString());
+                Main.helper.Log("----------------------- Main message -----------------------");
+                Main.helper.Log(ex.Message);
+                Main.helper.Log("----------------------- Main stacktrace -----------------------");
+                Main.helper.Log(ex.StackTrace);
+                if (ex.InnerException != null)
+                {
+                    Main.helper.Log("----------------------- Inner exception -----------------------");
+                    Main.helper.Log(ex.InnerException.ToString());
+                    Main.helper.Log("----------------------- Inner message -----------------------");
+                    Main.helper.Log(ex.InnerException.Message);
+                    Main.helper.Log("----------------------- Inner stacktrace -----------------------");
+                    Main.helper.Log(ex.InnerException.StackTrace);
+                }
             }
         }
 
