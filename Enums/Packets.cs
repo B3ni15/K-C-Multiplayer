@@ -42,6 +42,7 @@ namespace KCM.Enums
         SetupInitialWorkers = 89,
         VillagerTeleportTo = 90,
         PlaceKeepRandomly = 91,
-        BuildingRemove = 92
+        BuildingRemove = 92,
+        PlayerStateUpdate = 93
     }
 }

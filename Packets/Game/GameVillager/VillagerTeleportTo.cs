@@ -28,7 +28,17 @@ namespace KCM.Packets.Game.GameVillager
                     return;
                 }
 
-                villager.TeleportTo(pos);
+                // Flag as remote-originated so the TeleportTo Harmony postfix applies
+                // it locally without rebroadcasting (avoids a feedback loop).
+                Main.VillagerTeleportToHook.applyingRemoteTeleport = true;
+                try
+                {
+                    villager.TeleportTo(pos);
+                }
+                finally
+                {
+                    Main.VillagerTeleportToHook.applyingRemoteTeleport = false;
+                }
 
                 Main.helper.Log($"Teleporting villager to {pos.ToString()}");
             }

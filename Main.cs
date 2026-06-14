@@ -152,6 +152,29 @@ namespace KCM
         // from the mod assembly. Read it via cached reflection instead.
         private static readonly FieldInfo VillagerShutdownField =
             typeof(Villager).GetField("shutdown", BindingFlags.Instance | BindingFlags.NonPublic);
+        // Wired in as the SendUpdate handler for the local player's StateObserver
+        // (it used to be left null, so observed changes never went out over the
+        // network). When a monitored value changes, broadcast it so the mirror
+        // copies of this player on the other clients stay in sync.
+        public static void OnPlayerStateSendUpdate(object sender, Observer.StateUpdateEventArgs e)
+        {
+            try
+            {
+                var observer = sender as Observer;
+                if (observer == null || observer.changedValues == null)
+                    return;
+
+                if (observer.changedValues.TryGetValue("CurrYear", out object yearValue) && yearValue is int year)
+                {
+                    new PlayerStateUpdate() { currYear = year }.Send();
+                }
+            }
+            catch (Exception ex)
+            {
+                Main.helper.Log("Error sending player state update: " + ex.Message);
+            }
+        }
+
         public static void LogVillagerStateOnYearChange(Player localPlayer)
         {
             try
@@ -1276,19 +1299,24 @@ namespace KCM
         [HarmonyPatch(typeof(Villager), "TeleportTo")]
         public class VillagerTeleportToHook
         {
+            // Set while applying a teleport received over the network, so the postfix
+            // doesn't echo it back. Replaces a fragile hardcoded StackFrame(3) check
+            // that broke whenever the call stack shifted.
+            public static bool applyingRemoteTeleport = false;
+
             public static void Postfix(Villager __instance, Vector3 newPos)
             {
-                if (KCClient.client.IsConnected)
-                {
-                    if (new StackFrame(3).GetMethod().Name.Contains("HandlePacket"))
-                        return;
+                if (!KCClient.client.IsConnected)
+                    return;
 
-                    new VillagerTeleportTo()
-                    {
-                        guid = __instance.guid,
-                        pos = newPos
-                    }.Send();
-                }
+                if (applyingRemoteTeleport)
+                    return;
+
+                new VillagerTeleportTo()
+                {
+                    guid = __instance.guid,
+                    pos = newPos
+                }.Send();
             }
         }
         #endregion
@@ -2438,7 +2466,7 @@ namespace KCM
                             StateObserver.RegisterObserver(__instance, new string[] {
                                 "bannerIdx", "kingdomHappiness", "landMassHappiness", "landMassIntegrity", "bDidFirstFire", "CurrYear",
                                 "timeAtFailHappiness", "hasUsedCheats", "nameForOldAgeDeath", "deathsThisYear", /*"poorHealthGracePeriod",*/
-                            });
+                            }, null, OnPlayerStateSendUpdate);
 
                             LogVillagerStateOnYearChange(__instance);
 
